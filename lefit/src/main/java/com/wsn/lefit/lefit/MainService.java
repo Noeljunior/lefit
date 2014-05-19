@@ -25,8 +25,6 @@ public class MainService extends IntentService {
         super.onCreate();
         //number = 0;
         //Toast.makeText(this, "Service created: " + number, Toast.LENGTH_SHORT).show();
-
-
     }
 
     @Override
