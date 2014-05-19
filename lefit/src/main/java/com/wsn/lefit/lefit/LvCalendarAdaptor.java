@@ -14,6 +14,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class LvCalendarAdaptor extends BaseAdapter {
+    private enum Type {
+        ITEM_FILLED(0),
+        ITEM_UNFILLED(1),
+        SEPRATOR(2);
+
+        private final int id;
+        Type(int id) {
+            this.id = id;
+        }
+
+        public int getId() {
+            return id;
+        }
+    }
+
+    private ArrayList<Item> items = new ArrayList<Item>();
+
+
     private Activity activity;
     private ArrayList<HashMap<String, String>> data;
     private static LayoutInflater inflater = null;
@@ -21,33 +39,62 @@ public class LvCalendarAdaptor extends BaseAdapter {
 
     public LvCalendarAdaptor(Activity a) {
         activity = a;
-        inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        /* TODO delete this dummy data set */
+        for (int i = 0; i < 50; i++) {
+
+            if ((i % 5) == 0) {
+                items.add(new Item(Type.SEPRATOR, "Separator at " + i));
+            }
+            else {
+                items.add(new Item(Type.ITEM_FILLED, R.drawable.ic_icon_0, "Descrição da performance deste dia", "Seg, 19 de Maio"));
+            }
+
+        }
 
     }
 
+    @Override
     public int getCount() {
-        return 50;
+        return items.size();
     }
 
-    public Object getItem(int position) {
-        return position;
+    @Override
+    public Item getItem(int position) {
+        return items.get(position);
     }
 
+    @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return items.get(position).getType().getId();
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return Type.values().length;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
         View vi;
 
-
-        if (position % 4 == 0) {
-            vi = buildSeparator(convertView, "Separador " + position / 4);
+        switch (items.get(position).getType()) {
+            default:
+            case ITEM_FILLED:
+                vi = buildItem(convertView, R.drawable.ic_icon_0, "Descrição da performance deste dia", "Seg, 19 de Maio");
+                break;
+            case ITEM_UNFILLED:
+                vi = buildItem(convertView, R.drawable.ic_icon_0, "Descrição da performance deste dia", "Seg, 19 de Maio");
+                break;
+            case SEPRATOR:
+                vi = buildSeparator(convertView, "Separador at " + position);
+                break;
         }
-        else {
-            vi = buildItem(convertView, R.drawable.ic_icon_0, "Descrição da performance deste dia", "Seg, 19 de Maio");
-        }
-
         return vi;
     }
 
@@ -81,6 +128,43 @@ public class LvCalendarAdaptor extends BaseAdapter {
         tvtext.setText(text);
 
         return vi;
+    }
+
+
+    public class Item {
+        private Type type;
+
+        private int logo;
+        private String description;
+        private String date;
+
+        private Item(Type type, int logo, String description, String date) {
+            this.type = type;
+            this.logo = logo;
+            this.description = description;
+            this.date = date;
+        }
+
+        private Item(Type type, String description) {
+            this.type = type;
+            this.description = description;
+        }
+
+        public Type getType() {
+            return type;
+        }
+
+        public int getLogo() {
+            return logo;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public String getDate() {
+            return date;
+        }
     }
 
 }
