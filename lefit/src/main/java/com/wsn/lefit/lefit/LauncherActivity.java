@@ -21,6 +21,7 @@ import java.util.HashMap;
 
 
 public class LauncherActivity extends Activity {
+    private LvCalendarAdaptor lvcalendaradaptor;
 
 
     @Override
@@ -28,17 +29,17 @@ public class LauncherActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launcher);
 
+        lvcalendaradaptor = new LvCalendarAdaptor(this);
 
 
         ListView list=(ListView)findViewById(R.id.lvcalendar);
-        list.setAdapter(new LvCalendarAdaptor(this));
+        list.setAdapter(lvcalendaradaptor);
 
 
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.launcher, menu);
         return true;
     }

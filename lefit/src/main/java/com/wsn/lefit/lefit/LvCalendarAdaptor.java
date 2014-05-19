@@ -112,24 +112,30 @@ public class LvCalendarAdaptor extends BaseAdapter {
 
 
     private View buildItemFilled(View convertView, int position) {
-        View vi = convertView;
-        if(convertView == null)
-            vi = inflater.inflate(R.layout.lv_item_calendar, null);
+        ItemHolder holder;
 
-        vi.setEnabled(false);
-        vi.setOnClickListener(null);
+        if (convertView == null) {
+            convertView = inflater.inflate(R.layout.lv_item_calendar, null);
+            System.out.println("New View");
+            holder = new ItemHolder();
+            holder.logo = (ImageView) convertView.findViewById(R.id.ivlogo);
+            holder.description = (TextView) convertView.findViewById(R.id.tvdescription);
+            holder.date = (TextView) convertView.findViewById(R.id.tvdate);
+            convertView.setTag(holder);
 
-        TextView tvdescription = (TextView) vi.findViewById(R.id.tvdescription); // title
-        TextView tvdate = (TextView) vi.findViewById(R.id.tvdate); // artist name
-        ImageView ivlogo = (ImageView) vi.findViewById(R.id.ivlogo); // thumb image
+            convertView.setEnabled(false);
+            convertView.setOnClickListener(null);
+        }
+        else {
+            holder = (ItemHolder) convertView.getTag();
+            System.out.println("Cached View");
+        }
 
+        holder.logo.setImageResource(items.get(position).getLogo());
+        holder.description.setText(items.get(position).getDescription());
+        holder.date.setText(items.get(position).date);
 
-        // Setting all values in listview
-        tvdescription.setText(items.get(position).getDescription());
-        tvdate.setText(items.get(position).date);
-        ivlogo.setImageResource(items.get(position).getLogo());
-
-        return vi;
+        return convertView;
     }
 
     private View buildItemUnfilled(View convertView, int position) {
@@ -165,6 +171,11 @@ public class LvCalendarAdaptor extends BaseAdapter {
         return vi;
     }
 
+    public static class ItemHolder {
+        public ImageView logo;
+        public TextView description;
+        public TextView date;
+    }
 
     public class Item {
         private Type type;
