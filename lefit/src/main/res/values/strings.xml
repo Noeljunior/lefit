@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Le Fit</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_main_popup">MainPopup</string>
+
+    <string-array name="spinnermenu_list">
+        <item>DEBUG</item>
+        <item>Le Fit</item>
+        <item>Calendário</item>
+        <item>Feedback</item>
+    </string-array>
+
+    <string name="title_activity_launcher">LauncherActivity</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_debug">DebugActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+</resources>

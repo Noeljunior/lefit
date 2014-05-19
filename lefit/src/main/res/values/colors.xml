@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="actionbar">#ff3f8099</color>
+    <color name="tab">#ff356b80</color>
+    <color name="background">#ff5fc5ea</color>
+    <color name="focus">#ffb4dff0</color>
+    <color name="contextual">#ff002e3e</color>
+    <color name="highlight">#ff33b5e5</color>
+    <color name="darktext">#ff183039</color>
+    <color name="lighttext">#ffe6fcf7</color>
+</resources>

@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="actionbar_bg">#ff3f8099</color>
+    <color name="actionbar_fg">#ffe6fcf7</color>
+    <color name="tab_bg">#ff72ABBF</color>
+    <color name="tab_fg">#ffe6fcf7</color>
+    <color name="menu_bg">#ff244B59</color>
+    <color name="menu_fg">#ffe6fcf7</color>
+    <color name="view_bg">#ff5fc5ea</color>
+    <color name="view_fg_highlight">#ff33b5e5</color>
+    <color name="view_fg_dark">#ff183039</color>
+    <color name="view_fg_light">#ffe6fcf7</color>
+    <color name="view_fg_light_secondary">#ffD6FCF4</color>
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+                                     M A I N    T H E M E
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+    <style name="Theme.LeFitBlue" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <!-- Action Bar -->
+        <item name="android:actionBarItemBackground">@drawable/selectable_background_lefitstyle2</item>
+        <item name="android:popupMenuStyle">@style/LeFitBlue.PopupMenu</item>
+        <item name="android:dropDownListViewStyle">@style/LeFitBlue.DropDownListView</item>
+        <item name="android:actionBarTabStyle">@style/LeFitBlue.ActionBarTabStyle</item>
+        <item name="android:actionDropDownStyle">@style/LeFitBlue.DropDownNav</item>
+        <item name="android:actionBarStyle">@style/LeFitBlue.ActionBar.Solid</item>
+        <item name="android:actionModeBackground">@drawable/cab_background_top_lefitstyle2</item>
+        <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_lefitstyle2</item>
+        <item name="android:actionModeCloseButtonStyle">@style/LeFitBlue.ActionButton.CloseMode</item>
+
+        <!-- Default colours -->
+        <item name="android:actionBarWidgetTheme">@style/LeFitBlue.Theme.Widget</item>
+        <item name="android:textColorPrimary">@color/view_fg_light</item>
+        <item name="android:textColorSecondary">@color/view_fg_light_secondary</item>
+        <item name="android:windowBackground">@color/view_bg</item>
+
+        <!-- White widgets -->
+        <item name="android:editTextStyle">@style/EditTextLefitwhite</item>
+        <item name="android:textColorHighlight">#99ffffff</item>
+        <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewLefitwhite</item>
+        <item name="android:checkboxStyle">@style/CheckBoxLefitwhite</item>
+        <item name="android:radioButtonStyle">@style/RadioButtonLefitwhite</item>
+        <item name="android:buttonStyle">@style/ButtonLefitwhite</item>
+        <item name="android:imageButtonStyle">@style/ImageButtonLefitwhite</item>
+        <item name="android:spinnerStyle">@style/SpinnerLefitwhite</item>
+        <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemLefitwhite</item>
+        <item name="android:progressBarStyleHorizontal">@style/ProgressBarLefitwhite</item>
+        <item name="android:seekBarStyle">@style/SeekBarLefitwhite</item>
+        <item name="android:ratingBarStyle">@style/RatingBarLefitwhite</item>
+        <item name="android:ratingBarStyleIndicator">@style/RatingBarBigLefitwhite</item>
+        <item name="android:ratingBarStyleSmall">@style/RatingBarSmallLefitwhite</item>
+        <item name="android:buttonStyleToggle">@style/ToggleLefitwhite</item>
+        <item name="android:listViewStyle">@style/ListViewLefitwhite</item>
+        <item name="android:listViewWhiteStyle">@style/ListViewLefitwhite.White</item>
+        <item name="android:spinnerItemStyle">@style/SpinnerItemLefitwhite</item>
+    </style>
+
+    <style name="Theme.LeFitBlue.Dialog" parent="@style/Theme.LeFitBlue">
+        <!-- Making it to be a dialog -->
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowSoftInputMode">stateAlwaysHidden</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+    </style>
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+                                    D E F I N I T I O N S
+
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+
+    <!-- - - - - - ActionBar Widgets Styles Definitions - - - - - -->
+    <style name="LeFitBlue.ActionBar.Solid" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@drawable/ab_solid_lefitstyle2</item>
+        <item name="android:backgroundStacked">@drawable/ab_stacked_solid_lefitstyle2</item>
+        <item name="android:backgroundSplit">@drawable/ab_bottom_solid_lefitstyle2</item>
+        <item name="android:progressBarStyle">@style/LeFitBlue.ProgressBar</item>
+        <item name="android:textColor">@color/view_fg_light</item>
+    </style>
+
+    <style name="LeFitBlue.ActionBar.Transparent" parent="@style/Widget.AppCompat.ActionBar">
+        <item name="android:background">@drawable/ab_transparent_lefitstyle2</item>
+        <item name="android:progressBarStyle">@style/LeFitBlue.ProgressBar</item>
+    </style>
+
+    <style name="LeFitBlue.PopupMenu" parent="@style/Widget.AppCompat.PopupMenu">
+        <!--<item name="android:popupBackground">@drawable/menu_dropdown_panel_lefitstyle2</item>-->
+        <item name="android:popupBackground">@color/menu_bg</item>
+        <item name="android:textColor">@color/view_fg_light</item>
+    </style>
+
+    <style name="LeFitBlue.DropDownListView" parent="@style/Widget.AppCompat.ListView.DropDown">
+        <item name="android:listSelector">@drawable/selectable_background_lefitstyle2</item>
+    </style>
+
+    <style name="LeFitBlue.ActionBarTabStyle" parent="@style/Widget.AppCompat.ActionBar.TabView">
+        <item name="android:background">@drawable/tab_indicator_ab_lefitstyle2</item>
+    </style>
+
+    <style name="LeFitBlue.DropDownNav" parent="@style/Widget.AppCompat.Spinner.DropDown.ActionBar">
+        <item name="android:background">@drawable/spinner_background_ab_lefitstyle2</item>
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_lefitstyle2</item>
+        <item name="android:dropDownSelector">@drawable/selectable_background_lefitstyle2</item>
+    </style>
+
+    <style name="LeFitBlue.ProgressBar" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progress_horizontal_lefitstyle2</item>
+    </style>
+
+    <style name="LeFitBlue.ActionButton.CloseMode" parent="@style/Widget.AppCompat.ActionButton.CloseMode">
+        <item name="android:background">@drawable/btn_cab_done_lefitstyle2</item>
+    </style>
+
+    <style name="LeFitBlue.Theme.Widget" parent="@style/Theme.AppCompat">
+        <item name="android:popupMenuStyle">@style/LeFitBlue.PopupMenu</item>
+        <item name="android:dropDownListViewStyle">@style/LeFitBlue.DropDownListView</item>
+    </style>
+
+
+    <!-- - - - - - Views Widgets Definitions - - - - - -->
+    <style name="EditTextLefitwhite" parent="android:Widget.EditText">
+        <item name="android:background">@drawable/lefitwhite_edit_text_holo_light</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="AutoCompleteTextViewLefitwhite" parent="android:Widget.AutoCompleteTextView">
+        <item name="android:dropDownSelector">@drawable/lefitwhite_list_selector_holo_light</item>
+        <item name="android:background">@drawable/lefitwhite_edit_text_holo_light</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="CheckBoxLefitwhite" parent="android:Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/lefitwhite_btn_check_holo_light</item>
+    </style>
+
+    <style name="RadioButtonLefitwhite" parent="android:Widget.CompoundButton.RadioButton">
+        <item name="android:button">@drawable/lefitwhite_btn_radio_holo_light</item>
+    </style>
+
+    <style name="ButtonLefitwhite" parent="android:Widget.Button">
+        <item name="android:background">@drawable/lefitwhite_btn_default_holo_light</item>
+        <item name="android:minHeight">48dip</item>
+        <item name="android:minWidth">64dip</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="ImageButtonLefitwhite" parent="android:Widget.ImageButton">
+        <item name="android:background">@drawable/lefitwhite_btn_default_holo_light</item>
+    </style>
+
+    <style name="SpinnerLefitwhite" parent="android:Widget.Spinner">
+        <item name="android:background">@drawable/lefitwhite_spinner_background_holo_light</item>
+        <item name="android:dropDownSelector">@drawable/lefitwhite_list_selector_holo_light</item>
+    </style>
+
+    <style name="SpinnerDropDownItemLefitwhite" parent="android:Widget.DropDownItem.Spinner">
+        <item name="android:checkMark">@drawable/lefitwhite_btn_radio_holo_light</item>
+    </style>
+    <style name="TabLefitwhite">
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:paddingLeft">16dip</item>
+        <item name="android:paddingRight">16dip</item>
+        <item name="android:background">@drawable/lefitwhite_tab_indicator_holo</item>
+        <item name="android:layout_width">0dip</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:minWidth">80dip</item>
+    </style>
+
+    <style name="TabTextLefitwhite">
+        <item name="android:textColor">#000000</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <!-- v14 <item name="android:textAllCaps">true</item> -->
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:maxWidth">180dip</item>
+    </style>
+
+    <style name="ProgressBarLefitwhite" parent="android:Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/lefitwhite_progress_horizontal_holo_light</item>
+        <item name="android:indeterminateDrawable">@drawable/lefitwhite_progress_indeterminate_horizontal_holo_light</item>
+        <item name="android:minHeight">16dip</item>
+        <item name="android:maxHeight">16dip</item>
+    </style>
+
+    <style name="SeekBarLefitwhite" parent="android:Widget.SeekBar">
+        <item name="android:progressDrawable">@drawable/lefitwhite_scrubber_progress_horizontal_holo_light</item>
+        <item name="android:indeterminateDrawable">@drawable/lefitwhite_scrubber_progress_horizontal_holo_light</item>
+        <item name="android:minHeight">13dip</item>
+        <item name="android:maxHeight">13dip</item>
+        <item name="android:thumb">@drawable/lefitwhite_scrubber_control_selector_holo_light</item>
+        <item name="android:thumbOffset">16dip</item>
+        <item name="android:paddingLeft">16dip</item>
+        <item name="android:paddingRight">16dip</item>
+    </style>
+
+    <style name="RatingBarLefitwhite" parent="android:Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/lefitwhite_ratingbar_full_holo_light</item>
+        <item name="android:indeterminateDrawable">@drawable/lefitwhite_ratingbar_full_holo_light</item>
+    </style>
+
+    <style name="RatingBarBigLefitwhite">
+        <item name="android:progressDrawable">@drawable/lefitwhite_ratingbar_holo_light</item>
+        <item name="android:indeterminateDrawable">@drawable/lefitwhite_ratingbar_holo_light</item>
+        <item name="android:minHeight">35dip</item>
+        <item name="android:maxHeight">35dip</item>
+    </style>
+
+    <style name="RatingBarSmallLefitwhite">
+        <item name="android:progressDrawable">@drawable/lefitwhite_ratingbar_small_holo_light</item>
+        <item name="android:indeterminateDrawable">@drawable/lefitwhite_ratingbar_small_holo_light</item>
+        <item name="android:minHeight">16dip</item>
+        <item name="android:maxHeight">16dip</item>
+    </style>
+
+    <style name="ToggleLefitwhite" parent="android:Widget.Button.Toggle">
+        <item name="android:background">@drawable/lefitwhite_btn_toggle_holo_light</item>
+        <item name="android:minHeight">48dip</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="ListViewLefitwhite" parent="android:Widget.ListView">
+        <item name="android:listSelector">@drawable/lefitwhite_list_selector_holo_light</item>
+    </style>
+
+    <style name="ListViewLefitwhite.White" parent="android:Widget.ListView.White">
+        <item name="android:listSelector">@drawable/lefitwhite_list_selector_holo_light</item>
+    </style>
+
+    <style name="SpinnerItemLefitwhite" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
+        <item name="android:textColor">#000000</item>
+    </style>
+
+</resources>

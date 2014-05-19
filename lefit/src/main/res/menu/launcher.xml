@@ -1,0 +1,35 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.wsn.lefit.lefit.LauncherActivity" >
+
+    <item android:id="@+id/menunotifications"
+        android:title="Mostrar notificações"
+        android:titleCondensed="Notificações"
+        android:checkable="true"
+
+        android:icon="@drawable/ic_device_access_time"
+        app:showAsAction="always|collapseActionView" />
+
+    <item android:id="@+id/menusound"
+        android:title="Som"
+        android:titleCondensed="Som"
+        app:showAsAction="never" />
+    <item android:id="@+id/menuvibrate"
+        android:title="Vibrar"
+        android:titleCondensed="Vibrar"
+        app:showAsAction="never" />
+    <item android:id="@+id/menutime"
+        android:title="Hora"
+        android:titleCondensed="Hora"
+        app:showAsAction="never" />
+
+
+
+
+    <item android:id="@+id/menudebug"
+        android:title="DEBUG"
+        android:titleCondensed="DEBUG"
+        app:showAsAction="never" />
+
+</menu>

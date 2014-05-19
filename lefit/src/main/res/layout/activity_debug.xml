@@ -1,0 +1,56 @@
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:baselineAligned="false">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Dialog"
+        android:id="@+id/button"
+        android:layout_gravity="center_horizontal"
+        android:onClick="showDialog"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Notification"
+        android:id="@+id/button2"
+        android:layout_gravity="center_horizontal"
+        android:onClick="showNotification" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Check"
+        android:id="@+id/button3"
+        android:layout_gravity="center_horizontal"
+        android:onClick="checkService" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Set alarm"
+        android:id="@+id/button4"
+        android:layout_gravity="center_horizontal"
+        android:onClick="setalarmService" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Unset alarm"
+        android:id="@+id/button5"
+        android:layout_gravity="center_horizontal"
+        android:onClick="unsetalarmService" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/textView"
+        android:layout_gravity="center_horizontal" />
+
+
+</LinearLayout>

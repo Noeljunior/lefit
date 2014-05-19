@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.wsn.lefit.lefit" >
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.LeFitBlue" >
+        <activity
+            android:name="com.wsn.lefit.lefit.LauncherActivity"
+            android:label="@string/app_name"
+            android:logo="@drawable/ic_titleicon"
+            android:theme="@style/Theme.LeFitBlue" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+>
+        </activity>
+        <activity
+            android:name="com.wsn.lefit.lefit.PopupActivity"
+            android:excludeFromRecents="true"
+            android:label="Le Fit"
+            android:theme="@style/Theme.LeFitBlue.Dialog" >
+        </activity>
+        <activity
+            android:name="com.wsn.lefit.lefit.DebugActivity"
+            android:label="Debug Menu"
+            android:theme="@style/Theme.LeFitBlue" >
+        </activity>
+
+        <service android:name="com.wsn.lefit.lefit.MainService" />
+
+        <receiver
+            android:name="com.wsn.lefit.lefit.Alarmer"
+            android:process=":remote" />
+
+    </application>
+
+</manifest>
