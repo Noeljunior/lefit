@@ -44,8 +44,11 @@ public class LvCalendarAdaptor extends BaseAdapter {
         /* TODO delete this dummy data set */
         for (int i = 0; i < 50; i++) {
 
-            if ((i % 5) == 0) {
+            if ((i % 10) == 0) {
                 items.add(new Item(Type.SEPRATOR, "Separator at " + i));
+            }
+            else if ((i % 3) == 0) {
+                items.add(new Item(Type.ITEM_UNFILLED, R.drawable.ic_questionmark, "Clique para preencher", ""));
             }
             else {
                 items.add(new Item(Type.ITEM_FILLED, R.drawable.ic_icon_0, "Descrição da performance deste dia", "Seg, 19 de Maio"));
@@ -86,13 +89,13 @@ public class LvCalendarAdaptor extends BaseAdapter {
         switch (items.get(position).getType()) {
             default:
             case ITEM_FILLED:
-                vi = buildItem(convertView, R.drawable.ic_icon_0, "Descrição da performance deste dia", "Seg, 19 de Maio");
+                vi = buildItem(convertView, items.get(position).getLogo(), items.get(position).description, items.get(position).getDate());
                 break;
             case ITEM_UNFILLED:
-                vi = buildItem(convertView, R.drawable.ic_icon_0, "Descrição da performance deste dia", "Seg, 19 de Maio");
+                vi = buildItemUnfilled(convertView, position);
                 break;
             case SEPRATOR:
-                vi = buildSeparator(convertView, "Separador at " + position);
+                vi = buildSeparator(convertView, items.get(position).getDescription());
                 break;
         }
         return vi;
@@ -113,6 +116,23 @@ public class LvCalendarAdaptor extends BaseAdapter {
         tvdescription.setText(description);
         tvdate.setText(date);
         ivlogo.setImageResource(logo);
+
+
+        return vi;
+    }
+
+    private View buildItemUnfilled(View convertView, int position) {
+        View vi = convertView;
+        if(convertView == null)
+            vi = inflater.inflate(R.layout.lv_item_unfilled_calendar, null);
+
+        TextView tvdescription = (TextView) vi.findViewById(R.id.tvdescription); // title
+        ImageView ivlogo = (ImageView) vi.findViewById(R.id.ivlogo); // thumb image
+
+
+        // Setting all values in listview
+        tvdescription.setText(items.get(position).getDescription());
+        ivlogo.setImageResource(items.get(position).getLogo());
 
 
         return vi;
