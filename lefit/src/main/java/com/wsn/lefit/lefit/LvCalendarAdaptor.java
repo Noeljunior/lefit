@@ -32,13 +32,10 @@ public class LvCalendarAdaptor extends BaseAdapter {
     private ArrayList<Item> items = new ArrayList<Item>();
 
 
-    private Activity activity;
-    private ArrayList<HashMap<String, String>> data;
     private static LayoutInflater inflater = null;
 
 
-    public LvCalendarAdaptor(Activity a) {
-        activity = a;
+    public LvCalendarAdaptor(Activity activity) {
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         /* TODO delete this dummy data set */
@@ -48,7 +45,7 @@ public class LvCalendarAdaptor extends BaseAdapter {
                 items.add(new Item(Type.SEPRATOR, "Separator at " + i));
             }
             else if ((i % 3) == 0) {
-                items.add(new Item(Type.ITEM_UNFILLED, R.drawable.ic_questionmark, "Clique para preencher", ""));
+                items.add(new Item(Type.ITEM_UNFILLED, R.drawable.ic_questionmark, "Clique para preencher", "Seg, 20 de Maio"));
             }
             else {
                 items.add(new Item(Type.ITEM_FILLED, R.drawable.ic_icon_0, "Descrição da performance deste dia", "Seg, 19 de Maio"));
@@ -56,6 +53,18 @@ public class LvCalendarAdaptor extends BaseAdapter {
 
         }
 
+    }
+
+    public ArrayList<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(ArrayList<Item> items) {
+        this.items = items;
+    }
+
+    public void addItem(Item item) {
+        items.add(item);
     }
 
     @Override
@@ -89,23 +98,26 @@ public class LvCalendarAdaptor extends BaseAdapter {
         switch (items.get(position).getType()) {
             default:
             case ITEM_FILLED:
-                vi = buildItem(convertView, items.get(position).getLogo(), items.get(position).description, items.get(position).getDate());
+                vi = buildItemFilled(convertView, position);
                 break;
             case ITEM_UNFILLED:
                 vi = buildItemUnfilled(convertView, position);
                 break;
             case SEPRATOR:
-                vi = buildSeparator(convertView, items.get(position).getDescription());
+                vi = buildSeparator(convertView, position);
                 break;
         }
         return vi;
     }
 
 
-    private View buildItem(View convertView, int logo, String description, String date) {
+    private View buildItemFilled(View convertView, int position) {
         View vi = convertView;
         if(convertView == null)
             vi = inflater.inflate(R.layout.lv_item_calendar, null);
+
+        vi.setEnabled(false);
+        vi.setOnClickListener(null);
 
         TextView tvdescription = (TextView) vi.findViewById(R.id.tvdescription); // title
         TextView tvdate = (TextView) vi.findViewById(R.id.tvdate); // artist name
@@ -113,10 +125,9 @@ public class LvCalendarAdaptor extends BaseAdapter {
 
 
         // Setting all values in listview
-        tvdescription.setText(description);
-        tvdate.setText(date);
-        ivlogo.setImageResource(logo);
-
+        tvdescription.setText(items.get(position).getDescription());
+        tvdate.setText(items.get(position).date);
+        ivlogo.setImageResource(items.get(position).getLogo());
 
         return vi;
     }
@@ -127,25 +138,29 @@ public class LvCalendarAdaptor extends BaseAdapter {
             vi = inflater.inflate(R.layout.lv_item_unfilled_calendar, null);
 
         TextView tvdescription = (TextView) vi.findViewById(R.id.tvdescription); // title
+        TextView tvdate = (TextView) vi.findViewById(R.id.tvdate); // artist name
         ImageView ivlogo = (ImageView) vi.findViewById(R.id.ivlogo); // thumb image
 
 
         // Setting all values in listview
         tvdescription.setText(items.get(position).getDescription());
+        tvdate.setText(items.get(position).date);
         ivlogo.setImageResource(items.get(position).getLogo());
-
 
         return vi;
     }
 
-    private View buildSeparator(View convertView, String text) {
+    private View buildSeparator(View convertView, int position) {
         View vi = convertView;
         if(convertView == null)
             vi = inflater.inflate(R.layout.lv_item_separator, null);
 
+        vi.setEnabled(false);
+        vi.setOnClickListener(null);
+
         TextView tvtext = (TextView) vi.findViewById(R.id.tvtext);
 
-        tvtext.setText(text);
+        tvtext.setText(items.get(position).getDescription());
 
         return vi;
     }
@@ -153,7 +168,6 @@ public class LvCalendarAdaptor extends BaseAdapter {
 
     public class Item {
         private Type type;
-
         private int logo;
         private String description;
         private String date;
