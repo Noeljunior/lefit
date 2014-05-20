@@ -34,7 +34,7 @@ public class DebugActivity extends Activity {
 
         Message m = new Message("Como é o seu estilo de vida?",
                 new String[] {"Sou sedentário", "Sou activo mas não pratico exercício", "Faço algum exercicio", "Faço muito"},
-                new int[] {R.drawable.ic_icon_0, R.drawable.ic_icon_1, R.drawable.ic_icon_2, R.drawable.ic_icon_3},
+                new int[] {R.drawable.ic_phraseicon_0, R.drawable.ic_phraseicon_1, R.drawable.ic_phraseicon_2, R.drawable.ic_phraseicon_3},
                 new String[] {"A vida é bela", "Faça exercicio fisico!", "Lamba-me o escroto"},
                 2, 0,
                 1);
@@ -80,7 +80,7 @@ public class DebugActivity extends Activity {
 
         Message m = new Message("Como é o seu estilo de vida?",
                 new String[] {"Sou sedentário", "Sou activo mas não pratico exercício", "Faço algum exercicio", "Faço muito"},
-                new int[] {R.drawable.ic_icon_0, R.drawable.ic_icon_1, R.drawable.ic_icon_2, R.drawable.ic_icon_3},
+                new int[] {R.drawable.ic_phraseicon_0, R.drawable.ic_phraseicon_1, R.drawable.ic_phraseicon_2, R.drawable.ic_phraseicon_3},
                 new String[] {"A vida é bela", "Faça exercicio fisico!", "Lamba-me o escroto"},
                 2, 0,
                 1);

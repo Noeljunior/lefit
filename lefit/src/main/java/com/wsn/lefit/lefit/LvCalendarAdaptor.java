@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class LvCalendarAdaptor extends BaseAdapter {
-    private enum Type {
+    public static enum Type {
         ITEM_FILLED(0),
         ITEM_UNFILLED(1),
         SEPRATOR(2);
@@ -39,7 +39,7 @@ public class LvCalendarAdaptor extends BaseAdapter {
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         /* TODO delete this dummy data set */
-        for (int i = 0; i < 50; i++) {
+        /*for (int i = 0; i < 50; i++) {
 
             if (((i+1) % 7) == 0) {
                 items.add(new Item(Type.SEPRATOR, "Semana " + (int) i/7));
@@ -64,7 +64,7 @@ public class LvCalendarAdaptor extends BaseAdapter {
                     items.add(new Item(Type.ITEM_FILLED, R.drawable.ic_icon_3, "Pratiquei muito exercício", "Qui, 13 de Maio"));
                     break;
             }
-        }
+        }*/
 
     }
 
@@ -78,6 +78,16 @@ public class LvCalendarAdaptor extends BaseAdapter {
 
     public void addItem(Item item) {
         items.add(item);
+    }
+
+    public void addItemFilled(int logo, String description, String date) {
+        items.add(new Item(Type.ITEM_FILLED, logo, description, date));
+    }
+    public void addItemUnfilled(int logo, String description, String date) {
+        items.add(new Item(Type.ITEM_UNFILLED, logo, description, date));
+    }
+    public void addSeparator(String description) {
+        items.add(new Item(Type.SEPRATOR, description));
     }
 
     @Override
@@ -97,7 +107,7 @@ public class LvCalendarAdaptor extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        return items.get(position).getType().getId();
+        return items.get(position).type.getId();
     }
 
     @Override
@@ -108,7 +118,7 @@ public class LvCalendarAdaptor extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View vi;
 
-        switch (items.get(position).getType()) {
+        switch (items.get(position).type) {
             default:
             case ITEM_FILLED:
                 vi = buildItemFilled(convertView, position);
@@ -143,8 +153,8 @@ public class LvCalendarAdaptor extends BaseAdapter {
             holder = (ItemHolder) convertView.getTag();
         }
 
-        holder.logo.setImageResource(items.get(position).getLogo());
-        holder.description.setText(items.get(position).getDescription());
+        holder.logo.setImageResource(items.get(position).logo);
+        holder.description.setText(items.get(position).description);
         holder.date.setText(items.get(position).date);
 
         return convertView;
@@ -166,8 +176,8 @@ public class LvCalendarAdaptor extends BaseAdapter {
             holder = (ItemHolder) convertView.getTag();
         }
 
-        holder.logo.setImageResource(items.get(position).getLogo());
-        holder.description.setText(items.get(position).getDescription());
+        holder.logo.setImageResource(items.get(position).logo);
+        holder.description.setText(items.get(position).description);
         holder.date.setText(items.get(position).date);
 
         return convertView;
@@ -190,7 +200,7 @@ public class LvCalendarAdaptor extends BaseAdapter {
             holder = (ItemHolder) convertView.getTag();
         }
 
-        holder.description.setText(items.get(position).getDescription());
+        holder.description.setText(items.get(position).description);
 
         return convertView;
     }
@@ -202,24 +212,24 @@ public class LvCalendarAdaptor extends BaseAdapter {
     }
 
     public class Item {
-        private Type type;
-        private int logo;
-        private String description;
-        private String date;
+        public Type type;
+        public int logo;
+        public String description;
+        public String date;
 
-        private Item(Type type, int logo, String description, String date) {
+        public Item(Type type, int logo, String description, String date) {
             this.type = type;
             this.logo = logo;
             this.description = description;
             this.date = date;
         }
 
-        private Item(Type type, String description) {
+        public Item(Type type, String description) {
             this.type = type;
             this.description = description;
         }
 
-        public Type getType() {
+        /*public Type getType() {
             return type;
         }
 
@@ -233,7 +243,7 @@ public class LvCalendarAdaptor extends BaseAdapter {
 
         public String getDate() {
             return date;
-        }
+        }*/
     }
 
 }

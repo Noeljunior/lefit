@@ -22,7 +22,7 @@
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:src="@drawable/ic_icon_0"
+        android:src="@drawable/ic_phraseicon_0"
         android:layout_margin="8dp"  />
 
     <TextView

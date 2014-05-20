@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <array
+        name="phrases">
+        <item>@array/phrases0</item>
+        <item>@array/phrases1</item>
+    </array>
+
+    <string-array
+        name="phrases0">
+        <!--  0 --> <item>Sou sedentário</item>
+        <!--  1 --> <item>Gosto de descansar</item>
+        <!--  2 --> <item>Faço um passeio por dia</item>
+        <!--  3 --> <item>Tenho uma vida activa</item>
+        <!--  4 --> <item>Faço algum exercício</item>
+        <!--  5 --> <item>Costumo fazer exercício</item>
+        <!--  6 --> <item>Faço regularmente exercicio</item>
+        <!--  7 --> <item>Estou farto de inventar frases</item>
+        <!--  8 --> <item>Vou a Fátima a pé</item>
+        <!--  9 --> <item>Faço a volta a Portugal</item>
+        <!-- 10 --> <item>Puxo um camião com os dentes como treino diário, além de comer muito cálcio</item>
+    </string-array>
+    <string-array
+        name="phrases1">
+        <!--  0 --> <item>Fui sedentário</item>
+        <!--  1 --> <item></item>
+        <!--  2 --> <item></item>
+        <!--  3 --> <item></item>
+        <!--  4 --> <item></item>
+        <!--  5 --> <item></item>
+        <!--  6 --> <item></item>
+        <!--  7 --> <item></item>
+        <!--  8 --> <item></item>
+        <!--  9 --> <item></item>
+        <!-- 10 --> <item>Fiz um treino para competição</item>
+    </string-array>
+
+</resources>

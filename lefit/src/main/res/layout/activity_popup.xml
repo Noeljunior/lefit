@@ -52,7 +52,7 @@
         android:id="@+id/phraselogo"
         android:layout_below="@+id/titlelayout"
         android:layout_alignRight="@+id/titlelayout"
-        android:src="@drawable/ic_icon_2"
+        android:src="@drawable/ic_phraseicon_0"
         android:layout_marginRight="5dp"
         android:layout_marginTop="5dp" />
 
