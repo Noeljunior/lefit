@@ -7,9 +7,9 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:background="@color/tab_bg">
+        android:background="#43555555">
 
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -31,7 +31,7 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Medium Text"
                 android:id="@+id/textView6"

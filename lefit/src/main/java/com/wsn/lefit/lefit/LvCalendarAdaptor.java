@@ -41,16 +41,29 @@ public class LvCalendarAdaptor extends BaseAdapter {
         /* TODO delete this dummy data set */
         for (int i = 0; i < 50; i++) {
 
-            if ((i % 10) == 0) {
-                items.add(new Item(Type.SEPRATOR, "Separator at " + i));
+            if (((i+1) % 7) == 0) {
+                items.add(new Item(Type.SEPRATOR, "Semana " + (int) i/7));
             }
-            else if ((i % 3) == 0) {
+            if (Math.random() <= 0.2) {
                 items.add(new Item(Type.ITEM_UNFILLED, R.drawable.ic_questionmark, "Clique para preencher", "Seg, 20 de Maio"));
             }
-            else {
-                items.add(new Item(Type.ITEM_FILLED, R.drawable.ic_icon_0, "Descrição da performance deste dia", "Seg, 19 de Maio"));
-            }
 
+            int sel = (int) (Math.random() * 3.99);
+            switch (sel) {
+                default:
+                case 0:
+                    items.add(new Item(Type.ITEM_FILLED, R.drawable.ic_icon_0, "Fui sedentário", "Seg, 10 de Maio"));
+                    break;
+                case 1:
+                    items.add(new Item(Type.ITEM_FILLED, R.drawable.ic_icon_1, "Fui activo", "Ter, 11 de Maio"));
+                    break;
+                case 2:
+                    items.add(new Item(Type.ITEM_FILLED, R.drawable.ic_icon_2, "Pratiquei algum exercício", "Qua, 12 de Maio"));
+                    break;
+                case 3:
+                    items.add(new Item(Type.ITEM_FILLED, R.drawable.ic_icon_3, "Pratiquei muito exercício", "Qui, 13 de Maio"));
+                    break;
+            }
         }
 
     }
@@ -116,7 +129,7 @@ public class LvCalendarAdaptor extends BaseAdapter {
 
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.lv_item_calendar, null);
-            System.out.println("New View");
+
             holder = new ItemHolder();
             holder.logo = (ImageView) convertView.findViewById(R.id.ivlogo);
             holder.description = (TextView) convertView.findViewById(R.id.tvdescription);
@@ -128,7 +141,6 @@ public class LvCalendarAdaptor extends BaseAdapter {
         }
         else {
             holder = (ItemHolder) convertView.getTag();
-            System.out.println("Cached View");
         }
 
         holder.logo.setImageResource(items.get(position).getLogo());
@@ -139,36 +151,48 @@ public class LvCalendarAdaptor extends BaseAdapter {
     }
 
     private View buildItemUnfilled(View convertView, int position) {
-        View vi = convertView;
-        if(convertView == null)
-            vi = inflater.inflate(R.layout.lv_item_unfilled_calendar, null);
+        ItemHolder holder;
 
-        TextView tvdescription = (TextView) vi.findViewById(R.id.tvdescription); // title
-        TextView tvdate = (TextView) vi.findViewById(R.id.tvdate); // artist name
-        ImageView ivlogo = (ImageView) vi.findViewById(R.id.ivlogo); // thumb image
+        if (convertView == null) {
+            convertView = inflater.inflate(R.layout.lv_item_unfilled_calendar, null);
 
+            holder = new ItemHolder();
+            holder.logo = (ImageView) convertView.findViewById(R.id.ivlogo);
+            holder.description = (TextView) convertView.findViewById(R.id.tvdescription);
+            holder.date = (TextView) convertView.findViewById(R.id.tvdate);
+            convertView.setTag(holder);
+        }
+        else {
+            holder = (ItemHolder) convertView.getTag();
+        }
 
-        // Setting all values in listview
-        tvdescription.setText(items.get(position).getDescription());
-        tvdate.setText(items.get(position).date);
-        ivlogo.setImageResource(items.get(position).getLogo());
+        holder.logo.setImageResource(items.get(position).getLogo());
+        holder.description.setText(items.get(position).getDescription());
+        holder.date.setText(items.get(position).date);
 
-        return vi;
+        return convertView;
     }
 
     private View buildSeparator(View convertView, int position) {
-        View vi = convertView;
-        if(convertView == null)
-            vi = inflater.inflate(R.layout.lv_item_separator, null);
+        ItemHolder holder;
 
-        vi.setEnabled(false);
-        vi.setOnClickListener(null);
+        if (convertView == null) {
+            convertView = inflater.inflate(R.layout.lv_item_separator, null);
 
-        TextView tvtext = (TextView) vi.findViewById(R.id.tvtext);
+            holder = new ItemHolder();
+            holder.description = (TextView) convertView.findViewById(R.id.tvtext);
+            convertView.setTag(holder);
 
-        tvtext.setText(items.get(position).getDescription());
+            convertView.setEnabled(false);
+            convertView.setOnClickListener(null);
+        }
+        else {
+            holder = (ItemHolder) convertView.getTag();
+        }
 
-        return vi;
+        holder.description.setText(items.get(position).getDescription());
+
+        return convertView;
     }
 
     public static class ItemHolder {
