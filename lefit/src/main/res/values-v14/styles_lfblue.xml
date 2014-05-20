@@ -20,6 +20,8 @@
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
     <style name="Theme.LeFitBlue" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+
+
         <!-- Action Bar -->
         <item name="android:actionBarItemBackground">@drawable/selectable_background_lefitstyle2</item>
         <item name="android:popupMenuStyle">@style/LeFitBlue.PopupMenu</item>

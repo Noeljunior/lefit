@@ -64,6 +64,7 @@
             android:scrollingCache="true"
             android:stackFromBottom="false"
             android:paddingTop="10dp"
-            android:paddingBottom="10dp" />
+            android:paddingBottom="10dp"
+            android:cacheColorHint="#FF0000"/>
     </FrameLayout>
 </LinearLayout>

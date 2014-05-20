@@ -1,56 +1,103 @@
 <LinearLayout
-    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/info_root"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:baselineAligned="false">
+    android:orientation="vertical"
+    android:layout_gravity="bottom" >
 
-    <Button
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/infos_titre"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dip"
+            android:textSize="20dip"
+            android:gravity="center"
+            android:text="dsdsdfdsf">
+        </TextView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Show Dialog"
-        android:id="@+id/button"
-        android:layout_gravity="center_horizontal"
-        android:onClick="showDialog"/>
+        android:layout_weight="1">
 
-    <Button
-        android:layout_width="wrap_content"
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/infos_LL"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_vertical">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Show Dialog"
+                    android:id="@+id/button"
+                    android:layout_gravity="center_horizontal"
+                    android:onClick="showDialog"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Notification"
+                    android:id="@+id/button2"
+                    android:layout_gravity="center_horizontal"
+                    android:onClick="showNotification" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Check"
+                    android:id="@+id/button3"
+                    android:layout_gravity="center_horizontal"
+                    android:onClick="checkService" />
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Set alarm"
+                    android:id="@+id/button4"
+                    android:layout_gravity="center_horizontal"
+                    android:onClick="setalarmService" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Unset alarm"
+                    android:id="@+id/button5"
+                    android:layout_gravity="center_horizontal"
+                    android:onClick="unsetalarmService" />
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Notification"
-        android:id="@+id/button2"
-        android:layout_gravity="center_horizontal"
-        android:onClick="showNotification" />
+        android:paddingTop="6dip">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Check"
-        android:id="@+id/button3"
-        android:layout_gravity="center_horizontal"
-        android:onClick="checkService" />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Set alarm"
-        android:id="@+id/button4"
-        android:layout_gravity="center_horizontal"
-        android:onClick="setalarmService" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Unset alarm"
-        android:id="@+id/button5"
-        android:layout_gravity="center_horizontal"
-        android:onClick="unsetalarmService" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/textView"
-        android:layout_gravity="center_horizontal" />
-
-
+        <Button
+            android:id="@+id/infos_remarquebutton"
+            android:text="Faire une remarque"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1" >
+        </Button>
+        <Button
+            android:id="@+id/infos_partagerbutton"
+            android:text="Partager"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+        </Button>
+    </LinearLayout>
 </LinearLayout>

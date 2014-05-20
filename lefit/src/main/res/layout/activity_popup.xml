@@ -1,225 +1,261 @@
-<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    tools:context=".PopupActivity"
-    android:background="@color/background">
-
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:id="@+id/titlelayout"
-        android:layout_alignParentEnd="false"
-        android:layout_alignParentStart="false"
-        android:background="#3f8099">
-
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:id="@+id/logo"
-            android:layout_alignParentEnd="false"
-            android:src="@drawable/ic_titleicon"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp" />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Title"
-            android:id="@+id/title"
-            android:layout_alignTop="@+id/logo"
-            android:layout_toRightOf="@+id/logo"
-            android:layout_alignBottom="@+id/logo"
-            android:gravity="center_vertical"
-            android:layout_marginRight="2dp"
-            android:layout_marginLeft="5dp"
-            android:textColor="#ffe6fcf7" />
-
-        <View
-            android:id="@+id/separator"
-            android:layout_width="fill_parent"
-            android:layout_height="2dp"
-            android:background="#ff33b5e5"
-            android:layout_below="@+id/logo"
-            android:layout_marginTop="5dp" />
-    </RelativeLayout>
-
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:id="@+id/phraselogo"
-        android:layout_below="@+id/titlelayout"
-        android:layout_alignRight="@+id/titlelayout"
-        android:src="@drawable/ic_phraseicon_0"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Answer description"
-        android:id="@+id/phrase"
-        android:layout_alignStart="@+id/titlelayout"
-        android:layout_toLeftOf="@+id/phraselogo"
-        android:layout_alignBottom="@+id/phraselogo"
-        android:gravity="center_vertical"
-        android:layout_marginLeft="5dp"
-        android:paddingLeft="5dp"
-        android:textColor="#e6fcf7"
-        android:layout_alignTop="@+id/phraselogo"
-        android:layout_alignLeft="@+id/titlelayout" />
-
-    <ImageButton
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:id="@+id/ibless"
-        android:layout_below="@+id/phrase"
-        android:layout_alignLeft="@+id/phrase"
-        android:layout_alignStart="@+id/phrase"
-        android:background="?android:selectableItemBackground"
-        android:src="@drawable/ic_navigation_previous_item"
-        android:layout_marginRight="5dp"
-        android:onClick="decrementSeek"
-        android:layout_marginTop="5dp" />
-
-    <ImageButton
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:id="@+id/ibmore"
-        android:layout_alignRight="@+id/phraselogo"
-        android:layout_alignEnd="@+id/phraselogo"
-        android:layout_below="@+id/phrase"
-        android:background="?android:selectableItemBackground"
-        android:src="@drawable/ic_navigation_next_item"
-        android:layout_marginLeft="5dp"
-        android:onClick="incrementSeek"
-        android:layout_marginTop="5dp" />
-
-    <SeekBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/seekbar"
-        android:layout_alignTop="@+id/ibless"
-        android:layout_toRightOf="@+id/ibless"
-        android:layout_toLeftOf="@+id/ibmore"
-        style="@style/SeekBarLefitwhite" />
-
-    <RelativeLayout
-        android:id="@+id/messagelayout"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/phraselogo"
-        android:layout_below="@+id/ibless"
-        android:layout_marginTop="5dp"
-        android:layout_alignLeft="@+id/ibless"
-        android:layout_toRightOf="@+id/ibmore">
-
-        <View
-            android:id="@+id/separator3"
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="#ff5bbbdf" />
-
-        <ImageButton
-            android:layout_width="32dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/ibhidemsg"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:src="@drawable/ic_content_remove"
-            android:layout_alignTop="@+id/message"
-            android:layout_alignBottom="@+id/message"
-            android:layout_marginLeft="5dp"
-            android:background="?android:selectableItemBackground"
-            android:onClick="hideMessage" />
-
-        <ImageButton
-            android:layout_width="32dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/iblikemsg"
-            android:layout_below="@+id/separator3"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_navigation_next_item"
-            android:layout_alignTop="@+id/message"
-            android:layout_alignBottom="@+id/message"
-            android:background="?android:selectableItemBackground"
-            android:layout_marginRight="5dp" />
-
-        <TextView
-            android:layout_width="50dp"
-            android:layout_height="55dp"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Message of the day"
-            android:id="@+id/message"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:gravity="center_vertical|center_horizontal"
-            android:layout_toRightOf="@+id/ibhidemsg"
-            android:layout_toLeftOf="@+id/iblikemsg"
-            android:layout_alignTop="@+id/separator3"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:textColor="#e6fcf7" />
-    </RelativeLayout>
-
-    <View
-        android:id="@+id/separator4"
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="#3b7a91"
-        android:layout_below="@+id/messagelayout"
-        android:layout_marginTop="10dp" />
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:layout_gravity="bottom" >
 
     <LinearLayout
-        android:id="@+id/buttons"
-        android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/separator4"
-        android:background="@drawable/lvitembg">
+        android:layout_height="wrap_content" >
 
-        <ImageButton
-            android:layout_width="wrap_content"
+        <!-- HEADER -->
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="?android:selectableItemBackground"
-            android:id="@+id/ibclose"
-            android:src="@drawable/ic_navigation_cancel" />
+            android:id="@+id/header"
+            android:background="@color/actionbar_bg">
 
-        <View
-            android:id="@+id/separator1"
-            android:layout_width="1dp"
-            android:layout_height="fill_parent"
-            android:background="#3b7a91" />
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:id="@+id/logo"
+                android:layout_alignParentEnd="false"
+                android:src="@drawable/ic_titleicon"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp" />
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="?android:selectableItemBackground"
-            android:id="@+id/ibpostpone"
-            android:src="@drawable/ic_device_access_time" />
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Title"
+                android:id="@+id/title"
+                android:layout_alignTop="@+id/logo"
+                android:layout_toRightOf="@+id/logo"
+                android:layout_alignBottom="@+id/logo"
+                android:gravity="center_vertical"
+                android:layout_marginRight="2dp"
+                android:layout_marginLeft="5dp"
+                android:textColor="#ffe6fcf7" />
 
-        <View
-            android:id="@+id/separator2"
-            android:layout_width="1dp"
-            android:layout_height="fill_parent"
-            android:background="#3b7a91" />
+            <View
+                android:id="@+id/separator"
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:background="#ff33b5e5"
+                android:layout_below="@+id/logo"
+                android:layout_marginTop="5dp" />
+        </RelativeLayout>
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="?android:selectableItemBackground"
-            android:id="@+id/ibsubmit"
-            android:src="@drawable/ic_navigation_accept" />
     </LinearLayout>
 
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <!-- CONTENT -->
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/scrolllayout">
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:id="@+id/phraselogo"
+                    android:src="@drawable/ic_phraseicon_0"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_alignParentEnd="true" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:text="Answer description"
+                    android:id="@+id/phrase"
+                    android:layout_toLeftOf="@+id/phraselogo"
+                    android:layout_alignBottom="@+id/phraselogo"
+                    android:layout_marginLeft="5dp"
+                    android:paddingLeft="5dp"
+                    android:textColor="@color/view_fg_light"
+                    android:layout_alignTop="@+id/phraselogo"
+                    android:layout_alignParentEnd="false"
+                    android:layout_alignParentStart="true"
+                    android:singleLine="false"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:gravity="center_vertical" />
+
+                <ImageButton
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:id="@+id/ibless"
+                    android:layout_below="@+id/phrase"
+                    android:layout_alignLeft="@+id/phrase"
+                    android:layout_alignStart="@+id/phrase"
+                    android:background="?android:selectableItemBackground"
+                    android:src="@drawable/ic_navigation_previous_item"
+                    android:layout_marginRight="5dp"
+                    android:onClick="decrementSeek"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp" />
+
+                <ImageButton
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:id="@+id/ibmore"
+                    android:layout_alignRight="@+id/phraselogo"
+                    android:layout_alignEnd="@+id/phraselogo"
+                    android:layout_below="@+id/phrase"
+                    android:background="?android:selectableItemBackground"
+                    android:src="@drawable/ic_navigation_next_item"
+                    android:layout_marginLeft="5dp"
+                    android:onClick="incrementSeek"
+                    android:layout_marginTop="5dp" />
+
+                <SeekBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/seekbar"
+                    android:layout_alignTop="@+id/ibless"
+                    android:layout_toRightOf="@+id/ibless"
+                    android:layout_toLeftOf="@+id/ibmore"
+                    style="@style/SeekBarLefitwhite" />
+
+                <RelativeLayout
+                    android:id="@+id/messagelayout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/phraselogo"
+                    android:layout_below="@+id/ibless"
+                    android:layout_marginTop="5dp"
+                    android:layout_alignLeft="@+id/ibless"
+                    android:layout_toRightOf="@+id/ibmore">
+
+                    <View
+                        android:id="@+id/separator3"
+                        android:layout_width="fill_parent"
+                        android:layout_height="1dp"
+                        android:background="#ff5bbbdf" />
+
+                    <ImageButton
+                        android:layout_width="32dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/ibhidemsg"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:src="@drawable/ic_content_remove"
+                        android:layout_alignTop="@+id/message"
+                        android:layout_alignBottom="@+id/message"
+                        android:layout_marginLeft="5dp"
+                        android:background="?android:selectableItemBackground"
+                        android:onClick="hideMessage" />
+
+                    <ImageButton
+                        android:layout_width="32dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/iblikemsg"
+                        android:layout_below="@+id/separator3"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_navigation_next_item"
+                        android:layout_alignTop="@+id/message"
+                        android:layout_alignBottom="@+id/message"
+                        android:background="?android:selectableItemBackground"
+                        android:layout_marginRight="5dp" />
+
+                    <TextView
+                        android:layout_width="50dp"
+                        android:layout_height="55dp"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="Message of the day"
+                        android:id="@+id/message"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:layout_toRightOf="@+id/ibhidemsg"
+                        android:layout_toLeftOf="@+id/iblikemsg"
+                        android:layout_alignTop="@+id/separator3"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:textColor="@color/view_fg_light"
+                        android:layout_marginBottom="5dp" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+
+        </ScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- FOOTER -->
+
+        <View
+            android:id="@+id/separator4"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="#3b7a91"
+            android:layout_above="@+id/buttons" />
+
+        <LinearLayout
+            android:id="@+id/buttons"
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/lvitembg" >
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="?android:selectableItemBackground"
+                android:id="@+id/ibclose"
+                android:src="@drawable/ic_navigation_cancel" />
+
+            <View
+                android:id="@+id/separator1"
+                android:layout_width="1dp"
+                android:layout_height="fill_parent"
+                android:background="#3b7a91" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="?android:selectableItemBackground"
+                android:id="@+id/ibpostpone"
+                android:src="@drawable/ic_device_access_time" />
+
+            <View
+                android:id="@+id/separator2"
+                android:layout_width="1dp"
+                android:layout_height="fill_parent"
+                android:background="#3b7a91" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="?android:selectableItemBackground"
+                android:id="@+id/ibsubmit"
+                android:src="@drawable/ic_navigation_accept" />
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+</LinearLayout>

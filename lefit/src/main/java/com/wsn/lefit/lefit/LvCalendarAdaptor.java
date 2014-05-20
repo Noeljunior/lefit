@@ -38,34 +38,6 @@ public class LvCalendarAdaptor extends BaseAdapter {
     public LvCalendarAdaptor(Activity activity) {
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        /* TODO delete this dummy data set */
-        /*for (int i = 0; i < 50; i++) {
-
-            if (((i+1) % 7) == 0) {
-                items.add(new Item(Type.SEPRATOR, "Semana " + (int) i/7));
-            }
-            if (Math.random() <= 0.2) {
-                items.add(new Item(Type.ITEM_UNFILLED, R.drawable.ic_questionmark, "Clique para preencher", "Seg, 20 de Maio"));
-            }
-
-            int sel = (int) (Math.random() * 3.99);
-            switch (sel) {
-                default:
-                case 0:
-                    items.add(new Item(Type.ITEM_FILLED, R.drawable.ic_icon_0, "Fui sedentário", "Seg, 10 de Maio"));
-                    break;
-                case 1:
-                    items.add(new Item(Type.ITEM_FILLED, R.drawable.ic_icon_1, "Fui activo", "Ter, 11 de Maio"));
-                    break;
-                case 2:
-                    items.add(new Item(Type.ITEM_FILLED, R.drawable.ic_icon_2, "Pratiquei algum exercício", "Qua, 12 de Maio"));
-                    break;
-                case 3:
-                    items.add(new Item(Type.ITEM_FILLED, R.drawable.ic_icon_3, "Pratiquei muito exercício", "Qui, 13 de Maio"));
-                    break;
-            }
-        }*/
-
     }
 
     public ArrayList<Item> getItems() {
@@ -81,13 +53,13 @@ public class LvCalendarAdaptor extends BaseAdapter {
     }
 
     public void addItemFilled(int logo, String description, String date) {
-        items.add(new Item(Type.ITEM_FILLED, logo, description, date));
+        items.add(0, new Item(Type.ITEM_FILLED, logo, description, date));
     }
     public void addItemUnfilled(int logo, String description, String date) {
-        items.add(new Item(Type.ITEM_UNFILLED, logo, description, date));
+        items.add(0, new Item(Type.ITEM_UNFILLED, logo, description, date));
     }
     public void addSeparator(String description) {
-        items.add(new Item(Type.SEPRATOR, description));
+        items.add(0, new Item(Type.SEPRATOR, description));
     }
 
     @Override
