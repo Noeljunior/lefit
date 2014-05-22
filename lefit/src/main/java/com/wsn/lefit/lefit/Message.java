@@ -3,9 +3,7 @@ package com.wsn.lefit.lefit;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by liam on 5/15/14.
- */
+
 public class Message implements Parcelable {
     private String   title;
     private String[] phrases;

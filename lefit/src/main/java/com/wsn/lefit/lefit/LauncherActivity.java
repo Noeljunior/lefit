@@ -16,6 +16,8 @@ import java.util.Calendar;
 public class LauncherActivity extends Activity {
     private LvCalendarAdaptor lvcalendaradaptor;
 
+    //public static final
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -3,6 +3,8 @@ package com.wsn.lefit.lefit;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -183,7 +185,7 @@ public class LvCalendarAdaptor extends BaseAdapter {
         public TextView date;
     }
 
-    public class Item {
+    public class Item implements Parcelable {
         public Type type;
         public int logo;
         public String description;
@@ -198,24 +200,47 @@ public class LvCalendarAdaptor extends BaseAdapter {
 
         public Item(Type type, String description) {
             this.type = type;
+            this.logo = 0;
             this.description = description;
+            this.date = "";
         }
 
-        /*public Type getType() {
-            return type;
+        /* Parcelable */
+        public Item(Parcel in) {
+            readFromParcel(in);
         }
 
-        public int getLogo() {
-            return logo;
+        @Override
+        public int describeContents() {
+            return 0;
         }
 
-        public String getDescription() {
-            return description;
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(type.getId());
+            dest.writeInt(logo);
+            dest.writeString(description);
+            dest.writeString(date);
         }
 
-        public String getDate() {
-            return date;
-        }*/
+        private void readFromParcel(Parcel in) {
+            type = Type.values()[in.readInt()];
+            logo = in.readInt();
+            description = in.readString();
+            date = in.readString();
+        }
+
+        public final Parcelable.Creator CREATOR =
+                new Parcelable.Creator() {
+                    public Message createFromParcel(Parcel in) {
+                        return new Message(in);
+                    }
+                    public Message[] newArray(int size) {
+                        return new Message[size];
+                    }
+                };
+
+
     }
 
 }
