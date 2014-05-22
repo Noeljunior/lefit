@@ -32,7 +32,7 @@ public class DebugActivity extends Activity {
     public void showDialog(View view) {
         Intent intent = new Intent(this, PopupActivity.class);
 
-        Message m = new Message("Como é o seu estilo de vida?",
+        MessageParcel m = new MessageParcel("Como é o seu estilo de vida?",
                 new String[] {"Sou sedentário", "Sou activo mas não pratico exercício", "Faço algum exercicio", "Faço muito"},
                 new int[] {R.drawable.ic_phraseicon_0, R.drawable.ic_phraseicon_1, R.drawable.ic_phraseicon_2, R.drawable.ic_phraseicon_3},
                 new String[] {"A vida é bela", "Faça exercicio fisico!", "Lamba-me o escroto"},
@@ -78,7 +78,7 @@ public class DebugActivity extends Activity {
         Intent resultIntent = new Intent(this, PopupActivity.class);
 
 
-        Message m = new Message("Como é o seu estilo de vida?",
+        MessageParcel m = new MessageParcel("Como é o seu estilo de vida?",
                 new String[] {"Sou sedentário", "Sou activo mas não pratico exercício", "Faço algum exercicio", "Faço muito"},
                 new int[] {R.drawable.ic_phraseicon_0, R.drawable.ic_phraseicon_1, R.drawable.ic_phraseicon_2, R.drawable.ic_phraseicon_3},
                 new String[] {"A vida é bela", "Faça exercicio fisico!", "Lamba-me o escroto"},

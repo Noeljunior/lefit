@@ -4,12 +4,17 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Messenger;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
-import com.wsn.lefit.lefit.LvCalendarAdaptor.*;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 
@@ -93,6 +98,37 @@ public class LauncherActivity extends Activity {
 
 
     }
+
+    public void testBehave(View view) {
+        Intent intent = new Intent(this, MainService.class);
+        intent.putExtra(MainService.MESSENGER, new Messenger(handler));
+        intent.putExtra(MainService.SWITCH, MainService.GETLVITEMS);
+        startService(intent);
+    }
+
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            Bundle data = msg.getData();
+
+
+            LvItemParcel item = data.getParcelable(MainService.GETLVITEMS);
+
+            ArrayList<LvItemParcel> lvar = new ArrayList<>();
+            lvar.add(item);
+
+            lvcalendaradaptor.setItems(lvar);
+
+        }
+    };
+
+
+
+
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

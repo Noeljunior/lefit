@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 
-public class Message implements Parcelable {
+public class MessageParcel implements Parcelable {
     private String   title;
     private String[] phrases;
     private int[]    logos;
@@ -15,7 +15,7 @@ public class Message implements Parcelable {
 
     private static final long serialVersionUID = 1L;
 
-    public Message(String title, String[] phrases, int[] logos, String[] messages, int dphrase, int dmessage, int showMessage) {
+    public MessageParcel(String title, String[] phrases, int[] logos, String[] messages, int dphrase, int dmessage, int showMessage) {
         this.title = title;
         this.phrases = phrases;
         this.logos = logos;
@@ -72,7 +72,7 @@ public class Message implements Parcelable {
     }
 
     /* PARCELABLE SPECIFIC */
-    public Message(Parcel in) {
+    public MessageParcel(Parcel in) {
         readFromParcel(in);
     }
 
@@ -124,11 +124,13 @@ public class Message implements Parcelable {
 
     public static final Parcelable.Creator CREATOR =
             new Parcelable.Creator() {
-                public Message createFromParcel(Parcel in) {
-                    return new Message(in);
+                public MessageParcel createFromParcel(Parcel in) {
+                    return new MessageParcel(in);
                 }
-                public Message[] newArray(int size) {
-                    return new Message[size];
+                public MessageParcel[] newArray(int size) {
+                    return new MessageParcel[size];
                 }
             };
+
+
 }

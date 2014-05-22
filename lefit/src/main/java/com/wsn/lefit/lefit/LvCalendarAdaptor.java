@@ -13,25 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class LvCalendarAdaptor extends BaseAdapter {
-    public static enum Type {
-        ITEM_FILLED(0),
-        ITEM_UNFILLED(1),
-        SEPRATOR(2);
-
-        private final int id;
-        Type(int id) {
-            this.id = id;
-        }
-
-        public int getId() {
-            return id;
-        }
-    }
-
-    private ArrayList<Item> items = new ArrayList<Item>();
+    private ArrayList<LvItemParcel> items = new ArrayList<LvItemParcel>();
 
 
     private static LayoutInflater inflater = null;
@@ -42,26 +26,26 @@ public class LvCalendarAdaptor extends BaseAdapter {
 
     }
 
-    public ArrayList<Item> getItems() {
+    public ArrayList<LvItemParcel> getItems() {
         return items;
     }
 
-    public void setItems(ArrayList<Item> items) {
+    public void setItems(ArrayList<LvItemParcel> items) {
         this.items = items;
     }
 
-    public void addItem(Item item) {
+    public void addItem(LvItemParcel item) {
         items.add(item);
     }
 
     public void addItemFilled(int logo, String description, String date) {
-        items.add(0, new Item(Type.ITEM_FILLED, logo, description, date));
+        items.add(0, new LvItemParcel(LvItemParcel.Type.ITEM_FILLED, logo, description, date));
     }
     public void addItemUnfilled(int logo, String description, String date) {
-        items.add(0, new Item(Type.ITEM_UNFILLED, logo, description, date));
+        items.add(0, new LvItemParcel(LvItemParcel.Type.ITEM_UNFILLED, logo, description, date));
     }
     public void addSeparator(String description) {
-        items.add(0, new Item(Type.SEPRATOR, description));
+        items.add(0, new LvItemParcel(LvItemParcel.Type.SEPRATOR, description));
     }
 
     @Override
@@ -70,7 +54,7 @@ public class LvCalendarAdaptor extends BaseAdapter {
     }
 
     @Override
-    public Item getItem(int position) {
+    public LvItemParcel getItem(int position) {
         return items.get(position);
     }
 
@@ -86,7 +70,7 @@ public class LvCalendarAdaptor extends BaseAdapter {
 
     @Override
     public int getViewTypeCount() {
-        return Type.values().length;
+        return LvItemParcel.Type.values().length;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -185,62 +169,5 @@ public class LvCalendarAdaptor extends BaseAdapter {
         public TextView date;
     }
 
-    public class Item implements Parcelable {
-        public Type type;
-        public int logo;
-        public String description;
-        public String date;
-
-        public Item(Type type, int logo, String description, String date) {
-            this.type = type;
-            this.logo = logo;
-            this.description = description;
-            this.date = date;
-        }
-
-        public Item(Type type, String description) {
-            this.type = type;
-            this.logo = 0;
-            this.description = description;
-            this.date = "";
-        }
-
-        /* Parcelable */
-        public Item(Parcel in) {
-            readFromParcel(in);
-        }
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeInt(type.getId());
-            dest.writeInt(logo);
-            dest.writeString(description);
-            dest.writeString(date);
-        }
-
-        private void readFromParcel(Parcel in) {
-            type = Type.values()[in.readInt()];
-            logo = in.readInt();
-            description = in.readString();
-            date = in.readString();
-        }
-
-        public final Parcelable.Creator CREATOR =
-                new Parcelable.Creator() {
-                    public Message createFromParcel(Parcel in) {
-                        return new Message(in);
-                    }
-                    public Message[] newArray(int size) {
-                        return new Message[size];
-                    }
-                };
-
-
-    }
 
 }

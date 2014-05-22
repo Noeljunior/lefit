@@ -1,15 +1,10 @@
 package com.wsn.lefit.lefit;
 
-import android.support.v4.app.FragmentActivity;
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -19,7 +14,7 @@ import android.widget.TextView;
 
 public class PopupActivity extends Activity {
 
-    private Message message;
+    private MessageParcel message;
     private int test;
 
     /* States */
