@@ -12,9 +12,18 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Test"
+            android:text="TestCB"
             android:id="@+id/button"
             android:onClick="testBehave" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TestBC"
+            android:id="@+id/button3"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/button"
+            android:onClick="testBroadcast" />
     </RelativeLayout>
 
     <FrameLayout

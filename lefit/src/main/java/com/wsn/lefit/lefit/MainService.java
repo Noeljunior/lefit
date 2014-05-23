@@ -21,10 +21,20 @@ public class MainService extends IntentService {
     public static final String DOSETALARM = "com.wsn.lefit.lefit.extra.DOSETALARM";
     public static final String DOUNSETALARM = "com.wsn.lefit.lefit.extra.DOUNSETALARM";
 
+    /* Intent receivers */
     public static final String SWITCH = "com.wsn.lefit.lefit.mainservice.SWITCH";
     public static final String MESSENGER = "com.wsn.lefit.lefit.mainservice.MESSENGER";
 
+    public static final String DEBUG = "com.wsn.lefit.lefit.mainservice.SWITCH.DEBUG";
     public static final String GETLVITEMS = "com.wsn.lefit.lefit.mainservice.SWITCH.GETLVITEMS";
+
+    /* Broadcasts senders */
+    public static final String BROADCAST = "com.wsn.lefit.lefit.mainservice.BROADCAST";
+
+    public static final String BC_SWITCH = "com.wsn.lefit.lefit.mainservice.BROADCAST.BC_SWITCH";
+    public static final String BC_UPDATEITEMS = "com.wsn.lefit.lefit.mainservice.BROADCAST.BC_UPDATEITEMS";
+
+
 
     public MainService() {
         super("MainService");
@@ -47,74 +57,37 @@ public class MainService extends IntentService {
         switch (intent.getStringExtra(SWITCH)) {
             case GETLVITEMS:
                 sendLvItems((Messenger) intent.getExtras().get(MESSENGER));
-                break;
+                return;
 
+            case DEBUG:
+                debugIntent(intent);
+                return;
             default:
                 return;
         }
 
 
-        //Toast.makeText(this, "New intent received: " + intent.getStringExtra(DOCHECK), Toast.LENGTH_SHORT).show();
-        /*if (intent != null) {
-            final String action = intent.getAction();
-            //if (CHECK.equals(action)) {
-                final String param1 = intent.getStringExtra(DOCHECK);
-                handleActionCheck(param1);
-            //}
-        }*/
+    }
 
-        /*final String cenas = intent.getStringExtra(DOCHECK);
+    private void debugIntent(Intent it) {
+        Intent i = new Intent(BROADCAST);
 
-        Handler mHandler = new Handler(getMainLooper());
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getApplicationContext(), "New intent received: " + cenas, Toast.LENGTH_SHORT).show();
-            }
-        });*/
+        i.putExtra(BC_SWITCH, BC_UPDATEITEMS);
 
-
-        /*if (intent.getStringExtra(DOCHECK) != null) {
-            // If it is to check what to do
-            checkIfSendsANotification();
-        }
-        else if (intent.getStringExtra(DOSETALARM) != null) {
-            // If it is to set the alamarm
-
-            // TODO check if there is already an alarmer and stop it
-
-            // Setting up new alarmer
-            new Alarmer().setAlarm(MainService.this, System.currentTimeMillis(), 1000 * 10 * 1);
-
-        }
-        else if (intent.getStringExtra(DOUNSETALARM) != null) {
-            // If it is to unset the alamarm
-
-            // Unset the alarm, if any
-            new Alarmer().cancelAlarm(MainService.this);
-
-        }
-        else {
-            // Dunno what to do :/
-
-        }*/
-
-
-
-
-
+        sendBroadcast(i);
     }
 
     private void sendLvItems(Messenger messenger) {
         Message msg = Message.obtain();
         Bundle data = new Bundle();
 
-        //data.putString(GETLVITEMS, "TESTING");
+        data.putString(SWITCH, GETLVITEMS);
 
-
-        LvItemParcel item = new LvItemParcel(LvItemParcel.Type.SEPRATOR, "Separator test");
-
-        data.putParcelable(GETLVITEMS, item);
+        LvItemParcel item[] = {new LvItemParcel(LvItemParcel.Type.SEPRATOR, "Separator test"),
+                new LvItemParcel(LvItemParcel.Type.SEPRATOR, "Separator test 2"),
+                new LvItemParcel(LvItemParcel.Type.SEPRATOR, "Separator test 3"),
+                new LvItemParcel(LvItemParcel.Type.SEPRATOR, "Separator test 4") };
+        data.putParcelableArray(GETLVITEMS, item);
 
         msg.setData(data);
         try {
@@ -123,6 +96,8 @@ public class MainService extends IntentService {
             Log.i("ERROR", "Error send lv items back");
         }
     }
+
+
 
 
 

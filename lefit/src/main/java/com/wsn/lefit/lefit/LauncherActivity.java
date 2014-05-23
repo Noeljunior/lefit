@@ -2,7 +2,10 @@ package com.wsn.lefit.lefit;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,6 +18,7 @@ import android.widget.ListView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 
 
@@ -31,6 +35,8 @@ public class LauncherActivity extends Activity {
 
         lvcalendaradaptor = new LvCalendarAdaptor(this);
 
+
+        registerReceiver(setLvItemsReceiver, new IntentFilter(MainService.BROADCAST));
 
         /* TODO delete this dummy listview populator */
 
@@ -112,19 +118,59 @@ public class LauncherActivity extends Activity {
         public void handleMessage(Message msg) {
             Bundle data = msg.getData();
 
+            if (data.getString(MainService.SWITCH) == null) {
+                // Unknown intent
+                return;
+            }
 
-            LvItemParcel item = data.getParcelable(MainService.GETLVITEMS);
+            switch (data.getString(MainService.SWITCH)) {
+                case MainService.GETLVITEMS:
+                    LvItemParcel item[] = (LvItemParcel[]) data.getParcelableArray(MainService.GETLVITEMS);
 
-            ArrayList<LvItemParcel> lvar = new ArrayList<>();
-            lvar.add(item);
+                    ArrayList<LvItemParcel> lvar = new ArrayList<>(Arrays.asList(item));
 
-            lvcalendaradaptor.setItems(lvar);
+
+                    lvcalendaradaptor.setItems(lvar);
+                    lvcalendaradaptor.notifyDataSetChanged();
+                    return;
+
+                default:
+                    return;
+            }
+
 
         }
     };
 
+    public void testBroadcast(View view) {
+        Intent intent = new Intent(this, MainService.class);
+        intent.putExtra(MainService.SWITCH, MainService.DEBUG);
+        startService(intent);
+    }
+
+    private BroadcastReceiver setLvItemsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("LauncherActivity", "NEW BROADCAST RECEIVED");
+            if (intent.getStringExtra(MainService.BC_SWITCH) == null) {
+                // Unkown intent
+                Log.d("LauncherActivity", "NULL BROADCAST INTENT");
+                return;
+            }
 
 
+            switch (intent.getStringExtra(MainService.BC_SWITCH)) {
+                case MainService.BC_UPDATEITEMS:
+                    testBehave(null);
+                    Log.d("LauncherActivity", "BROADCAST: BC_UPDATEITEMS");
+                    return;
+
+                default:
+                    return;
+            }
+
+        }
+    };
 
 
 
