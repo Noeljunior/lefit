@@ -5,15 +5,6 @@ import android.os.Parcelable;
 
 
 public class MessageParcel implements Parcelable {
-    private String   title;
-    private String[] phrases;
-    private int[]    logos;
-    private String[] messages;
-    private int      dphrase;
-    private int      dmessage;
-    private int      showMessage;
-
-
     public int title;
 
     public int phraseset;
@@ -23,67 +14,20 @@ public class MessageParcel implements Parcelable {
 
     public int messageset;
     public int messagesubset;
-    public int defphrase;
+    public int defmessage;
     public int showmessage;
 
 
-
-    private static final long serialVersionUID = 1L;
-
-    public MessageParcel(String title, String[] phrases, int[] logos, String[] messages, int dphrase, int dmessage, int showMessage) {
+    public MessageParcel(int title, int phraseset, int minphrase, int maxphrase, int defphrase, int messageset, int messagesubset, int defmessage, int showmessage) {
         this.title = title;
-        this.phrases = phrases;
-        this.logos = logos;
-        this.messages = messages;
-        this.dphrase = dphrase;
-        this.dmessage = dmessage;
-        this.showMessage = showMessage;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String[] getPhrases() {
-        return phrases;
-    }
-    public String getPhrase(int id) {
-        return phrases[id];
-    }
-    public int countPhrases() {
-        return phrases.length;
-    }
-
-    public int[] getLogos() {
-        return logos;
-    }
-    public int getLogo(int id) {
-        return logos[id];
-    }
-    public int countLogos() {
-        return logos.length;
-    }
-
-    public String[] getMessages() {
-        return messages;
-    }
-    public String getMessage(int id) {
-        return messages[id];
-    }
-    public int countMessages() {
-        return messages.length;
-    }
-
-    public int getDphrase() {
-        return dphrase;
-    }
-
-    public int getDmessage() {
-        return dmessage;
-    }
-
-    public int getShowMessage() {
-        return showMessage;
+        this.phraseset = phraseset;
+        this.minphrase = minphrase;
+        this.maxphrase = maxphrase;
+        this.defphrase = defphrase;
+        this.messageset = messageset;
+        this.messagesubset = messagesubset;
+        this.defmessage = defmessage;
+        this.showmessage = showmessage;
     }
 
     /* PARCELABLE SPECIFIC */
@@ -98,43 +42,29 @@ public class MessageParcel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(title);
+        dest.writeInt(title);
+        dest.writeInt(phraseset);
+        dest.writeInt(minphrase);
+        dest.writeInt(maxphrase);
+        dest.writeInt(defphrase);
 
-        dest.writeInt(countPhrases());
-        for (int i = 0; i < countPhrases(); i++) {
-            dest.writeString(phrases[i]);
-            dest.writeInt(logos[i]);
-        }
-
-        dest.writeInt(countMessages());
-        for (int i = 0; i < countMessages(); i++)
-            dest.writeString(messages[i]);
-
-        dest.writeInt(dphrase);
-        dest.writeInt(dmessage);
-        dest.writeInt(showMessage);
+        dest.writeInt(messageset);
+        dest.writeInt(messagesubset);
+        dest.writeInt(defmessage);
+        dest.writeInt(showmessage);
     }
 
 
     private void readFromParcel(Parcel in) {
-        title = in.readString();
-
-        int i = in.readInt();
-        phrases = new String[i];
-        logos = new int[i];
-        for (i = 0; i < countPhrases(); i++) {
-            phrases[i] = in.readString();
-            logos[i] = in.readInt();
-        }
-
-        i = in.readInt();
-        messages = new String[i];
-        for (i = 0; i < countMessages(); i++)
-            messages[i] = in.readString();
-
-        dphrase = in.readInt();
-        dmessage = in.readInt();
-        showMessage = in.readInt();
+        this.title = in.readInt();
+        this.phraseset = in.readInt();
+        this.minphrase = in.readInt();
+        this.maxphrase = in.readInt();
+        this.defphrase = in.readInt();
+        this.messageset = in.readInt();
+        this.messagesubset = in.readInt();
+        this.defmessage = in.readInt();
+        this.showmessage = in.readInt();
     }
 
     public static final Parcelable.Creator CREATOR =

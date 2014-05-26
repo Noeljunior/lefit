@@ -1,28 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--  Titles -->
-    <string-array
-        name="titles">
+    <string-array name="titles">
         <!--  0 --> <item>Como é o seu estilo de vida?</item>
         <!--  1 --> <item>Como foi o seu dia?</item>
     </string-array>
 
     <!--  Phrases -->
-    <array
-        name="phrases">
+    <array name="phrases">
         <item>@array/phrases0</item>
         <item>@array/phrases1</item>
         <item>@array/phrases2</item>
     </array>
-    <string-array
-        name="phrases0">
+    <string-array name="phrases0">
         <!--  0 --> <item>Sou sedentário.</item>
         <!--  1 --> <item>Sou activo mas não pratico exercício físico.</item>
         <!--  2 --> <item>Pratico exercício de forma moderada.</item>
         <!--  3 --> <item>Pratico exercício de forma intensa.</item>
     </string-array>
-    <string-array
-        name="phrases1">
+    <string-array name="phrases1">
         <!--  0 --> <item>Não fiz nada.</item>
         <!--  1 --> <item>Estive bastante parado.</item>
         <!--  2 --> <item>Fiz qualquer coisa mas não me cansei muito.</item>
@@ -31,12 +27,8 @@
         <!--  5 --> <item>Fiz exercício um tanto ou quanto exigente.</item>
         <!--  6 --> <item>Aventurei-me e fui treinar, mas aguentei.</item>
         <!--  7 --> <item>Treinei como um louco. Nem sei como ainda estou vivo. </item>
-        <!--  8 --> <item>O treino que fiz hoje não é para pessoas normais.. Nem sei como estou vivo.</item>
-        <!--  9 --> <item>Cometi uma locura e fiz uma maratona. Não faço mais nada o resto da semana</item>
-        <!-- 10 --> <item>Fui um super-homem! Nem sei como ainda estou vivo!</item>
     </string-array>
-    <string-array
-        name="phrases2">
+    <string-array name="phrases2">
         <!--  0 --> <item>Descansei.</item>
         <!--  1 --> <item>Não fiz grande coisa.</item>
         <!--  2 --> <item>Tive um dia calmo.</item>
@@ -51,25 +43,58 @@
     </string-array>
 
     <!--  Messages -->
-    <array
-        name="messages">
-        <item>@array/messages0</item>
-        <item>@array/messages1</item>
+    <array name="messages">
+        <item>@array/messagesinfo</item>
+        <item>@array/messagesmotiv</item>
     </array>
-    <string-array
-        name="messages0"> <!--  Informativas -->
-        <!--  0 --> <item>Mensagem informativa 1</item>
-        <!--  1 --> <item>Mensagem informativa 2</item>
-        <!--  2 --> <item>Mensagem informativa 3</item>
-        <!--  3 --> <item>Mensagem informativa 4</item>
+
+
+    <!--  Informativas -->
+    <array name="messagesinfo">
+        <item>@array/messagesinfo0</item>
+        <item>@array/messagesinfo1</item>
+    </array>
+
+    <string-array name="messagesinfo0">
+        <!--  0 --> <item>Mensagem informativa A1</item>
+        <!--  1 --> <item>Mensagem informativa A2</item>
+        <!--  2 --> <item>Mensagem informativa A3</item>
     </string-array>
-    <string-array
-        name="messages1"> <!--  Motivacionais -->
-        <!--  0 --> <item>Mensagem motivacinal 1</item>
-        <!--  1 --> <item>Mensagem motivacinal 2</item>
-        <!--  2 --> <item>Mensagem motivacinal 3</item>
-        <!--  3 --> <item>Mensagem motivacinal 4</item>
+    <string-array name="messagesinfo1">
+        <!--  0 --> <item>Mensagem informativa B1</item>
+        <!--  1 --> <item>Mensagem informativa B2</item>
+        <!--  2 --> <item>Mensagem informativa B3</item>
+    </string-array>
+
+    <!--  Motivacionais -->
+    <array name="messagesmotiv">
+        <item>@array/messagesmotiv0</item>
+        <item>@array/messagesmotiv1</item>
+    </array>
+    <string-array name="messagesmotiv0">
+        <!--  0 --> <item>Mensagem motivacinal A1</item>
+        <!--  1 --> <item>Mensagem motivacinal A2</item>
+        <!--  2 --> <item>Mensagem motivacinal A3</item>
+    </string-array>
+    <string-array name="messagesmotiv1">
+        <!--  0 --> <item>Mensagem motivacinal B1</item>
+        <!--  1 --> <item>Mensagem motivacinal B2</item>
+        <!--  2 --> <item>Mensagem motivacinal B3</item>
     </string-array>
 
 
+    <!--  Logos -->
+    <array name="phraseicons">
+        <!--  0 --> <item>@drawable/ic_phraseicon_0</item>
+        <!--  1 --> <item>@drawable/ic_phraseicon_1</item>
+        <!--  2 --> <item>@drawable/ic_phraseicon_2</item>
+        <!--  3 --> <item>@drawable/ic_phraseicon_3</item>
+        <!--  4 --> <item>@drawable/ic_phraseicon_4</item>
+        <!--  5 --> <item>@drawable/ic_phraseicon_5</item>
+        <!--  6 --> <item>@drawable/ic_phraseicon_6</item>
+        <!--  7 --> <item>@drawable/ic_phraseicon_7</item>
+        <!--  8 --> <item>@drawable/ic_phraseicon_8</item>
+        <!--  9 --> <item>@drawable/ic_phraseicon_9</item>
+        <!-- 10 --> <item>@drawable/ic_phraseicon_10</item>
+    </array>
 </resources>

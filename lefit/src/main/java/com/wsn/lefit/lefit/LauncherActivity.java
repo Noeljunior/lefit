@@ -61,37 +61,37 @@ public class LauncherActivity extends Activity {
             switch (sel) {
                 default:
                 case 0:
-                    lvcalendaradaptor.addItemFilled(R.drawable.ic_phraseicon_0, getResources().getStringArray(R.array.phrases0)[0], dateFormat.format(cal.getTime()));
+                    lvcalendaradaptor.addItemFilled(R.drawable.ic_phraseicon_0, getResources().getStringArray(R.array.phrases2)[0], dateFormat.format(cal.getTime()));
                     break;
                 case 1:
-                    lvcalendaradaptor.addItemFilled(R.drawable.ic_phraseicon_1, getResources().getStringArray(R.array.phrases0)[1], dateFormat.format(cal.getTime()));
+                    lvcalendaradaptor.addItemFilled(R.drawable.ic_phraseicon_1, getResources().getStringArray(R.array.phrases2)[1], dateFormat.format(cal.getTime()));
                     break;
                 case 2:
-                    lvcalendaradaptor.addItemFilled(R.drawable.ic_phraseicon_2, getResources().getStringArray(R.array.phrases0)[2], dateFormat.format(cal.getTime()));
+                    lvcalendaradaptor.addItemFilled(R.drawable.ic_phraseicon_2, getResources().getStringArray(R.array.phrases2)[2], dateFormat.format(cal.getTime()));
                     break;
                 case 3:
-                    lvcalendaradaptor.addItemFilled(R.drawable.ic_phraseicon_3, getResources().getStringArray(R.array.phrases0)[3], dateFormat.format(cal.getTime()));
+                    lvcalendaradaptor.addItemFilled(R.drawable.ic_phraseicon_3, getResources().getStringArray(R.array.phrases2)[3], dateFormat.format(cal.getTime()));
                     break;
                 case 4:
-                    lvcalendaradaptor.addItemFilled(R.drawable.ic_phraseicon_4, getResources().getStringArray(R.array.phrases0)[4], dateFormat.format(cal.getTime()));
+                    lvcalendaradaptor.addItemFilled(R.drawable.ic_phraseicon_4, getResources().getStringArray(R.array.phrases2)[4], dateFormat.format(cal.getTime()));
                     break;
                 case 5:
-                    lvcalendaradaptor.addItemFilled(R.drawable.ic_phraseicon_5, getResources().getStringArray(R.array.phrases0)[5], dateFormat.format(cal.getTime()));
+                    lvcalendaradaptor.addItemFilled(R.drawable.ic_phraseicon_5, getResources().getStringArray(R.array.phrases2)[5], dateFormat.format(cal.getTime()));
                     break;
                 case 6:
-                    lvcalendaradaptor.addItemFilled(R.drawable.ic_phraseicon_6, getResources().getStringArray(R.array.phrases0)[6], dateFormat.format(cal.getTime()));
+                    lvcalendaradaptor.addItemFilled(R.drawable.ic_phraseicon_6, getResources().getStringArray(R.array.phrases2)[6], dateFormat.format(cal.getTime()));
                     break;
                 case 7:
-                    lvcalendaradaptor.addItemFilled(R.drawable.ic_phraseicon_7, getResources().getStringArray(R.array.phrases0)[7], dateFormat.format(cal.getTime()));
+                    lvcalendaradaptor.addItemFilled(R.drawable.ic_phraseicon_7, getResources().getStringArray(R.array.phrases2)[7], dateFormat.format(cal.getTime()));
                     break;
                 case 8:
-                    lvcalendaradaptor.addItemFilled(R.drawable.ic_phraseicon_8, getResources().getStringArray(R.array.phrases0)[8], dateFormat.format(cal.getTime()));
+                    lvcalendaradaptor.addItemFilled(R.drawable.ic_phraseicon_8, getResources().getStringArray(R.array.phrases2)[8], dateFormat.format(cal.getTime()));
                     break;
                 case 9:
-                    lvcalendaradaptor.addItemFilled(R.drawable.ic_phraseicon_9, getResources().getStringArray(R.array.phrases0)[9], dateFormat.format(cal.getTime()));
+                    lvcalendaradaptor.addItemFilled(R.drawable.ic_phraseicon_9, getResources().getStringArray(R.array.phrases2)[9], dateFormat.format(cal.getTime()));
                     break;
                 case 10:
-                    lvcalendaradaptor.addItemFilled(R.drawable.ic_phraseicon_10, getResources().getStringArray(R.array.phrases0)[10], dateFormat.format(cal.getTime()));
+                    lvcalendaradaptor.addItemFilled(R.drawable.ic_phraseicon_10, getResources().getStringArray(R.array.phrases2)[10], dateFormat.format(cal.getTime()));
                     break;
             }
 

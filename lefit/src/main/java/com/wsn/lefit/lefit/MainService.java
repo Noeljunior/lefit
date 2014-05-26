@@ -180,14 +180,14 @@ public class MainService extends IntentService {
         /* So, its time to send notification */
 
         /* Pick a message to send */
-        MessageParcel m = new MessageParcel("Como é o seu estilo de vida?",
+        /*MessageParcel m = new MessageParcel("Como é o seu estilo de vida?",
                 new String[] {"Sou sedentário", "Sou activo mas não pratico exercício", "Faço algum exercicio", "Faço muito"},
                 new int[] {R.drawable.ic_phraseicon_0, R.drawable.ic_phraseicon_1, R.drawable.ic_phraseicon_2, R.drawable.ic_phraseicon_3},
                 new String[] {"A vida é bela", "Faça exercicio fisico!", "Lamba-me o escroto"},
                 2, 0,
-                1);
+                1);*/
 
-        sendNotification(m);
+        //sendNotification(m);
     }
 
 

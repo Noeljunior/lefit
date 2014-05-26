@@ -185,7 +185,8 @@
                         android:layout_alignTop="@+id/message"
                         android:layout_alignBottom="@+id/message"
                         android:background="?android:selectableItemBackground"
-                        android:layout_marginRight="5dp" />
+                        android:layout_marginRight="5dp"
+                        android:onClick="netMessage" />
 
                     <TextView
                         android:layout_width="50dp"

@@ -6,10 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
-import android.provider.BaseColumns;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.view.MenuItem;
@@ -35,12 +32,16 @@ public class DebugActivity extends Activity {
     public void showDialog(View view) {
         Intent intent = new Intent(this, PopupActivity.class);
 
-        MessageParcel m = new MessageParcel("Como é o seu estilo de vida?",
+        /*MessageParcel m = new MessageParcel("Como é o seu estilo de vida?",
                 new String[] {"Sou sedentário", "Sou activo mas não pratico exercício", "Faço algum exercicio", "Faço muito"},
                 new int[] {R.drawable.ic_phraseicon_0, R.drawable.ic_phraseicon_1, R.drawable.ic_phraseicon_2, R.drawable.ic_phraseicon_3},
                 new String[] {"A vida é bela", "Faça exercicio fisico!", "Lamba-me o escroto"},
                 2, 0,
-                1);
+                1);*/
+
+        MessageParcel m = new MessageParcel(1,
+                2, 3, 4, 3,
+                1, 0, 0, 1);
 
         intent.putExtra("msg", m);
 
@@ -81,14 +82,14 @@ public class DebugActivity extends Activity {
         Intent resultIntent = new Intent(this, PopupActivity.class);
 
 
-        MessageParcel m = new MessageParcel("Como é o seu estilo de vida?",
+        /*MessageParcel m = new MessageParcel("Como é o seu estilo de vida?",
                 new String[] {"Sou sedentário", "Sou activo mas não pratico exercício", "Faço algum exercicio", "Faço muito"},
                 new int[] {R.drawable.ic_phraseicon_0, R.drawable.ic_phraseicon_1, R.drawable.ic_phraseicon_2, R.drawable.ic_phraseicon_3},
                 new String[] {"A vida é bela", "Faça exercicio fisico!", "Lamba-me o escroto"},
                 2, 0,
-                1);
+                1);*/
 
-        resultIntent.putExtra("msg", m);
+       // resultIntent.putExtra("msg", m);
 
         // The stack builder object will contain an artificial back stack for the
         // started Activity.
