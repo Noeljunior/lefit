@@ -6,7 +6,10 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.provider.BaseColumns;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.view.MenuItem;
@@ -45,7 +48,7 @@ public class DebugActivity extends Activity {
 
     }
 
-    public void checkService(View view) {
+    /*public void checkService(View view) {
         Intent mServiceIntent = new Intent(this, MainService.class);
 
         mServiceIntent.putExtra(MainService.DOCHECK, "");
@@ -62,7 +65,7 @@ public class DebugActivity extends Activity {
 
         mServiceIntent.putExtra(MainService.DOUNSETALARM, "");
         this.startService(mServiceIntent);
-    }
+    }*/
 
     public void showNotification(View view) {
         NotificationCompat.Builder mBuilder;
@@ -129,6 +132,27 @@ public class DebugActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }*/
+
+
+    public void WriteItem(View view) {
+        StorageDB db = new StorageDB(this);
+
+        db.addDailyRow(69, "hell yeah");
+
+
+
+    }
+
+    public void ReadItems(View view) {
+        StorageDB db = new StorageDB(this);
+
+        db.readDaily();
+
+    }
+
+
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

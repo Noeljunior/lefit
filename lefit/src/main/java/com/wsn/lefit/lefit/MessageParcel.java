@@ -13,6 +13,21 @@ public class MessageParcel implements Parcelable {
     private int      dmessage;
     private int      showMessage;
 
+
+    public int title;
+
+    public int phraseset;
+    public int minphrase;
+    public int maxphrase;
+    public int defphrase;
+
+    public int messageset;
+    public int messagesubset;
+    public int defphrase;
+    public int showmessage;
+
+
+
     private static final long serialVersionUID = 1L;
 
     public MessageParcel(String title, String[] phrases, int[] logos, String[] messages, int dphrase, int dmessage, int showMessage) {

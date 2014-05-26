@@ -1,39 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--  Titles -->
+    <string-array
+        name="titles">
+        <!--  0 --> <item>Como é o seu estilo de vida?</item>
+        <!--  1 --> <item>Como foi o seu dia?</item>
+    </string-array>
 
+    <!--  Phrases -->
     <array
         name="phrases">
         <item>@array/phrases0</item>
         <item>@array/phrases1</item>
+        <item>@array/phrases2</item>
     </array>
-
     <string-array
         name="phrases0">
-        <!--  0 --> <item>Sou sedentário</item>
-        <!--  1 --> <item>Gosto de descansar</item>
-        <!--  2 --> <item>Faço um passeio por dia</item>
-        <!--  3 --> <item>Tenho uma vida activa</item>
-        <!--  4 --> <item>Faço algum exercício</item>
-        <!--  5 --> <item>Costumo fazer exercício</item>
-        <!--  6 --> <item>Faço regularmente exercicio</item>
-        <!--  7 --> <item>Estou farto de inventar frases</item>
-        <!--  8 --> <item>Vou a Fátima a pé</item>
-        <!--  9 --> <item>Faço a volta a Portugal</item>
-        <!-- 10 --> <item>Puxo um camião com os dentes como treino diário, além de comer muito cálcio</item>
+        <!--  0 --> <item>Sou sedentário.</item>
+        <!--  1 --> <item>Sou activo mas não pratico exercício físico.</item>
+        <!--  2 --> <item>Pratico exercício de forma moderada.</item>
+        <!--  3 --> <item>Pratico exercício de forma intensa.</item>
     </string-array>
     <string-array
         name="phrases1">
-        <!--  0 --> <item>Fui sedentário</item>
-        <!--  1 --> <item></item>
-        <!--  2 --> <item></item>
-        <!--  3 --> <item></item>
-        <!--  4 --> <item></item>
-        <!--  5 --> <item></item>
-        <!--  6 --> <item></item>
-        <!--  7 --> <item></item>
-        <!--  8 --> <item></item>
-        <!--  9 --> <item></item>
-        <!-- 10 --> <item>Fiz um treino para competição</item>
+        <!--  0 --> <item>Não fiz nada.</item>
+        <!--  1 --> <item>Estive bastante parado.</item>
+        <!--  2 --> <item>Fiz qualquer coisa mas não me cansei muito.</item>
+        <!--  3 --> <item>Não parei quieto.</item>
+        <!--  4 --> <item>Hoje fiz algum exercício, mas muito ligeiro.</item>
+        <!--  5 --> <item>Fiz exercício um tanto ou quanto exigente.</item>
+        <!--  6 --> <item>Aventurei-me e fui treinar, mas aguentei.</item>
+        <!--  7 --> <item>Treinei como um louco. Nem sei como ainda estou vivo. </item>
+        <!--  8 --> <item>O treino que fiz hoje não é para pessoas normais.. Nem sei como estou vivo.</item>
+        <!--  9 --> <item>Cometi uma locura e fiz uma maratona. Não faço mais nada o resto da semana</item>
+        <!-- 10 --> <item>Fui um super-homem! Nem sei como ainda estou vivo!</item>
     </string-array>
+    <string-array
+        name="phrases2">
+        <!--  0 --> <item>Descansei.</item>
+        <!--  1 --> <item>Não fiz grande coisa.</item>
+        <!--  2 --> <item>Tive um dia calmo.</item>
+        <!--  3 --> <item>Tive um dia agitado.</item>
+        <!--  4 --> <item>Não treinei mas fiz actividade ligeira.</item>
+        <!--  5 --> <item>Não treinei mas fiz actividades exigente.</item>
+        <!--  6 --> <item>Fiz um treino não muito intenso.</item>
+        <!--  7 --> <item>Um treino intenso.</item>
+        <!--  8 --> <item>Um treino muito intenso.</item>
+        <!--  9 --> <item>Fiz uma maratona.</item>
+        <!-- 10 --> <item>Superei-me. Fui um super-homem!</item>
+    </string-array>
+
+    <!--  Messages -->
+    <array
+        name="messages">
+        <item>@array/messages0</item>
+        <item>@array/messages1</item>
+    </array>
+    <string-array
+        name="messages0"> <!--  Informativas -->
+        <!--  0 --> <item>Mensagem informativa 1</item>
+        <!--  1 --> <item>Mensagem informativa 2</item>
+        <!--  2 --> <item>Mensagem informativa 3</item>
+        <!--  3 --> <item>Mensagem informativa 4</item>
+    </string-array>
+    <string-array
+        name="messages1"> <!--  Motivacionais -->
+        <!--  0 --> <item>Mensagem motivacinal 1</item>
+        <!--  1 --> <item>Mensagem motivacinal 2</item>
+        <!--  2 --> <item>Mensagem motivacinal 3</item>
+        <!--  3 --> <item>Mensagem motivacinal 4</item>
+    </string-array>
+
 
 </resources>

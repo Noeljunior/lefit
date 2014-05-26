@@ -5,28 +5,6 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:layout_gravity="bottom" >
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
-
-        <TextView
-            android:id="@+id/infos_titre"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="12dip"
-            android:textSize="20dip"
-            android:gravity="center"
-            android:text="dsdsdfdsf">
-        </TextView>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1">
-
         <ScrollView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
@@ -76,28 +54,31 @@
                     android:id="@+id/button5"
                     android:layout_gravity="center_horizontal"
                     android:onClick="unsetalarmService" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Item to DB"
+                    android:id="@+id/btwrite"
+                    android:layout_gravity="center_horizontal"
+                    android:onClick="WriteItem" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Read Items from DB"
+                    android:id="@+id/btread"
+                    android:layout_gravity="center_horizontal"
+                    android:onClick="ReadItems" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Small Text"
+                    android:id="@+id/tvdb"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="5dp" />
             </LinearLayout>
         </ScrollView>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="6dip">
-
-        <Button
-            android:id="@+id/infos_remarquebutton"
-            android:text="Faire une remarque"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1" >
-        </Button>
-        <Button
-            android:id="@+id/infos_partagerbutton"
-            android:text="Partager"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" >
-        </Button>
-    </LinearLayout>
 </LinearLayout>

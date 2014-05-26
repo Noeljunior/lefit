@@ -18,7 +18,7 @@ public class Alarmer extends BroadcastReceiver {
 
         /* Make the service check for what to do */
         Intent mServiceIntent = new Intent(context, MainService.class);
-        mServiceIntent.putExtra(MainService.DOCHECK, "testing");
+        //mServiceIntent.putExtra(MainService.DOCHECK, "testing");
         context.startService(mServiceIntent);
 
         wl.release();
