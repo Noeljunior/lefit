@@ -41,7 +41,8 @@ public class DebugActivity extends Activity {
 
         MessageParcel m = new MessageParcel(1,
                 2, 3, 4, 3,
-                1, 0, 0, 1);
+                1, 0, 0, 1,
+                0, 0);
 
         intent.putExtra("msg", m);
 

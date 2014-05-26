@@ -19,17 +19,47 @@ public class StorageDB extends SQLiteOpenHelper {
 
 
     public static abstract class DailyEntry implements BaseColumns {
-        public static final String TABLE_NAME = "dailyreg";
+        public static final String TABLE_NAME = "uniqtable";
 
-        public static final String COLUMN_NAME_ANSWERID = "answer";
-        public static final String COLUMN_NAME_DATE = "date";
+        public static final String COLUMN_NAME_TYPE  = "type";
+        public static final String COLUMN_NAME_SENT  = "sent";
+        public static final String COLUMN_NAME_VAL1  = "val1";
+        public static final String COLUMN_NAME_VAL2  = "val2";
+        public static final String COLUMN_NAME_VAL3  = "val3";
+        public static final String COLUMN_NAME_VAL4  = "val4";
+        public static final String COLUMN_NAME_VAL5  = "val5";
+        public static final String COLUMN_NAME_VAL6  = "val6";
+        public static final String COLUMN_NAME_VAL7  = "val7";
+        public static final String COLUMN_NAME_VAL8  = "val8";
+        public static final String COLUMN_NAME_VAL9  = "val9";
+        public static final String COLUMN_NAME_VAL10 = "val10";
+        public static final String COLUMN_NAME_VAL11 = "val11";
+        public static final String COLUMN_NAME_VAL12 = "val12";
+        public static final String COLUMN_NAME_VAL13 = "val13";
+        public static final String COLUMN_NAME_VAL14 = "val14";
+
+
 
         private static final String SQL_CREATE_ENTRIES =
                 "CREATE TABLE " + TABLE_NAME + " (" +
                         _ID + INT_TYPE + " PRIMARY KEY " + COMMA_SEP +
-                        COLUMN_NAME_ANSWERID + INT_TYPE + COMMA_SEP +
-                        COLUMN_NAME_DATE + TEXT_TYPE+
-                        " )";
+                        COLUMN_NAME_TYPE + INT_TYPE + COMMA_SEP +
+                        COLUMN_NAME_SENT + INT_TYPE + COMMA_SEP +
+
+                        COLUMN_NAME_VAL1  + INT_TYPE + COMMA_SEP +
+                        COLUMN_NAME_VAL2  + INT_TYPE + COMMA_SEP +
+                        COLUMN_NAME_VAL3  + INT_TYPE + COMMA_SEP +
+                        COLUMN_NAME_VAL4  + INT_TYPE + COMMA_SEP +
+                        COLUMN_NAME_VAL5  + INT_TYPE + COMMA_SEP +
+                        COLUMN_NAME_VAL6  + INT_TYPE + COMMA_SEP +
+                        COLUMN_NAME_VAL7  + INT_TYPE + COMMA_SEP +
+                        COLUMN_NAME_VAL8  + INT_TYPE + COMMA_SEP +
+                        COLUMN_NAME_VAL9  + INT_TYPE + COMMA_SEP +
+                        COLUMN_NAME_VAL10 + INT_TYPE + COMMA_SEP +
+                        COLUMN_NAME_VAL11 + INT_TYPE + COMMA_SEP +
+                        COLUMN_NAME_VAL12 + INT_TYPE + COMMA_SEP +
+                        COLUMN_NAME_VAL13 + INT_TYPE + COMMA_SEP +
+                        COLUMN_NAME_VAL14 + INT_TYPE + " )";
 
         private static final String SQL_DELETE_ENTRIES =
                 "DROP TABLE IF EXISTS " + TABLE_NAME;

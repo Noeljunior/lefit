@@ -24,6 +24,8 @@ public class PopupActivity extends Activity {
     private String[] messages;
     private int selectedmessage;
 
+    private MessageResultParcel msgresult;
+
     /* States */
     private boolean showMessage;
 
@@ -88,6 +90,18 @@ public class PopupActivity extends Activity {
         selectedmessage = message.defmessage;
         // And set the default
         tvmessage.setText(messages[selectedmessage]);
+
+        // Start new result message
+        msgresult = new MessageResultParcel();
+
+        msgresult.title = message.title;
+        msgresult.phrasesset = message.phraseset;
+        msgresult.phrasesmax = message.maxphrase;
+        msgresult.phrasesmin = message.minphrase;
+        msgresult.messageset = message.messageset;
+        msgresult.messagesubset = message.messagesubset;
+        msgresult.action = MessageResultParcel.ACTION_IGNORE;
+        msgresult.messagehithide = message.showmessage == 1 ? MessageResultParcel.HIDE_FALSE : MessageResultParcel.HIDE_HIDEN;
         /* END Initialize this new popup*/
 
 
@@ -118,6 +132,9 @@ public class PopupActivity extends Activity {
     public void incrementSeek(View view) {
         if (seekbar.getProgress() == seekbar.getMax() &&  (seekbar.getProgress() + sboffset) < (phrases.length - 1)) {
             seekbar.setMax(seekbar.getMax() + 1);
+
+            // STATS
+            msgresult.phraseshitsmore++;
         }
 
         seekbar.setProgress(seekbar.getProgress() + 1);
@@ -126,6 +143,9 @@ public class PopupActivity extends Activity {
         if (seekbar.getProgress() == 0 && sboffset > 0) {
             sboffset--;
             seekbar.setMax(seekbar.getMax() + 1);
+
+            // STATS
+            msgresult.phraseshitsless++;
         }
 
         seekbar.setProgress(seekbar.getProgress() - 1);
@@ -148,17 +168,44 @@ public class PopupActivity extends Activity {
 
         if (id >= 0)
             ivphraselogo.setImageResource(phraseid);
+
+        // STATS
+        msgresult.phrasesanswered = id;
     }
 
-    public void netMessage(View view) {
+    public void nextMessage(View view) {
         selectedmessage = (selectedmessage + 1) % messages.length;
         tvmessage.setText(messages[selectedmessage]);
+
+        // STATS
+        msgresult.messagehitmore++;
     }
 
     public void hideMessage(View view) {
         RelativeLayout messagelayout = (RelativeLayout) findViewById(R.id.messagelayout);
         messagelayout.setVisibility(RelativeLayout.GONE);
+
+        // STATS
+        msgresult.messagehithide = MessageResultParcel.HIDE_TRUE;
     }
 
+
+    public void actionCancel(View view) {
+
+        // STATS
+        msgresult.action = MessageResultParcel.ACTION_CANCEL;
+    }
+
+    public void actionPostpone(View view) {
+
+        // STATS
+        msgresult.action = MessageResultParcel.ACTION_POSTPONE;
+    }
+
+    public void actionSubmit(View view) {
+
+        // STATS
+        msgresult.action = MessageResultParcel.ACTION_SUBMIT;
+    }
 
 }

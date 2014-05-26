@@ -186,7 +186,7 @@
                         android:layout_alignBottom="@+id/message"
                         android:background="?android:selectableItemBackground"
                         android:layout_marginRight="5dp"
-                        android:onClick="netMessage" />
+                        android:onClick="nextMessage" />
 
                     <TextView
                         android:layout_width="50dp"
@@ -238,7 +238,8 @@
                 android:layout_weight="1"
                 android:background="?android:selectableItemBackground"
                 android:id="@+id/ibclose"
-                android:src="@drawable/ic_navigation_cancel" />
+                android:src="@drawable/ic_navigation_cancel"
+                android:onClick="actionCancel" />
 
             <View
                 android:id="@+id/separator1"
@@ -252,7 +253,8 @@
                 android:layout_weight="1"
                 android:background="?android:selectableItemBackground"
                 android:id="@+id/ibpostpone"
-                android:src="@drawable/ic_device_access_time" />
+                android:src="@drawable/ic_device_access_time"
+                android:onClick="actionPostpone" />
 
             <View
                 android:id="@+id/separator2"
@@ -266,7 +268,8 @@
                 android:layout_weight="1"
                 android:background="?android:selectableItemBackground"
                 android:id="@+id/ibsubmit"
-                android:src="@drawable/ic_navigation_accept" />
+                android:src="@drawable/ic_navigation_accept"
+                android:onClick="actionSubmit" />
         </LinearLayout>
 
 
