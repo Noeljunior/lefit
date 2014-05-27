@@ -1,4 +1,4 @@
-package com.wsn.lefit.lefit;
+package com.thunguip.lefit;
 
 import android.os.Parcel;
 import android.os.Parcelable;

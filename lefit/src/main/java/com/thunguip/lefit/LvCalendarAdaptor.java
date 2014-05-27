@@ -1,10 +1,8 @@
-package com.wsn.lefit.lefit;
+package com.thunguip.lefit;
 
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

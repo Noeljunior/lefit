@@ -1,22 +1,17 @@
-package com.wsn.lefit.lefit;
+package com.thunguip.lefit;
 
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.provider.BaseColumns;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
-
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,17 +19,17 @@ import java.util.Calendar;
 
 public class MainService extends IntentService {
     /* Intent receivers */
-    public static final String SWITCH = "com.wsn.lefit.lefit.mainservice.SWITCH";
-    public static final String MESSENGER = "com.wsn.lefit.lefit.mainservice.MESSENGER";
+    public static final String SWITCH = "com.thunguip.lefit.mainservice.SWITCH";
+    public static final String MESSENGER = "com.thunguip.lefit.mainservice.MESSENGER";
 
-    public static final String DEBUG = "com.wsn.lefit.lefit.mainservice.SWITCH.DEBUG";
-    public static final String GETLVITEMS = "com.wsn.lefit.lefit.mainservice.SWITCH.GETLVITEMS";
+    public static final String DEBUG = "com.thunguip.lefit.mainservice.SWITCH.DEBUG";
+    public static final String GETLVITEMS = "com.thunguip.lefit.mainservice.SWITCH.GETLVITEMS";
 
     /* Broadcasts senders */
-    public static final String BROADCAST = "com.wsn.lefit.lefit.mainservice.BROADCAST";
+    public static final String BROADCAST = "com.thunguip.lefit.mainservice.BROADCAST";
 
-    public static final String BC_SWITCH = "com.wsn.lefit.lefit.mainservice.BROADCAST.BC_SWITCH";
-    public static final String BC_UPDATEITEMS = "com.wsn.lefit.lefit.mainservice.BROADCAST.BC_UPDATEITEMS";
+    public static final String BC_SWITCH = "com.thunguip.lefit.mainservice.BROADCAST.BC_SWITCH";
+    public static final String BC_UPDATEITEMS = "com.thunguip.lefit.mainservice.BROADCAST.BC_UPDATEITEMS";
 
     /* Init date */
     Calendar initCalendar;

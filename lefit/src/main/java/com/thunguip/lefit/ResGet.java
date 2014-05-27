@@ -1,8 +1,8 @@
-package com.wsn.lefit.lefit;
+package com.thunguip.lefit;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
+
 
 /**
  * Created by liam on 5/20/14.

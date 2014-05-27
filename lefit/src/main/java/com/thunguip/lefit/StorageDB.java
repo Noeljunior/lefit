@@ -1,4 +1,4 @@
-package com.wsn.lefit.lefit;
+package com.thunguip.lefit;
 
 
 import android.content.ContentValues;
@@ -157,15 +157,17 @@ public class StorageDB extends SQLiteOpenHelper {
 
     public PopupEntry[] getUnansweredPopupEntries() {
 
+
+        return null;
     }
 
     public void readDaily() {
         SQLiteDatabase db = getReadableDatabase();
 
         String[] projection = {
-                UniqEntry._ID,
+                UniqEntry._ID/*,
                 UniqEntry.COLUMN_NAME_ANSWERID,
-                UniqEntry.COLUMN_NAME_DATE,
+                UniqEntry.COLUMN_NAME_DATE,*/
         };
 
 
@@ -185,9 +187,9 @@ public class StorageDB extends SQLiteOpenHelper {
         while (c.isAfterLast() == false) {
 
             Log.d("StorageDB", "SQLITEM: [" +
-                    c.getLong(c.getColumnIndexOrThrow(UniqEntry._ID)) + "] [" +
+                    c.getLong(c.getColumnIndexOrThrow(UniqEntry._ID)) + "] [" /*+
                     c.getLong(c.getColumnIndexOrThrow(UniqEntry.COLUMN_NAME_ANSWERID)) + "] [" +
-                    c.getString(c.getColumnIndexOrThrow(UniqEntry.COLUMN_NAME_DATE))+ "]"
+                    c.getString(c.getColumnIndexOrThrow(UniqEntry.COLUMN_NAME_DATE))+ "]"*/
             );
 
             c.moveToNext();

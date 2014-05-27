@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.wsn.lefit.lefit" >
+    package="com.thunguip.lefit">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.LeFitBlue" >
         <activity
-            android:name="com.wsn.lefit.lefit.LauncherActivity"
+            android:name=".LauncherActivity"
             android:label="@string/app_name"
             android:logo="@drawable/ic_titleicon"
             android:theme="@style/Theme.LeFitBlue" >
@@ -22,21 +22,21 @@
 >
         </activity>
         <activity
-            android:name="com.wsn.lefit.lefit.PopupActivity"
+            android:name=".PopupActivity"
             android:excludeFromRecents="true"
             android:label="Le Fit"
             android:theme="@style/Theme.LeFitBlue.Dialog" >
         </activity>
         <activity
-            android:name="com.wsn.lefit.lefit.DebugActivity"
+            android:name=".DebugActivity"
             android:label="Debug Menu"
             android:theme="@style/Theme.LeFitBlue" >
         </activity>
 
-        <service android:name="com.wsn.lefit.lefit.MainService" />
+        <service android:name=".MainService" />
 
         <receiver
-            android:name="com.wsn.lefit.lefit.Alarmer"
+            android:name=".Alarmer"
             android:process=":remote" />
 
     </application>

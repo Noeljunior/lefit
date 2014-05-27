@@ -1,4 +1,4 @@
-package com.wsn.lefit.lefit;
+package com.thunguip.lefit;
 
 import android.app.Activity;
 import android.app.DialogFragment;
@@ -15,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;

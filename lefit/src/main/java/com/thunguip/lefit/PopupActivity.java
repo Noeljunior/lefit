@@ -1,4 +1,4 @@
-package com.wsn.lefit.lefit;
+package com.thunguip.lefit;
 
 import android.app.Activity;
 import android.content.res.TypedArray;
@@ -11,8 +11,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
-
 
 public class PopupActivity extends Activity {
 

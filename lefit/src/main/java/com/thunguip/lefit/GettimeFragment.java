@@ -1,4 +1,4 @@
-package com.wsn.lefit.lefit;
+package com.thunguip.lefit;
 
 import android.app.Dialog;
 import android.app.DialogFragment;

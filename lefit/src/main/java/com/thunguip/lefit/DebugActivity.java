@@ -1,4 +1,4 @@
-package com.wsn.lefit.lefit;
+package com.thunguip.lefit;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -11,7 +11,6 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.view.MenuItem;
 import android.view.View;
-
 
 public class DebugActivity extends Activity {
 
@@ -139,7 +138,7 @@ public class DebugActivity extends Activity {
     public void WriteItem(View view) {
         StorageDB db = new StorageDB(this);
 
-        db.addDailyRow(69, "hell yeah");
+        //db.addDailyRow(69, "hell yeah");
 
 
 
@@ -148,7 +147,7 @@ public class DebugActivity extends Activity {
     public void ReadItems(View view) {
         StorageDB db = new StorageDB(this);
 
-        db.readDaily();
+        //db.readDaily();
 
     }
 
