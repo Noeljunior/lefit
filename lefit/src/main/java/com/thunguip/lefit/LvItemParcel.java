@@ -24,6 +24,7 @@ public class LvItemParcel implements Parcelable {
     public int logo;
     public String description;
     public String date;
+    public long referdate;
 
     private static final long serialVersionUID = 2L;
 
@@ -32,6 +33,14 @@ public class LvItemParcel implements Parcelable {
         this.logo = logo;
         this.description = description;
         this.date = date;
+    }
+
+    public LvItemParcel(Type type, int logo, String description, String date, long referdate) {
+        this.type = type;
+        this.logo = logo;
+        this.description = description;
+        this.date = date;
+        this.referdate = referdate;
     }
 
     public LvItemParcel(Type type, String description) {
@@ -57,6 +66,7 @@ public class LvItemParcel implements Parcelable {
         dest.writeInt(logo);
         dest.writeString(description);
         dest.writeString(date);
+        dest.writeLong(referdate);
     }
 
     private void readFromParcel(Parcel in) {
@@ -64,6 +74,7 @@ public class LvItemParcel implements Parcelable {
         logo = in.readInt();
         description = in.readString();
         date = in.readString();
+        referdate = in.readLong();
     }
 
     public static final Parcelable.Creator CREATOR =

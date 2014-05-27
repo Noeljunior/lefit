@@ -5,16 +5,16 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     tools:context=".LauncherActivity">
 
-    <RelativeLayout
+    <!--<RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TestCB"
             android:id="@+id/button"
-            android:onClick="testBehave" />
+            android:onClick="getItems"
+            android:text="Get Items" />
 
         <Button
             android:layout_width="wrap_content"
@@ -24,7 +24,7 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/button"
             android:onClick="testBroadcast" />
-    </RelativeLayout>
+    </RelativeLayout> -->
 
     <FrameLayout
         android:layout_width="match_parent"

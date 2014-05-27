@@ -17,19 +17,22 @@ public class MessageParcel implements Parcelable {
     public int defmessage;
     public int showmessage;
 
-    public int initdate;
-    public int referdate;
+    public long initdate;
+    public long referdate;
 
-    public MessageParcel(int title, int phraseset, int minphrase, int maxphrase, int defphrase, int messageset, int messagesubset, int defmessage, int showmessage, int initdate, int referdate) {
+    public MessageParcel(int title, int phraseset, int minphrase, int maxphrase, int defphrase, int messageset, int messagesubset, int defmessage, int showmessage, long initdate, long referdate) {
         this.title = title;
+
         this.phraseset = phraseset;
         this.minphrase = minphrase;
         this.maxphrase = maxphrase;
         this.defphrase = defphrase;
+
         this.messageset = messageset;
         this.messagesubset = messagesubset;
         this.defmessage = defmessage;
         this.showmessage = showmessage;
+
         this.initdate = initdate;
         this.referdate = referdate;
     }
@@ -56,8 +59,8 @@ public class MessageParcel implements Parcelable {
         dest.writeInt(messagesubset);
         dest.writeInt(defmessage);
         dest.writeInt(showmessage);
-        dest.writeInt(initdate);
-        dest.writeInt(referdate);
+        dest.writeLong(initdate);
+        dest.writeLong(referdate);
     }
 
 
@@ -71,8 +74,8 @@ public class MessageParcel implements Parcelable {
         this.messagesubset = in.readInt();
         this.defmessage = in.readInt();
         this.showmessage = in.readInt();
-        this.initdate = in.readInt();
-        this.referdate = in.readInt();
+        this.initdate = in.readLong();
+        this.referdate = in.readLong();
     }
 
     public static final Parcelable.Creator CREATOR =

@@ -5,13 +5,13 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class MessageResultParcel implements Parcelable {
-    public static final int HIDE_HIDEN = -1;
+    /*public static final int HIDE_HIDEN = -1;
     public static final int HIDE_FALSE = 0;
     public static final int HIDE_TRUE = 1;
     public static final int ACTION_IGNORE = 0;
     public static final int ACTION_CANCEL = 1;
     public static final int ACTION_POSTPONE = 2;
-    public static final int ACTION_SUBMIT = 3;
+    public static final int ACTION_SUBMIT = 3;*/
 
 
 
@@ -32,9 +32,9 @@ public class MessageResultParcel implements Parcelable {
 
     public int action;
 
-    public int daterefer;
-    public int dateinit;
-    public int dateaction;
+    public long daterefer;
+    public long dateinit;
+    public long dateaction;
 
 
 
@@ -69,9 +69,9 @@ public class MessageResultParcel implements Parcelable {
 
         dest.writeInt(action);
 
-        dest.writeInt(daterefer);
-        dest.writeInt(dateinit);
-        dest.writeInt(dateaction);
+        dest.writeLong(daterefer);
+        dest.writeLong(dateinit);
+        dest.writeLong(dateaction);
     }
 
 
@@ -92,9 +92,9 @@ public class MessageResultParcel implements Parcelable {
 
         this.action = in.readInt();
 
-        this.daterefer = in.readInt();
-        this.dateinit = in.readInt();
-        this.dateaction = in.readInt();
+        this.daterefer = in.readLong();
+        this.dateinit = in.readLong();
+        this.dateaction = in.readLong();
 
     }
 

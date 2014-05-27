@@ -1,27 +1,28 @@
 package com.thunguip.lefit;
 
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
-import android.util.Log;
+
+import java.util.ArrayList;
 
 public class StorageDB extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "lefit";
 
-    private static final String INT_TYPE = " INTEGER";
-    private static final String COMMA_SEP = ",";
+    public static final int TYPE_POPUP = 1;
+    public static final int SENT_TRUE = 1;
+    public static final int SENT_FALSE = 0;
+    /* TODO add an ID to each day */
+    /* TODO add how was popup action fired [notification | mainactivity] */
 
-    private static final int TYPE_POPUP = 1;
-    private static final int SENT_TRUE = 1;
-    private static final int SENT_FALSE = 0;
-
-    public static abstract class UniqEntry implements BaseColumns {
+    public static abstract class UniqTable implements BaseColumns {
         public static final String TABLE_NAME = "uniqtable";
+        private static final String INT_TYPE = " INTEGER";
+        private static final String COMMA_SEP = ",";
 
         public static final String COLUMN_NAME_TYPE  = "type";
         public static final String COLUMN_NAME_SENT  = "sent";
@@ -72,129 +73,66 @@ public class StorageDB extends SQLiteOpenHelper {
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(UniqEntry.SQL_CREATE_ENTRIES);
+        db.execSQL(UniqTable.SQL_CREATE_ENTRIES);
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(UniqEntry.SQL_DELETE_ENTRIES);
+        db.execSQL(UniqTable.SQL_DELETE_ENTRIES);
         onCreate(db);
     }
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
     }
 
-    /* - - - OWN CLASSES - - - */
-    public class PopupEntry {
-        public int _id;
-        public int _type;
-        public int _sent;
-        public int title;
-        public int phraseset;
-        public int phrasemin;
-        public int phrasemax;
-        public int phraseanswer;
-        public int phrasehitmore;
-        public int phrasehitless;
-        public int messageset;
-        public int messagesubset;
-        public int messagehide;
-        public int messagemore;
-        public int action;
-        public int daterefer;
-        public int dateinit;
-        public int dateaction;
-
-        public PopupEntry(int _type, int title, int phraseset, int phrasemin, int phrasemax, int phraseanswer, int phrasehitmore, int phrasehitless, int messageset, int messagesubset, int messagehide, int messagemore, int action, int daterefer, int dateinit, int dateaction) {
-            this._type = _type;
-            this.title = title;
-            this.phraseset = phraseset;
-            this.phrasemin = phrasemin;
-            this.phrasemax = phrasemax;
-            this.phraseanswer = phraseanswer;
-            this.phrasehitmore = phrasehitmore;
-            this.phrasehitless = phrasehitless;
-            this.messageset = messageset;
-            this.messagesubset = messagesubset;
-            this.messagehide = messagehide;
-            this.messagemore = messagemore;
-            this.action = action;
-            this.daterefer = daterefer;
-            this.dateinit = dateinit;
-            this.dateaction = dateaction;
-        }
-
-        public ContentValues getContentValues() {
-            ContentValues values = new ContentValues();
-            values.put(UniqEntry.COLUMN_NAME_TYPE , _type);
-            values.put(UniqEntry.COLUMN_NAME_SENT , SENT_FALSE);
-            values.put(UniqEntry.COLUMN_NAME_VAL1 , title);
-            values.put(UniqEntry.COLUMN_NAME_VAL2 , phraseset);
-            values.put(UniqEntry.COLUMN_NAME_VAL3 , phrasemin);
-            values.put(UniqEntry.COLUMN_NAME_VAL4 , phrasemax);
-            values.put(UniqEntry.COLUMN_NAME_VAL5 , phraseanswer);
-            values.put(UniqEntry.COLUMN_NAME_VAL6 , phrasehitmore);
-            values.put(UniqEntry.COLUMN_NAME_VAL7 , phrasehitless);
-            values.put(UniqEntry.COLUMN_NAME_VAL8 , messageset);
-            values.put(UniqEntry.COLUMN_NAME_VAL9 , messagesubset);
-            values.put(UniqEntry.COLUMN_NAME_VAL10, messagehide);
-            values.put(UniqEntry.COLUMN_NAME_VAL11, messagemore);
-            values.put(UniqEntry.COLUMN_NAME_VAL12, action);
-            values.put(UniqEntry.COLUMN_NAME_VAL13, daterefer);
-            values.put(UniqEntry.COLUMN_NAME_VAL14, dateinit);
-            values.put(UniqEntry.COLUMN_NAME_VAL15, dateaction);
-            return values;
-        }
-    }
 
     /* - - - Own methods - - - */
-
-    public long addPopup(PopupEntry entry) {
+    public long addEntry(PopupEntryParcel entry) {
         SQLiteDatabase db = getWritableDatabase();
 
-        return db.insert(UniqEntry.TABLE_NAME, null, entry.getContentValues());
+        return db.insert(UniqTable.TABLE_NAME, null, entry.getContentValues());
     }
 
-
-    public PopupEntry[] getUnansweredPopupEntries() {
-
-
-        return null;
-    }
-
-    public void readDaily() {
+    /* * * * DATABASES QUERIES * * * */
+    public PopupEntryParcel[] getAnsweredPopupEntries() {
+        ArrayList<PopupEntryParcel> results = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
 
         String[] projection = {
-                UniqEntry._ID/*,
-                UniqEntry.COLUMN_NAME_ANSWERID,
-                UniqEntry.COLUMN_NAME_DATE,*/
+                UniqTable.COLUMN_NAME_VAL2,
+                UniqTable.COLUMN_NAME_VAL5,
+                UniqTable.COLUMN_NAME_VAL13
         };
 
+        String where = UniqTable.COLUMN_NAME_TYPE + " = " + TYPE_POPUP + " AND " +
+                UniqTable.COLUMN_NAME_VAL12 + " = " + PopupEntryParcel.POPUP_ACTION_SUBMIT;
 
-        Cursor c = db.query(
-                UniqEntry.TABLE_NAME,                    // The table to query
-                projection,                               // The columns to return
-                null,                                     // The columns for the WHERE clause
-                null,                            // The values for the WHERE clause
-                null,                                     // don't group the rows
-                null,                                     // don't filter by row groups
-                null                                      // The sort order
+        String order = UniqTable.COLUMN_NAME_VAL15 + " ASC";
+
+        Cursor cursor = db.query(
+                UniqTable.TABLE_NAME,       // The table to query
+                projection,                 // The columns to return
+                where,                      // The columns for the WHERE clause
+                null,                       // The values for the WHERE clause
+                null,                       // don't group the rows
+                null,                       // don't filter by row groups
+                order                       // The sort order
         );
 
+        cursor.moveToFirst();
+        while (cursor.isAfterLast() == false) {
+            PopupEntryParcel pe = new PopupEntryParcel();
 
+            pe.phraseset = cursor.getInt(cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL2));
+            pe.phraseanswer = cursor.getInt(cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL5));
+            pe.daterefer = cursor.getLong(cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL13));
 
-        c.moveToFirst();
-        while (c.isAfterLast() == false) {
+            results.add(pe);
 
-            Log.d("StorageDB", "SQLITEM: [" +
-                    c.getLong(c.getColumnIndexOrThrow(UniqEntry._ID)) + "] [" /*+
-                    c.getLong(c.getColumnIndexOrThrow(UniqEntry.COLUMN_NAME_ANSWERID)) + "] [" +
-                    c.getString(c.getColumnIndexOrThrow(UniqEntry.COLUMN_NAME_DATE))+ "]"*/
-            );
-
-            c.moveToNext();
+            cursor.moveToNext();
         }
 
+        return results.toArray(new PopupEntryParcel[results.size()]);
     }
+
 
 }

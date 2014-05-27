@@ -1,6 +1,7 @@
 package com.thunguip.lefit;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 public class PopupActivity extends Activity {
+    public static final String MESSAGE = "com.thunguip.lefit.PopupActivity.MESSAGE";
 
     private MessageParcel message;
     private int sboffset;
@@ -43,14 +45,32 @@ public class PopupActivity extends Activity {
 
 
         /* Get the message */
-        message = getIntent().getExtras().getParcelable("msg");
+        message = getIntent().getExtras().getParcelable(MESSAGE);
         if (message == null) {
             Log.w("myApp", "NULL!!!!!");
             // TODO abort the creation of this activity
+            finish();
         }
 
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_popup);
+
+        // Start new result message
+        msgresult = new MessageResultParcel();
+
+        msgresult.title = message.title;
+        msgresult.phrasesset = message.phraseset;
+        msgresult.phrasesmax = message.maxphrase;
+        msgresult.phrasesmin = message.minphrase;
+        msgresult.messageset = message.messageset;
+        msgresult.messagesubset = message.messagesubset;
+        msgresult.action = PopupEntryParcel.POPUP_ACTION_IGNORE;
+        msgresult.messagehithide = message.showmessage == 1 ? PopupEntryParcel.POPUP_HIDE_FALSE : PopupEntryParcel.POPUP_HIDE_HIDEN;
+        msgresult.daterefer = message.referdate;
+                msgresult.dateinit = MainService.newZeroedNowCalendar().getTimeInMillis();
+
+
+        Log.d("PopupActivity", "REFERDATE: " + msgresult.daterefer);
 
         /* Initialize this new popup */
         seekbar = (SeekBar) findViewById(R.id.seekbar);
@@ -89,17 +109,7 @@ public class PopupActivity extends Activity {
         // And set the default
         tvmessage.setText(messages[selectedmessage]);
 
-        // Start new result message
-        msgresult = new MessageResultParcel();
 
-        msgresult.title = message.title;
-        msgresult.phrasesset = message.phraseset;
-        msgresult.phrasesmax = message.maxphrase;
-        msgresult.phrasesmin = message.minphrase;
-        msgresult.messageset = message.messageset;
-        msgresult.messagesubset = message.messagesubset;
-        msgresult.action = MessageResultParcel.ACTION_IGNORE;
-        msgresult.messagehithide = message.showmessage == 1 ? MessageResultParcel.HIDE_FALSE : MessageResultParcel.HIDE_HIDEN;
         /* END Initialize this new popup*/
 
 
@@ -184,26 +194,56 @@ public class PopupActivity extends Activity {
         messagelayout.setVisibility(RelativeLayout.GONE);
 
         // STATS
-        msgresult.messagehithide = MessageResultParcel.HIDE_TRUE;
+        msgresult.messagehithide = PopupEntryParcel.POPUP_HIDE_TRUE;
     }
 
 
     public void actionCancel(View view) {
 
         // STATS
-        msgresult.action = MessageResultParcel.ACTION_CANCEL;
+        msgresult.action = PopupEntryParcel.POPUP_ACTION_CANCEL;
+
+        closeAndSendData();
     }
 
     public void actionPostpone(View view) {
 
         // STATS
-        msgresult.action = MessageResultParcel.ACTION_POSTPONE;
+        msgresult.action = PopupEntryParcel.POPUP_ACTION_POSTPONE;
+
+        closeAndSendData();
     }
 
     public void actionSubmit(View view) {
 
         // STATS
-        msgresult.action = MessageResultParcel.ACTION_SUBMIT;
+        msgresult.action = PopupEntryParcel.POPUP_ACTION_SUBMIT;
+
+        closeAndSendData();
+    }
+
+    private void closeAndSendData() {
+        /*StorageDB db = new StorageDB(this);
+        db.addEntry(db.new PopupEntryParcel(msgresult.title,
+                msgresult.phrasesset, msgresult.phrasesmin, msgresult.phrasesmax, msgresult.phrasesanswered, msgresult.phraseshitsmore, msgresult.phraseshitsless,
+                msgresult.messageset, msgresult.messagesubset, msgresult.messagehithide, msgresult.messagehitmore,
+                msgresult.action,
+                msgresult.daterefer, msgresult.dateinit, MainService.newZeroedNowCalendar().getTimeInMillis()));*/
+
+        PopupEntryParcel pep = new PopupEntryParcel(msgresult.title,
+                msgresult.phrasesset, msgresult.phrasesmin, msgresult.phrasesmax, msgresult.phrasesanswered, msgresult.phraseshitsmore, msgresult.phraseshitsless,
+                msgresult.messageset, msgresult.messagesubset, msgresult.messagehithide, msgresult.messagehitmore,
+                msgresult.action,
+                msgresult.daterefer, msgresult.dateinit, MainService.newZeroedNowCalendar().getTimeInMillis());
+
+        Intent intent = new Intent(this, MainService.class);
+        intent.putExtra(MainService.SWITCH, MainService.ADDPOPUPENTRY);
+        intent.putExtra(MainService.ADDPOPUPENTRY, pep);
+        startService(intent);
+
+
+        // Closing
+        finish();
     }
 
 }

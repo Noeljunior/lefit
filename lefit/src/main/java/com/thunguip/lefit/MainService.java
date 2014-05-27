@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Messenger;
@@ -24,6 +25,8 @@ public class MainService extends IntentService {
 
     public static final String DEBUG = "com.thunguip.lefit.mainservice.SWITCH.DEBUG";
     public static final String GETLVITEMS = "com.thunguip.lefit.mainservice.SWITCH.GETLVITEMS";
+    public static final String ADDPOPUPENTRY = "com.thunguip.lefit.mainservice.SWITCH.ADDPOPUPENTRY";
+    public static final String INVOKEPOPUP = "com.thunguip.lefit.mainservice.SWITCH.INVOKEPOPUP";
 
     /* Broadcasts senders */
     public static final String BROADCAST = "com.thunguip.lefit.mainservice.BROADCAST";
@@ -46,7 +49,7 @@ public class MainService extends IntentService {
         initCalendar = Calendar.getInstance();
         initCalendar.set(Calendar.YEAR, 2014);
         initCalendar.set(Calendar.MONTH, 4);
-        initCalendar.set(Calendar.DAY_OF_MONTH, 0);
+        initCalendar.set(Calendar.DAY_OF_MONTH, 20);
     }
 
     @Override
@@ -56,11 +59,19 @@ public class MainService extends IntentService {
             return;
         }
 
+        Log.d("MainService", "New Intent: " + intent.getStringExtra(SWITCH));
+
         switch (intent.getStringExtra(SWITCH)) {
             case GETLVITEMS:
                 sendLvItems((Messenger) intent.getExtras().get(MESSENGER));
                 return;
 
+            case ADDPOPUPENTRY:
+                addPopupEntryToDB((PopupEntryParcel) intent.getParcelableExtra(ADDPOPUPENTRY));
+                return;
+            case INVOKEPOPUP:
+                openNewPopup(intent.getLongExtra(INVOKEPOPUP, -1));
+                return;
             case DEBUG:
                 debugIntent(intent);
                 return;
@@ -77,15 +88,13 @@ public class MainService extends IntentService {
         sendBroadcast(i);
     }
 
-
-
-
     private void sendLvItems(Messenger messenger) {
         Message msg = Message.obtain();
         Bundle data = new Bundle();
         data.putString(SWITCH, GETLVITEMS);
 
-        data.putParcelableArray(GETLVITEMS, getDummyItems(10));
+        //data.putParcelableArray(GETLVITEMS, getDummyItems(10));
+        data.putParcelableArray(GETLVITEMS, loadItemsFromDB());
 
         msg.setData(data);
         try {
@@ -95,6 +104,30 @@ public class MainService extends IntentService {
         }
     }
 
+    private void addPopupEntryToDB(PopupEntryParcel pep){
+        StorageDB db = new StorageDB(this);
+        db.addEntry(pep);
+
+        if (pep.action == PopupEntryParcel.POPUP_ACTION_SUBMIT)
+            sendBroadcast(BC_UPDATEITEMS);
+    }
+
+    private void openNewPopup(long refer) {
+        /* TODO know what to send to popup */
+
+        Intent intent = new Intent(this, PopupActivity.class);
+
+        MessageParcel m = new MessageParcel(1,
+                2, 2, 5, 4,
+                1, 0, 0, 1,
+                newZeroedNowCalendar().getTimeInMillis(), refer);
+
+        intent.putExtra(PopupActivity.MESSAGE, m);
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        startActivity(intent);
+    }
 
 
 
@@ -103,9 +136,97 @@ public class MainService extends IntentService {
 
 
 
+    private LvItemParcel[] loadItemsFromDB() {
+        ArrayList<LvItemParcel> items = new ArrayList<>();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, d 'de' MMM");
+
+        Calendar today = Calendar.getInstance();
+        Calendar iterator = (Calendar) today.clone();
+
+        StorageDB database = new StorageDB(this);
+        PopupEntryParcel[] entries = database.getAnsweredPopupEntries();
+        PopupEntryParcel pep;
+
+        while (iterator.getTimeInMillis() >= initCalendar.getTimeInMillis()) {
+            if ((pep = PopupEntryParcel.findByDay(entries, iterator)) != null) { // Answered day
+                // Get logo drwable id
+                TypedArray ids = getResources().obtainTypedArray(R.array.phraseicons);
+                int logoid = ids.getResourceId(pep.phraseanswer, -1);
+                ids.recycle();
+                // Get phrase string
+                ids = getResources().obtainTypedArray(R.array.phrases);
+                int phraseid = ids.getResourceId(pep.phraseset, -1);
+                ids.recycle();
+                String phrase = getResources().getStringArray(phraseid)[pep.phraseanswer];
+
+                items.add(new LvItemParcel(LvItemParcel.Type.ITEM_FILLED,
+                        logoid,
+                        phrase,
+                        dateFormat.format(iterator.getTime())));
+            }
+            else { // Unanswered day
+                items.add(new LvItemParcel(LvItemParcel.Type.ITEM_UNFILLED,
+                        R.drawable.ic_questionmark, "Clique para preencher",
+                        dateFormat.format(iterator.getTime()),
+                        newZeroedCalendarByCalendar(iterator).getTimeInMillis()));
+            }
+            iterator.add(Calendar.DAY_OF_MONTH, -1);
+
+            if (iterator.getTimeInMillis() >= initCalendar.getTimeInMillis() && iterator.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                SimpleDateFormat sepdateFormat = new SimpleDateFormat("d 'de' MMMM");
+                Calendar cloned = (Calendar) iterator.clone();
+                String text = " a " + sepdateFormat.format(cloned.getTime());
+                cloned.add(Calendar.DAY_OF_MONTH, -6);
+                text = "De " + sepdateFormat.format(cloned.getTime()) + text;
+
+                items.add(new LvItemParcel(LvItemParcel.Type.SEPRATOR, text));
+            }
+        }
+
+        return items.toArray(new LvItemParcel[items.size()]);
+    }
 
 
+    public static boolean isSameDay(Calendar a, Calendar b) {
+        return (a.get(Calendar.YEAR) == b.get(Calendar.YEAR)) &&
+                (a.get(Calendar.MONTH) == b.get(Calendar.MONTH)) &&
+                (a.get(Calendar.DAY_OF_MONTH) == b.get(Calendar.DAY_OF_MONTH));
+    }
 
+    public static Calendar newCalendarByDate(int day, int month, int year) {
+        Calendar now = Calendar.getInstance();
+        now.setTimeInMillis(0);
+        now.set(Calendar.YEAR, year);
+        now.set(Calendar.MONTH, month);
+        now.set(Calendar.DAY_OF_MONTH, day);
+        return now;
+    }
+
+    public static Calendar newZeroedCalendarByCalendar(Calendar cal) {
+        return newCalendarByDate(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR));
+    }
+
+    public static Calendar newZeroedNowCalendar() {
+        return newZeroedCalendarByCalendar(Calendar.getInstance());
+    }
+
+    public static Calendar newCalendarByMillis(long millis) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(millis);
+        return cal;
+    }
+
+    public static String getStringByCalendar(Calendar cal) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, d 'de' MMM");
+        return dateFormat.format(cal.getTime());
+    }
+
+    public static String getStringByMillis(long millis) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(millis);
+        return getStringByCalendar(cal);
+    }
 
 
 
