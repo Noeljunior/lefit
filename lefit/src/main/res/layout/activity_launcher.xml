@@ -3,7 +3,9 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    tools:context=".LauncherActivity">
+    tools:context=".LauncherActivity"
+
+    android:background="@color/actionbar_bg" >
 
     <!--<RelativeLayout
         android:layout_width="fill_parent"
@@ -30,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:background="#43555555">
+        android:background="#43555555" >
 
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -54,7 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Medium Text"
+                android:text="Description"
                 android:id="@+id/textView6"
                 android:layout_below="@+id/textView3"
                 android:layout_marginLeft="10dp"
@@ -69,7 +71,8 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center_horizontal"
+        android:background="@color/background">
 
         <ListView
             android:layout_width="fill_parent"
@@ -85,8 +88,7 @@
             android:scrollingCache="true"
             android:stackFromBottom="false"
             android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:cacheColorHint="#FF0000"/>
+            android:paddingBottom="10dp" />
     </FrameLayout>
 
 </LinearLayout>

@@ -69,47 +69,9 @@ public class DebugActivity extends Activity {
     }*/
 
     public void showNotification(View view) {
-        NotificationCompat.Builder mBuilder;
-        mBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_stat)
-                .setContentTitle("Como foi o seu dia?")
-                .setContentText("Toque para registar como foi o seu dia.")
-                .addAction (R.drawable.ic_navigation_cancel,
-                        "Dispensar", null)
-                .addAction (R.drawable.ic_device_access_time,
-                        "Adiar", null);
-        // Creates an explicit intent for an Activity in your app
-        Intent resultIntent = new Intent(this, PopupActivity.class);
-
-
-        /*MessageParcel m = new MessageParcel("Como é o seu estilo de vida?",
-                new String[] {"Sou sedentário", "Sou activo mas não pratico exercício", "Faço algum exercicio", "Faço muito"},
-                new int[] {R.drawable.ic_phraseicon_0, R.drawable.ic_phraseicon_1, R.drawable.ic_phraseicon_2, R.drawable.ic_phraseicon_3},
-                new String[] {"A vida é bela", "Faça exercicio fisico!", "Lamba-me o escroto"},
-                2, 0,
-                1);*/
-
-       // resultIntent.putExtra("msg", m);
-
-        // The stack builder object will contain an artificial back stack for the
-        // started Activity.
-        // This ensures that navigating backward from the Activity leads out of
-        // your application to the Home screen.
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        // Adds the back stack for the Intent (but not the Intent itself)
-        stackBuilder.addParentStack(PopupActivity.class);
-        // Adds the Intent that starts the Activity to the top of the stack
-        stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent =
-                stackBuilder.getPendingIntent(
-                        0,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
-        mBuilder.setContentIntent(resultPendingIntent);
-        NotificationManager mNotificationManager =
-                (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-        // mId allows you to update the notification later on.
-        mNotificationManager.notify(0, mBuilder.build());
+        Intent intent = new Intent(this, MainService.class);
+        intent.putExtra(MainService.SWITCH, MainService.FIRENOTIFICATION);
+        startService(intent);
     }
     
     

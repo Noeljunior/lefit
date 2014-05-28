@@ -20,6 +20,10 @@
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
     <style name="Theme.LeFitBlue" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:fitsSystemWindows">true</item>
+
         <!-- Action Bar -->
         <item name="android:actionBarItemBackground">@drawable/selectable_background_lefitstyle2</item>
         <item name="android:popupMenuStyle">@style/LeFitBlue.PopupMenu</item>

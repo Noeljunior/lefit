@@ -27,6 +27,7 @@ public class MainService extends IntentService {
     public static final String GETLVITEMS = "com.thunguip.lefit.mainservice.SWITCH.GETLVITEMS";
     public static final String ADDPOPUPENTRY = "com.thunguip.lefit.mainservice.SWITCH.ADDPOPUPENTRY";
     public static final String INVOKEPOPUP = "com.thunguip.lefit.mainservice.SWITCH.INVOKEPOPUP";
+    public static final String FIRENOTIFICATION = "com.thunguip.lefit.mainservice.SWITCH.FIRENOTIFICATION";
 
     /* Broadcasts senders */
     public static final String BROADCAST = "com.thunguip.lefit.mainservice.BROADCAST";
@@ -72,8 +73,12 @@ public class MainService extends IntentService {
             case INVOKEPOPUP:
                 openNewPopup(intent.getLongExtra(INVOKEPOPUP, -1));
                 return;
+            case FIRENOTIFICATION:
+                fireNotification();
+                return;
+
             case DEBUG:
-                debugIntent(intent);
+
                 return;
             default:
                 return;
@@ -104,7 +109,7 @@ public class MainService extends IntentService {
         }
     }
 
-    private void addPopupEntryToDB(PopupEntryParcel pep){
+    private void addPopupEntryToDB(PopupEntryParcel pep) {
         StorageDB db = new StorageDB(this);
         db.addEntry(pep);
 
@@ -129,7 +134,16 @@ public class MainService extends IntentService {
         startActivity(intent);
     }
 
+    private void fireNotification() {
+        MessageParcel m = new MessageParcel(1,
+                2, 2, 5, 4,
+                1, 0, 0, 1,
+                newZeroedNowCalendar().getTimeInMillis(), 0);
 
+
+
+        sendNotificationByMessage(m, 0, "Como foi o seu dia?", "Toque para registar como foi o seu dia.");
+    }
 
 
 
@@ -279,40 +293,13 @@ public class MainService extends IntentService {
     }
 
 
-    private void debugIntent(Intent it) {
-        Intent i = new Intent(BROADCAST);
 
-        i.putExtra(BC_SWITCH, BC_UPDATEITEMS);
-
-        sendBroadcast(i);
-    }
-
-
-
-    private void checkIfSendsANotification() {
-        /* Go check if its time to send notification */
-
-
-        /* So, its time to send notification */
-
-        /* Pick a message to send */
-        /*MessageParcel m = new MessageParcel("Como é o seu estilo de vida?",
-                new String[] {"Sou sedentário", "Sou activo mas não pratico exercício", "Faço algum exercicio", "Faço muito"},
-                new int[] {R.drawable.ic_phraseicon_0, R.drawable.ic_phraseicon_1, R.drawable.ic_phraseicon_2, R.drawable.ic_phraseicon_3},
-                new String[] {"A vida é bela", "Faça exercicio fisico!", "Lamba-me o escroto"},
-                2, 0,
-                1);*/
-
-        //sendNotification(m);
-    }
-
-
-    private void sendNotification(MessageParcel m) {
+    private void sendNotificationByMessage(MessageParcel m, int mid, String title, String description) {
         NotificationCompat.Builder mBuilder;
         mBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_stat)
-                .setContentTitle("Como foi o seu dia?")
-                .setContentText("Toque para registar como foi o seu dia.")
+                .setContentTitle(title)
+                .setContentText(description)
                 .addAction (R.drawable.ic_navigation_cancel,
                         "Dispensar", null)
                 .addAction (R.drawable.ic_device_access_time,
@@ -320,58 +307,20 @@ public class MainService extends IntentService {
 
         Intent resultIntent = new Intent(this, PopupActivity.class);
 
-        resultIntent.putExtra("msg", m);
+        resultIntent.putExtra(PopupActivity.MESSAGE, m);
 
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(PopupActivity.class);
         stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent =
-                stackBuilder.getPendingIntent(
-                        0,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.setContentIntent(resultPendingIntent);
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         /* TODO: do something with mId : 0  */
-        mNotificationManager.notify(0, mBuilder.build());
+        mNotificationManager.notify(mid, mBuilder.build());
     }
 
 
-
-    /*private class StorageDB extends SQLiteOpenHelper {
-        public static final int DATABASE_VERSION = 1;
-        public static final String DATABASE_NAME = "";
-
-        public static final String SQL_CREATE_ENTRIES = "";
-
-
-        public static abstract class StorageEntry implements BaseColumns {
-            public static final String TABLE_NAME = "entry";
-            public static final String COLUMN_NAME_ENTRY_ID = "entryid";
-            public static final String COLUMN_NAME_TITLE = "title";
-            public static final String COLUMN_NAME_SUBTITLE = "subtitle";
-        }
-
-        public StorageDB(Context context) {
-            super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        }
-        @Override
-        public void onCreate(SQLiteDatabase db) {
-            db.execSQL(SQL_CREATE_ENTRIES);
-        }
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            // This database is only a cache for online data, so its upgrade policy is
-            // to simply to discard the data and start over
-            db.execSQL(SQL_DELETE_ENTRIES);
-            onCreate(db);
-        }
-        public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            onUpgrade(db, oldVersion, newVersion);
-        }
-
-    }*/
 
 }
