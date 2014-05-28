@@ -3,12 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.thunguip.lefit.LauncherActivity" >
 
+    <item android:id="@+id/menumessage"
+        android:title="Mostrar mensagens diária"
+        android:titleCondensed="Mensagem Diária"
+        android:checkable="true" />
+
     <item android:id="@+id/menunotifications"
         android:title="Mostrar notificações"
         android:titleCondensed="Notificações"
         android:checkable="true"
 
-        android:icon="@drawable/ic_device_access_time"
+        android:icon="@drawable/ic_action_bellon"
         app:showAsAction="always|collapseActionView" />
 
     <item android:id="@+id/menusound"
@@ -18,7 +23,8 @@
     <item android:id="@+id/menuvibrate"
         android:title="Vibrar"
         android:titleCondensed="Vibrar"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:checkable="true" />
     <item android:id="@+id/menutime"
         android:title="Hora"
         android:titleCondensed="Hora"

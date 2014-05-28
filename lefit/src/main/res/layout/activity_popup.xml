@@ -107,8 +107,8 @@
                         android:gravity="center_vertical" />
 
                     <ImageButton
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:id="@+id/ibless"
                         android:layout_below="@+id/phrase"
                         android:layout_alignLeft="@+id/phrase"
@@ -120,8 +120,8 @@
                         android:layout_marginTop="5dp" />
 
                     <ImageButton
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:id="@+id/ibmore"
                         android:layout_alignRight="@+id/phraselogo"
                         android:layout_alignEnd="@+id/phraselogo"
@@ -159,52 +159,44 @@
                         android:layout_height="1dp"
                         android:background="#ff5bbbdf" />
 
-                    <ImageButton
-                        android:layout_width="32dp"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/ibhidemsg"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:src="@drawable/ic_content_remove"
-                        android:layout_alignTop="@+id/message"
-                        android:layout_alignBottom="@+id/message"
-                        android:layout_marginLeft="5dp"
-                        android:background="?android:selectableItemBackground"
-                        android:onClick="hideMessage" />
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
 
-                    <ImageButton
-                        android:layout_width="32dp"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/iblikemsg"
-                        android:layout_below="@+id/separator3"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_navigation_next_item"
-                        android:layout_alignTop="@+id/message"
-                        android:layout_alignBottom="@+id/message"
-                        android:background="?android:selectableItemBackground"
-                        android:layout_marginRight="5dp"
-                        android:onClick="nextMessage" />
+                        <ImageButton
+                            android:layout_width="40dp"
+                            android:layout_height="match_parent"
+                            android:id="@+id/ibhidemsg"
+                            android:src="@drawable/ic_content_remove"
+                            android:layout_marginLeft="5dp"
+                            android:background="?android:selectableItemBackground"
+                            android:onClick="hideMessage" />
 
-                    <TextView
-                        android:layout_width="50dp"
-                        android:layout_height="55dp"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="Message of the day"
-                        android:id="@+id/message"
-                        android:layout_centerVertical="true"
-                        android:layout_centerHorizontal="true"
-                        android:gravity="center_vertical|center_horizontal"
-                        android:layout_toRightOf="@+id/ibhidemsg"
-                        android:layout_toLeftOf="@+id/iblikemsg"
-                        android:layout_alignTop="@+id/separator3"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:textColor="@color/view_fg_light"
-                        android:layout_marginBottom="5dp" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="Message of the day  df sdf sdf sd  fsdf sd f sf fs df sdf  fs fsdjfsd fj shjfd jsdf hjf sdf jsf jsd fh jsdf sdfhjsd fhj sdjhjf sdjMessage of the day  df sdf sdf sd  fsdf sd f sf fs df sdf  fs fsdjfsd fj shjfd jsdf hjf sdf jsf jsd fh jsdf sdfhjsd fhj sdjhjf sdj"
+                            android:id="@+id/message"
+                            android:minHeight="48dp"
+                            android:gravity="center_vertical|center_horizontal"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/view_fg_light"
+                            android:layout_marginBottom="5dp"
+                            android:layout_weight="1" />
+
+                        <ImageButton
+                            android:layout_width="40dp"
+                            android:layout_height="match_parent"
+                            android:id="@+id/iblikemsg"
+                            android:src="@drawable/ic_navigation_next_item"
+                            android:background="?android:selectableItemBackground"
+                            android:layout_marginRight="5dp"
+                            android:onClick="nextMessage" />
+
+                    </LinearLayout>
+
                 </RelativeLayout>
             </LinearLayout>
         </ScrollView>

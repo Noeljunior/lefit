@@ -20,6 +20,9 @@ public class MessageParcel implements Parcelable {
     public long initdate;
     public long referdate;
 
+    public MessageParcel() {
+    }
+
     public MessageParcel(int title, int phraseset, int minphrase, int maxphrase, int defphrase, int messageset, int messagesubset, int defmessage, int showmessage, long initdate, long referdate) {
         this.title = title;
 

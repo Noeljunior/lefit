@@ -6,11 +6,16 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+
+import java.util.Calendar;
 
 public class DebugActivity extends Activity {
 
@@ -74,35 +79,18 @@ public class DebugActivity extends Activity {
         startService(intent);
     }
     
-    
-    
-
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.debug, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }*/
 
 
     public void WriteItem(View view) {
-        StorageDB db = new StorageDB(this);
+        //StorageDB db = new StorageDB(this);
 
         //db.addDailyRow(69, "hell yeah");
 
-
+        Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Som de notificação");
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, (Uri) null);
+        this.startActivityForResult(intent, 5);
 
     }
 
@@ -114,6 +102,16 @@ public class DebugActivity extends Activity {
     }
 
 
+
+    public void setalarmService(View view) {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.SECOND, 5);
+
+        AlarmerManager.setAlarm(this, MainService.ALARM_SENDNOTIFICATION, cal.getTimeInMillis());
+
+        Log.d("DebugActivity", "SETTING ALLARM OK");
+
+    }
 
 
 

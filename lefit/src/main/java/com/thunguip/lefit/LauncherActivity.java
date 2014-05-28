@@ -1,15 +1,19 @@
 package com.thunguip.lefit;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,7 +26,13 @@ import java.util.Arrays;
 import java.util.Calendar;
 
 
-public class LauncherActivity extends Activity {
+public class LauncherActivity extends ActionBarActivity {
+    private static final int ACTRES_SELECTSOUND = 1;
+
+
+    private boolean shownotificationsmenus;
+    private boolean showdaillymessage;
+
     private LvCalendarAdaptor lvcalendaradaptor;
 
     private ListView listView;
@@ -45,6 +55,10 @@ public class LauncherActivity extends Activity {
         listView.setOnItemClickListener(ListViewOnItemClickedListner);
 
         requestLvItems();
+
+        // TODO get saved results
+        shownotificationsmenus = true;
+        showdaillymessage = true;
     }
 
 
@@ -157,10 +171,49 @@ public class LauncherActivity extends Activity {
 
 
 
+    @Override
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent intent)
+    {
+        if (resultCode == Activity.RESULT_OK && requestCode == ACTRES_SELECTSOUND)
+        {
+            Uri uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+
+            if (uri != null)
+            {
+                //this.chosenRingtone = uri.toString();
+
+                Log.d("LauncherActivity", "Ringtone selected: " + uri);
+            }
+            else
+            {
+                Log.d("LauncherActivity", "Ringtone selected: NULL");
+                //this.chosenRingtone = null;
+            }
+        }
+    }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.launcher, menu);
+
+        // Notifications
+        MenuItem menunotifications =  menu.findItem(R.id.menunotifications);
+        MenuItem menusound = menu.findItem(R.id.menusound);
+        MenuItem menuvibrate = menu.findItem(R.id.menuvibrate);
+        MenuItem menutime = menu.findItem(R.id.menutime);
+
+        menunotifications.setChecked(shownotificationsmenus);
+        menunotifications.setIcon(shownotificationsmenus ? R.drawable.ic_action_bellon : R.drawable.ic_action_belloff);
+        menusound.setVisible(shownotificationsmenus);
+        menuvibrate.setVisible(shownotificationsmenus);
+        menutime.setVisible(shownotificationsmenus);
+
+        // Dailly message
+        MenuItem menumessage =  menu.findItem(R.id.menumessage);
+        menumessage.setChecked(showdaillymessage);
+
         return true;
     }
 
@@ -171,14 +224,37 @@ public class LauncherActivity extends Activity {
                 this.finish();
                 return true;
 
+            case R.id.menumessage:
+                showdaillymessage = !item.isChecked();
+                this.invalidateOptionsMenu();
+
+                return true;
+
             case R.id.menunotifications:
+                shownotificationsmenus = !item.isChecked();
+                this.invalidateOptionsMenu();
+
+                return true;
+            case R.id.menusound:
+                Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Som de notificação");
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, (Uri) null);
+
+                this.startActivityForResult(intent, ACTRES_SELECTSOUND);
+
+                return true;
+            case R.id.menuvibrate:
                 if (item.isChecked()) item.setChecked(false);
                 else item.setChecked(true);
+
                 return true;
             case R.id.menutime:
                 DialogFragment newFragment = new GettimeFragment();
                 newFragment.show(getFragmentManager(), "timePicker");
                 return true;
+
+
 
             case R.id.menudebug:
                 startActivity(new Intent(this, DebugActivity.class));

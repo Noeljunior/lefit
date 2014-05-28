@@ -5,6 +5,7 @@
     package="com.thunguip.lefit">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -40,7 +41,7 @@
             android:label="Le Fit Service"/>
 
         <receiver
-            android:name=".Alarmer"
+            android:name=".AlarmerManager"
             android:process=":remote" />
 
     </application>

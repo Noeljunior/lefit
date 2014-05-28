@@ -13,6 +13,8 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import java.util.Calendar;
+
 public class PopupActivity extends Activity {
     public static final String MESSAGE = "com.thunguip.lefit.PopupActivity.MESSAGE";
 
@@ -112,6 +114,15 @@ public class PopupActivity extends Activity {
 
         /* END Initialize this new popup*/
 
+        /* Check if this intent if for today */
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(message.referdate);
+
+        if (!MainService.isSameDay(cal, Calendar.getInstance())) {
+            findViewById(R.id.ibpostpone).setVisibility(View.GONE);
+            findViewById(R.id.separator2).setVisibility(View.GONE);
+        }
+
 
         seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -199,6 +210,14 @@ public class PopupActivity extends Activity {
 
 
     public void actionCancel(View view) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(message.referdate);
+
+        if (MainService.isSameDay(cal, Calendar.getInstance())) {
+            Intent intent = new Intent(this, MainService.class);
+            intent.putExtra(MainService.SWITCH, MainService.REMOVETODAYNOTIF);
+            startService(intent);
+        }
 
         // STATS
         msgresult.action = PopupEntryParcel.POPUP_ACTION_CANCEL;
@@ -207,6 +226,15 @@ public class PopupActivity extends Activity {
     }
 
     public void actionPostpone(View view) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(message.referdate);
+
+        if (MainService.isSameDay(cal, Calendar.getInstance())) {
+            Intent intent = new Intent(this, MainService.class);
+            intent.putExtra(MainService.SWITCH, MainService.POSTPONE);
+            startService(intent);
+        }
+
 
         // STATS
         msgresult.action = PopupEntryParcel.POPUP_ACTION_POSTPONE;
@@ -223,13 +251,6 @@ public class PopupActivity extends Activity {
     }
 
     private void closeAndSendData() {
-        /*StorageDB db = new StorageDB(this);
-        db.addEntry(db.new PopupEntryParcel(msgresult.title,
-                msgresult.phrasesset, msgresult.phrasesmin, msgresult.phrasesmax, msgresult.phrasesanswered, msgresult.phraseshitsmore, msgresult.phraseshitsless,
-                msgresult.messageset, msgresult.messagesubset, msgresult.messagehithide, msgresult.messagehitmore,
-                msgresult.action,
-                msgresult.daterefer, msgresult.dateinit, MainService.newZeroedNowCalendar().getTimeInMillis()));*/
-
         PopupEntryParcel pep = new PopupEntryParcel(msgresult.title,
                 msgresult.phrasesset, msgresult.phrasesmin, msgresult.phrasesmax, msgresult.phrasesanswered, msgresult.phraseshitsmore, msgresult.phraseshitsless,
                 msgresult.messageset, msgresult.messagesubset, msgresult.messagehithide, msgresult.messagehitmore,
