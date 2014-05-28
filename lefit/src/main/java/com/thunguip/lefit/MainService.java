@@ -75,8 +75,8 @@ public class MainService extends IntentService {
         initCalendar.set(Calendar.MONTH, 4);
         initCalendar.set(Calendar.DAY_OF_MONTH, 20);
 
-        alarmTimeCalendar ;
-        intervalCalendar ;
+        //alarmTimeCalendar ;
+        //intervalCalendar ;
 
         /* TODO get saved notification sound and vibrate state */
         notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
