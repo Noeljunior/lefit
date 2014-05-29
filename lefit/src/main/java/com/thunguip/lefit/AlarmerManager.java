@@ -6,7 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.PowerManager;
-import android.util.Log;
 
 
 public class AlarmerManager extends BroadcastReceiver {
@@ -18,7 +17,7 @@ public class AlarmerManager extends BroadcastReceiver {
 
         Intent si = new Intent(context, MainService.class);
         si.putExtra(MainService.SWITCH, MainService.ALARM);
-        si.putExtra(MainService.ALARM, MainService.ALARM_SENDNOTIFICATION);
+        si.putExtra(MainService.ALARM, intent.getIntExtra(MainService.ALARM, -1));
         context.startService(si);
 
         wl.release();

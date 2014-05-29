@@ -1,11 +1,9 @@
 package com.thunguip.lefit;
 
-import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
@@ -14,7 +12,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Messenger;
-import android.os.PowerManager;
 import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -34,9 +31,13 @@ public class MainService extends IntentService {
     public static final String ADDPOPUPENTRY = "com.thunguip.lefit.mainservice.SWITCH.ADDPOPUPENTRY";
     public static final String INVOKEPOPUP = "com.thunguip.lefit.mainservice.SWITCH.INVOKEPOPUP";
     public static final String FIRENOTIFICATION = "com.thunguip.lefit.mainservice.SWITCH.FIRENOTIFICATION";
+
     public static final String ALARM = "com.thunguip.lefit.mainservice.SWITCH.ALARM";
     public static final String REMOVETODAYNOTIF = "com.thunguip.lefit.mainservice.SWITCH.REMOVETODAYNOTIF";
     public static final String POSTPONE = "com.thunguip.lefit.mainservice.SWITCH.POSTPONE";
+
+    public static final String SETREPEATEDALARM = "com.thunguip.lefit.mainservice.SWITCH.SETREPEATEDALARM";
+    public static final String SETPOSTPONEALARM = "com.thunguip.lefit.mainservice.SWITCH.SETPOSTPONEALARM";
 
     /* Broadcasts senders */
     public static final String BROADCAST = "com.thunguip.lefit.mainservice.BROADCAST";
@@ -50,7 +51,9 @@ public class MainService extends IntentService {
     Calendar intervalCalendar;
 
     /* Alarm Identifiers */
-    public static final int ALARM_SENDNOTIFICATION = 1;
+    public static final int ALARMID_REPEATED = 1;
+    public static final int ALARMID_POSTPONED = 2;
+    public static final int ALARMID_STOPPOSTPONED = 3;
 
     /* Notification Identifiers */
     public static final int NOTIF_TODAY = 1;
@@ -75,8 +78,12 @@ public class MainService extends IntentService {
         initCalendar.set(Calendar.MONTH, 4);
         initCalendar.set(Calendar.DAY_OF_MONTH, 20);
 
-        //alarmTimeCalendar ;
-        //intervalCalendar ;
+        /* TODO get a calendar based on saved time */
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MINUTE, 1);
+
+        alarmTimeCalendar = cal;
+        intervalCalendar = newCalendarByTime(0, 0, 30);
 
         /* TODO get saved notification sound and vibrate state */
         notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -116,6 +123,13 @@ public class MainService extends IntentService {
                 postponePopup();
                 return;
 
+            case SETREPEATEDALARM:
+                setRepeatAlarmer();
+                return;
+            case SETPOSTPONEALARM:
+                //setPosponeAlarm();
+                return;
+
 
             case DEBUG:
 
@@ -138,7 +152,6 @@ public class MainService extends IntentService {
         Bundle data = new Bundle();
         data.putString(SWITCH, GETLVITEMS);
 
-        //data.putParcelableArray(GETLVITEMS, getDummyItems(10));
         data.putParcelableArray(GETLVITEMS, loadItemsFromDB());
 
         msg.setData(data);
@@ -187,7 +200,8 @@ public class MainService extends IntentService {
 
     private void handleAlarm(int as) {
         switch (as) {
-            case ALARM_SENDNOTIFICATION:
+            case ALARMID_REPEATED:
+                Log.d("MainService", "HANDLEALARM: ALARMID_REPEATED");
                 /* TODO set notification's title and descritions based on something */
                 String title = "Como foi o seu dia?";
                 String description = "Toque para registar como foi o seu dia.";
@@ -195,6 +209,22 @@ public class MainService extends IntentService {
 
                 sendNotificationByMessage(getTodaysMessageParcel(),
                         NOTIF_TODAY, title, description);
+                return;
+            case ALARMID_POSTPONED:
+                Log.d("MainService", "HANDLEALARM: ALARMID_POSTPONED");
+                /* TODO get last postponed  */
+
+                /* TODO check if refer date is older then yerterday  */
+
+
+                sendNotificationByMessage(getTodaysMessageParcel(),
+                        NOTIF_TODAY,
+                        "Como foi o seu dia ontem?",
+                        "Toque para registar como foi o seu dia de ontem.");
+                return;
+            case ALARMID_STOPPOSTPONED:
+                /* TODO unset postponed alarms and notifications */
+
                 return;
 
             default:
@@ -209,14 +239,19 @@ public class MainService extends IntentService {
         Calendar cal = Calendar.getInstance();
 
         AlarmerManager.setAlarm(this,
-                MainService.ALARM_SENDNOTIFICATION,
-                cal.getTimeInMillis() + newCalendarByTime(0, 1, 0).getTimeInMillis());
+                MainService.ALARMID_POSTPONED,
+                cal.getTimeInMillis() + newCalendarByTime(0, 0, 5).getTimeInMillis());
     }
 
 
     private void setRepeatAlarmer() {
-
+        AlarmerManager.setRepeatingAlarm(this,
+                ALARMID_REPEATED,
+                alarmTimeCalendar.getTimeInMillis(),
+                intervalCalendar.getTimeInMillis());
     }
+
+
 
     private MessageParcel getTodaysMessageParcel() {
         MessageParcel mp = new MessageParcel();

@@ -2,15 +2,10 @@ package com.thunguip.lefit;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -104,10 +99,14 @@ public class DebugActivity extends Activity {
 
 
     public void setalarmService(View view) {
-        Calendar cal = Calendar.getInstance();
+        /*Calendar cal = Calendar.getInstance();
         cal.add(Calendar.SECOND, 5);
 
-        AlarmerManager.setAlarm(this, MainService.ALARM_SENDNOTIFICATION, cal.getTimeInMillis());
+        AlarmerManager.setAlarm(this, MainService.ALARMID_REPEATED, cal.getTimeInMillis());*/
+
+        Intent intent = new Intent(this, MainService.class);
+        intent.putExtra(MainService.SWITCH, MainService.SETREPEATEDALARM);
+        startService(intent);
 
         Log.d("DebugActivity", "SETTING ALLARM OK");
 
