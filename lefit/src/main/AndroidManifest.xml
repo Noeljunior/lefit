@@ -26,7 +26,6 @@
         </activity>
         <activity
             android:name=".PopupActivity"
-            android:excludeFromRecents="true"
             android:label="Le Fit"
             android:theme="@style/Theme.LeFitBlue.Dialog" >
         </activity>

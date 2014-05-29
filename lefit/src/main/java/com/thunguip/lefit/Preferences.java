@@ -46,6 +46,8 @@ public class Preferences {
         }
     }
 
+    /* Getters */
+
     public long getNotificationInterval() {
         if (false) { /* TODO go check the preferences */
 
@@ -126,6 +128,11 @@ public class Preferences {
         }
     }
 
+    /* Setters */
+
+
+
+    /* Helpers */
 
     public abstract static class TimeHelper {
         public static long getNow() {

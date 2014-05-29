@@ -215,7 +215,7 @@ public class PopupActivity extends Activity {
 
         if (MainService.isSameDay(cal, Calendar.getInstance())) {
             Intent intent = new Intent(this, MainService.class);
-            intent.putExtra(MainService.SWITCH, MainService.REMOVETODAYNOTIF);
+            //intent.putExtra(MainService.SWITCH, MainService.REMOVETODAYNOTIF);
             startService(intent);
         }
 
@@ -231,7 +231,7 @@ public class PopupActivity extends Activity {
 
         if (MainService.isSameDay(cal, Calendar.getInstance())) {
             Intent intent = new Intent(this, MainService.class);
-            intent.putExtra(MainService.SWITCH, MainService.POSTPONE);
+            //intent.putExtra(MainService.SWITCH, MainService.POSTPONE);
             startService(intent);
         }
 

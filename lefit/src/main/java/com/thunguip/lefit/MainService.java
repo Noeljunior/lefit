@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
@@ -14,7 +15,6 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,58 +23,51 @@ import java.util.Calendar;
 
 public class MainService extends IntentService {
     /* Intent receivers */
-    public static final String SWITCH = "com.thunguip.lefit.mainservice.SWITCH";
-    public static final String MESSENGER = "com.thunguip.lefit.mainservice.MESSENGER";
-    public static final String DEBUG = "com.thunguip.lefit.mainservice.SWITCH.DEBUG";
+    public static final String SWITCH               = "com.thunguip.lefit.mainservice.SWITCH";
+    public static final String MESSENGER            = "com.thunguip.lefit.mainservice.MESSENGER";
+    public static final String DEBUG                = "com.thunguip.lefit.mainservice.SWITCH.DEBUG";
 
-    public static final String GETLVITEMS = "com.thunguip.lefit.mainservice.SWITCH.GETLVITEMS";
-    public static final String ADDANSWERTODB = "com.thunguip.lefit.mainservice.SWITCH.ADDANSWERTODB";
+    public static final String GETLVITEMS           = "com.thunguip.lefit.mainservice.SWITCH.GETLVITEMS";
+    public static final String ADDANSWERTODB        = "com.thunguip.lefit.mainservice.SWITCH.ADDANSWERTODB";
 
-    public static final String ALARM = "com.thunguip.lefit.mainservice.SWITCH.ALARM";
+    public static final String ALARM                = "com.thunguip.lefit.mainservice.SWITCH.ALARM";
 
-    public static final String ENABLENOTIFICATIONS = "com.thunguip.lefit.mainservice.SWITCH.ENABLENOTIFICATIONS";
+    public static final String ENABLENOTIFICATIONS  = "com.thunguip.lefit.mainservice.SWITCH.ENABLENOTIFICATIONS";
     public static final String DISABLENOTIFICATIONS = "com.thunguip.lefit.mainservice.SWITCH.DISABLENOTIFICATIONS";
-    public static final String NOTIFICATIONACTION = "com.thunguip.lefit.mainservice.SWITCH.NOTIFICATIONACTION";
+    public static final String NOTIFICATIONACTION   = "com.thunguip.lefit.mainservice.SWITCH.NOTIFICATIONACTION";
     public static final String NOTIFCATION_POSTPONE = "com.thunguip.lefit.mainservice.SWITCH.NOTIFICATIONACTION.NOTIFCATION_POSTPONE";
-    public static final String NOTIFCATION_OPNEN = "com.thunguip.lefit.mainservice.SWITCH.NOTIFICATIONACTION.NOTIFCATION_OPNEN";
+    public static final String NOTIFCATION_OPNEN    = "com.thunguip.lefit.mainservice.SWITCH.NOTIFICATIONACTION.NOTIFCATION_OPNEN";
 
+    public static final String INVOKEPOPUPBYLVITEM  = "com.thunguip.lefit.mainservice.SWITCH.INVOKEPOPUPBYLVITEM";
 
-
-    public static final String INVOKEPOPUPBYLVITEM = "com.thunguip.lefit.mainservice.SWITCH.INVOKEPOPUPBYLVITEM";
-    public static final String FIRENOTIFICATION = "com.thunguip.lefit.mainservice.SWITCH.FIRENOTIFICATION";
-
-    public static final String REMOVETODAYNOTIF = "com.thunguip.lefit.mainservice.SWITCH.REMOVETODAYNOTIF";
-    public static final String POSTPONE = "com.thunguip.lefit.mainservice.SWITCH.POSTPONE";
-
-    public static final String SETPOSTPONENOTIFICATION = "com.thunguip.lefit.mainservice.SWITCH.SETPOSTPONENOTIFICATION";
 
     /* Broadcasts senders */
-    public static final String BROADCAST = "com.thunguip.lefit.mainservice.BROADCAST";
+    public static final String BROADCAST        = "com.thunguip.lefit.mainservice.BROADCAST";
 
-    public static final String BC_SWITCH = "com.thunguip.lefit.mainservice.BROADCAST.BC_SWITCH";
-    public static final String BC_UPDATEITEMS = "com.thunguip.lefit.mainservice.BROADCAST.BC_UPDATEITEMS";
+    public static final String BC_SWITCH        = "com.thunguip.lefit.mainservice.BROADCAST.BC_SWITCH";
+    public static final String BC_UPDATEITEMS   = "com.thunguip.lefit.mainservice.BROADCAST.BC_UPDATEITEMS";
 
-    /* Start date */
+    /* Alarm Identifiers */
+    public static final int ALARMID_REPEATED    = 1;
+    public static final int ALARMID_POSTPONED   = 2;
+    public static final int ALARMID_CLEAN       = 3;
+
+    /* Notification Identifiers */
+    public static final int NOTIFID_MAIN        = 1;
+    public static final int NOTIFID_PIRESULT    = 100;
+    public static final int NOTIFID_PIPOSTPONE  = 101;
+
+    /* Preferences */
+    private Preferences preferences;
     private long startDate;
-
-    /* Notification's times */
     private long notificationTime;
     private long notificationInterval;
     private long postponeDelay;
     private long notificationCleanGap;
-
-    /* Alarm Identifiers */
-    public static final int ALARMID_REPEATED = 1;
-    public static final int ALARMID_POSTPONED = 2;
-    public static final int ALARMID_CLEAN = 3;
-
-    /* Notification Identifiers */
-    public static final int NOTIFID_MAIN = 1;
-
-    /* Notifications settings */
     private boolean isFireNotifications;
     private Uri notificationSound;
     private boolean isToVibrate;
+    private boolean isShowDaillyMessages;
 
     public MainService() {
         super("MainService");
@@ -84,24 +77,28 @@ public class MainService extends IntentService {
     public void onCreate() {
         super.onCreate();
 
-        Preferences prefs = new Preferences(this);
-
-        startDate = prefs.getStartDate();
-
-        notificationTime = prefs.getNotificationTime();
-        notificationInterval = prefs.getNotificationInterval();
-        postponeDelay = prefs.getPostponeDelay();
-        notificationCleanGap = prefs.getNotificationCleanGap();
-
-
-        notificationSound = Uri.parse(prefs.getNotificationSound());
-        isToVibrate = prefs.isNotificationVibrate();
+        Preferences preferences = new Preferences(this);
     }
 
     private void sendBroadcast(String bswitch) {
         Intent i = new Intent(BROADCAST);
         i.putExtra(BC_SWITCH, bswitch);
         sendBroadcast(i);
+    }
+
+    private void updatePreferences() {
+        startDate               = preferences.getStartDate();
+
+        notificationTime        = preferences.getNotificationTime();
+        notificationInterval    = preferences.getNotificationInterval();
+        postponeDelay           = preferences.getPostponeDelay();
+        notificationCleanGap    = preferences.getNotificationCleanGap();
+
+        isFireNotifications     = preferences.isFireNotifications();
+        notificationSound       = Uri.parse(preferences.getNotificationSound());
+        isToVibrate             = preferences.isNotificationVibrate();
+
+        isShowDaillyMessages    = preferences.isShowDaillyMessage();
     }
 
     @Override
@@ -111,13 +108,7 @@ public class MainService extends IntentService {
             return;
         }
 
-        Preferences prefs = new Preferences(this);
-
-        notificationTime = prefs.getNotificationTime();
-        notificationInterval = prefs.getNotificationInterval();
-        postponeDelay = prefs.getPostponeDelay();
-        notificationCleanGap = prefs.getNotificationCleanGap();
-
+        updatePreferences();
 
         Log.d("MainService", "New Intent: " + intent.getStringExtra(SWITCH));
 
@@ -146,27 +137,9 @@ public class MainService extends IntentService {
                 handleNotificationAction(intent.getStringExtra(NOTIFICATIONACTION));
                 return;
 
-
             /* Popup invokers */
             case INVOKEPOPUPBYLVITEM:
-                openNewPopup(intent.getLongExtra(INVOKEPOPUPBYLVITEM, -1));
-                return;
-
-
-
-            /* REFACTOR */
-            case REMOVETODAYNOTIF:
-                removeNotificationByID(NOTIFID_MAIN);
-                return;
-            case POSTPONE:
-                postponePopup();
-                return;
-            case SETPOSTPONENOTIFICATION:
-                setPostponeNotification();
-                return;
-
-            case FIRENOTIFICATION:
-                fireNotification();
+                openPopupByRefer(intent.getLongExtra(INVOKEPOPUPBYLVITEM, -1));
                 return;
 
 
@@ -174,9 +147,67 @@ public class MainService extends IntentService {
 
                 return;
             default:
+                /* Unknown SWITCH */
+        }
+    }
+
+    /* Alarmer Switch */
+    private void handleAlarm(int as) {
+        switch (as) {
+            case ALARMID_REPEATED:
+                Log.d("MainService", "HANDLEALARM: ALARMID_REPEATED");
+                /* TODO set notification's title and descritions based on something */
+                String title = "Como foi o seu dia?";
+                String description = "Toque para registar como foi o seu dia.";
+
+
+                sendNotificationByMessage(NOTIFID_MAIN, title, description);
+                return;
+            case ALARMID_POSTPONED:
+                Log.d("MainService", "HANDLEALARM: ALARMID_POSTPONED");
+                /* TODO get last postponed  */
+
+                /* TODO check if refer date is older then yerterday  */
+
+
+                sendNotificationByMessage(NOTIFID_MAIN,
+                        "Como foi o seu dia ontem?",
+                        "Toque para registar como foi o seu dia de ontem.");
+                return;
+            case ALARMID_CLEAN:
+                Log.d("MainService", "HANDLEALARM: ALARMID_CLEAN");
+                /* Unset alarm */
+                AlarmerManager.cancelAlarm(this, ALARMID_POSTPONED);
+                /* Remove notification, if any */
+                removeNotificationByID(NOTIFID_MAIN);
+                return;
+
+            default:
+                Log.d("MainService", "HANDLEALARM: UNKOWN " + as);
+                /* UNKOWN ALARM ID */
                 return;
         }
+    }
 
+    /* Notification Switch */
+    private void handleNotificationAction(String action) {
+        Log.d("MainService", "HANDLENOTIFICATION: " + action);
+        switch (action) {
+            case NOTIFCATION_OPNEN:
+                //removeNotificationByID(NOTIFID_MAIN);
+                openPopupByNotification();
+
+                return;
+            case NOTIFCATION_POSTPONE:
+                removeNotificationByID(NOTIFID_MAIN);
+
+                setPostponeNotification();
+                return;
+
+            default:
+                /* Unknown action */
+                return;
+        }
 
     }
 
@@ -205,7 +236,7 @@ public class MainService extends IntentService {
             sendBroadcast(BC_UPDATEITEMS);
     }
 
-    private void openNewPopup(long refer) {
+    private void openPopupByRefer(long refer) {
         /* TODO know what to send to popup */
 
         Intent intent = new Intent(this, PopupActivity.class);
@@ -222,68 +253,23 @@ public class MainService extends IntentService {
         startActivity(intent);
     }
 
-    private void fireNotification() {
+    private void openPopupByNotification() {
+        /* TODO know what to send to popup */
+        /* TODO select refer to either today or yesterday */
+
+        Intent intent = new Intent(this, PopupActivity.class);
+
         MessageParcel m = new MessageParcel(1,
                 2, 2, 5, 4,
                 1, 0, 0, 1,
-                newZeroedNowCalendar().getTimeInMillis(), 0);
+                newZeroedNowCalendar().getTimeInMillis(), Preferences.TimeHelper.getTodayDate());
 
+        intent.putExtra(PopupActivity.MESSAGE, m);
 
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
 
-        sendNotificationByMessage(m, 0, "Como foi o seu dia?", "Toque para registar como foi o seu dia.");
+        startActivity(intent);
     }
-
-    private void handleAlarm(int as) {
-        switch (as) {
-            case ALARMID_REPEATED:
-                Log.d("MainService", "HANDLEALARM: ALARMID_REPEATED");
-                /* TODO set notification's title and descritions based on something */
-                String title = "Como foi o seu dia?";
-                String description = "Toque para registar como foi o seu dia.";
-
-
-                sendNotificationByMessage(getTodaysMessageParcel(),
-                        NOTIFID_MAIN, title, description);
-                return;
-            case ALARMID_POSTPONED:
-                Log.d("MainService", "HANDLEALARM: ALARMID_POSTPONED");
-                /* TODO get last postponed  */
-
-                /* TODO check if refer date is older then yerterday  */
-
-
-                sendNotificationByMessage(getTodaysMessageParcel(),
-                        NOTIFID_MAIN,
-                        "Como foi o seu dia ontem?",
-                        "Toque para registar como foi o seu dia de ontem.");
-                return;
-            case ALARMID_CLEAN:
-                Log.d("MainService", "HANDLEALARM: ALARMID_CLEAN");
-                /* Unset alarm */
-                AlarmerManager.cancelAlarm(this, ALARMID_POSTPONED);
-                /* Remove notification, if any */
-                removeNotificationByID(NOTIFID_MAIN);
-                return;
-
-            default:
-                Log.d("MainService", "HANDLEALARM: UNKOWN " + as);
-                /* UNKOWN ALARM ID */
-                return;
-        }
-    }
-
-    private void postponePopup() {
-        removeNotificationByID(NOTIFID_MAIN);
-
-        AlarmerManager.setRelativeAlarm(this,
-                MainService.ALARMID_POSTPONED,
-                SystemClock.elapsedRealtime() + postponeDelay);
-
-        /*AlarmerManager.setAlarm(this,
-                MainService.ALARMID_CLEAN,
-                notificationCleanGap.getTimeInMillis());*/
-    }
-
 
     private void enableNotifications() {
         AlarmerManager.setRepeatingAlarm(this,
@@ -305,34 +291,13 @@ public class MainService extends IntentService {
         removeNotificationByID(NOTIFID_MAIN);
     }
 
-
-    private void handleNotificationAction(String action) {
-        Log.d("MainService", "HANDLENOTIFICATION: " + action);
-        switch (action) {
-            case NOTIFCATION_OPNEN:
-
-                return;
-            case NOTIFCATION_POSTPONE:
-
-                return;
-
-            default:
-                /* Unknown action */
-                return;
-        }
-
-    }
-
-
-
-
     private void setPostponeNotification() {
-        removeNotificationByID(NOTIFID_MAIN);
-
         AlarmerManager.setRelativeAlarm(this,
                 MainService.ALARMID_POSTPONED,
                 SystemClock.elapsedRealtime() + postponeDelay);
     }
+
+
 
     private MessageParcel getTodaysMessageParcel() {
         MessageParcel mp = new MessageParcel();
@@ -415,16 +380,23 @@ public class MainService extends IntentService {
 
 
 
-    private void sendNotificationByMessage(MessageParcel m, int mid, String title, String description) {
+    private void sendNotificationByMessage(int mid, String title, String description) {
         /* Actions callbacks */
         /*Intent cancelIntent = new Intent(this, MainService.class);
         cancelIntent.putExtra(MainService.SWITCH, MainService.REMOVETODAYNOTIF);
         PendingIntent cancelPendingIntent = PendingIntent.getService(this, 0, cancelIntent, 0);*/
 
+        /* Result Action */
+        Intent resultIntent = new Intent(this, MainService.class);
+        resultIntent.putExtra(SWITCH, NOTIFICATIONACTION);
+        resultIntent.putExtra(NOTIFICATIONACTION, NOTIFCATION_OPNEN);
+        PendingIntent resultPendingIntent = PendingIntent.getService(this, NOTIFID_PIRESULT, resultIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        /* Postpone Action */
         Intent postponeIntent = new Intent(this, MainService.class);
         postponeIntent.putExtra(SWITCH, NOTIFICATIONACTION);
         postponeIntent.putExtra(NOTIFICATIONACTION, NOTIFCATION_POSTPONE);
-        PendingIntent postponePendingIntent = PendingIntent.getService(this, 1, postponeIntent, 0);
+        PendingIntent postponePendingIntent = PendingIntent.getService(this, NOTIFID_PIPOSTPONE, postponeIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
 
         NotificationCompat.Builder mBuilder;
@@ -433,6 +405,7 @@ public class MainService extends IntentService {
                 .setSound(notificationSound)
                 .setContentTitle(title)
                 .setContentText(description)
+                .setContentIntent(resultPendingIntent)
                 /*.addAction (R.drawable.ic_navigation_cancel, "Dispensar", cancelPendingIntent)*/
                 .addAction (R.drawable.ic_device_access_time, "Lembrar mais tarde", postponePendingIntent);
 
@@ -440,19 +413,7 @@ public class MainService extends IntentService {
             mBuilder.setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_LIGHTS);
         }
 
-        Intent resultIntent = new Intent(this, PopupActivity.class);
-
-        resultIntent.putExtra(PopupActivity.MESSAGE, m);
-
-
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(PopupActivity.class);
-        stackBuilder.addNextIntent(resultIntent);
-
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-        mBuilder.setContentIntent(resultPendingIntent);
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
         mNotificationManager.notify(mid, mBuilder.build());
     }
 
@@ -462,8 +423,6 @@ public class MainService extends IntentService {
 
 
     /* STATIC METHODS */
-
-
     public static boolean isSameDay(Calendar a, Calendar b) {
         return (a.get(Calendar.YEAR) == b.get(Calendar.YEAR)) &&
                 (a.get(Calendar.MONTH) == b.get(Calendar.MONTH)) &&

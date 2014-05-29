@@ -68,7 +68,7 @@ public class DebugActivity extends Activity {
 
     public void showNotification(View view) {
         Intent intent = new Intent(this, MainService.class);
-        intent.putExtra(MainService.SWITCH, MainService.FIRENOTIFICATION);
+        //intent.putExtra(MainService.SWITCH, MainService.FIRENOTIFICATION);
         startService(intent);
     }
     
