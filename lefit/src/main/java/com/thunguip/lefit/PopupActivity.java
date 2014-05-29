@@ -258,8 +258,8 @@ public class PopupActivity extends Activity {
                 msgresult.daterefer, msgresult.dateinit, MainService.newZeroedNowCalendar().getTimeInMillis());
 
         Intent intent = new Intent(this, MainService.class);
-        intent.putExtra(MainService.SWITCH, MainService.ADDPOPUPENTRY);
-        intent.putExtra(MainService.ADDPOPUPENTRY, pep);
+        intent.putExtra(MainService.SWITCH, MainService.ADDANSWERTODB);
+        intent.putExtra(MainService.ADDANSWERTODB, pep);
         startService(intent);
 
 

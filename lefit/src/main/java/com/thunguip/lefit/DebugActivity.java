@@ -10,8 +10,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-import java.util.Calendar;
-
 public class DebugActivity extends Activity {
 
     @Override
@@ -105,7 +103,7 @@ public class DebugActivity extends Activity {
         AlarmerManager.setAlarm(this, MainService.ALARMID_REPEATED, cal.getTimeInMillis());*/
 
         Intent intent = new Intent(this, MainService.class);
-        intent.putExtra(MainService.SWITCH, MainService.SETREPEATEDALARM);
+        intent.putExtra(MainService.SWITCH, MainService.ENABLENOTIFICATIONS);
         startService(intent);
 
         Log.d("DebugActivity", "SETTING ALLARM OK");

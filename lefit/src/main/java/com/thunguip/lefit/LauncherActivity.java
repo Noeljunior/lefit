@@ -1,6 +1,5 @@
 package com.thunguip.lefit;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.BroadcastReceiver;
@@ -116,8 +115,8 @@ public class LauncherActivity extends ActionBarActivity {
 
 
             Intent intent = new Intent(v.getContext(), MainService.class);
-            intent.putExtra(MainService.SWITCH, MainService.INVOKEPOPUP);
-            intent.putExtra(MainService.INVOKEPOPUP, clickedItem.referdate);
+            intent.putExtra(MainService.SWITCH, MainService.INVOKEPOPUPBYLVITEM);
+            intent.putExtra(MainService.INVOKEPOPUPBYLVITEM, clickedItem.referdate);
             startService(intent);
         }
     };
@@ -233,6 +232,17 @@ public class LauncherActivity extends ActionBarActivity {
             case R.id.menunotifications:
                 shownotificationsmenus = !item.isChecked();
                 this.invalidateOptionsMenu();
+
+                if (shownotificationsmenus) {
+                    Intent intent = new Intent(this, MainService.class);
+                    intent.putExtra(MainService.SWITCH, MainService.ENABLENOTIFICATIONS);
+                    startService(intent);
+                }
+                else {
+                    Intent intent = new Intent(this, MainService.class);
+                    intent.putExtra(MainService.SWITCH, MainService.DISABLENOTIFICATIONS);
+                    startService(intent);
+                }
 
                 return true;
             case R.id.menusound:
