@@ -77,7 +77,7 @@ public class MainService extends IntentService {
     public void onCreate() {
         super.onCreate();
 
-        Preferences preferences = new Preferences(this);
+        preferences = new Preferences(this);
     }
 
     private void sendBroadcast(String bswitch) {
@@ -243,7 +243,7 @@ public class MainService extends IntentService {
 
         MessageParcel m = new MessageParcel(1,
                 2, 2, 5, 4,
-                1, 0, 0, 1,
+                0, 1, 0, 1,
                 newZeroedNowCalendar().getTimeInMillis(), refer);
 
         intent.putExtra(PopupActivity.MESSAGE, m);

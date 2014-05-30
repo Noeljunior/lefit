@@ -2,11 +2,23 @@ package com.thunguip.lefit;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 
 import java.util.Calendar;
 
 public class Preferences {
+    /* Prefrences File */
+    public static final String  PREFS_NAME                  = "MainPrefs";
+    public static final int     PREFS_MODE                  = Context.MODE_PRIVATE | Context.MODE_MULTI_PROCESS;
+    /* Preferences Keys */
+    public static final String  PREFS_STARTDATE             = "MAINPREFES.PREFS_STARTDATE";
+    public static final String  PREFS_FIRENOTIFICATIONS     = "MAINPREFES.PREFS_FIRENOTIFICATIONS";
+    public static final String  PREFS_NOTIFICATIONTIME      = "MAINPREFES.PREFS_NOTIFICATIONTIME";
+    public static final String  PREFS_NOTIFICATIONSOUND     = "MAINPREFES.PREFS_NOTIFICATIONSOUND";
+    public static final String  PREFS_NOTIFICATIONVIBRATE   = "MAINPREFES.PREFS_NOTIFICATIONVIBRATE";
+    public static final String  PREFS_SHOWDAILLYMESSAGE     = "MAINPREFES.PREFS_SHOWDAILLYMESSAGE";
+
     /* DEFAULTS */
     public static final boolean     DEF_fireNotifications       = true;
     public static final long        DEF_notificationTime        = TimeHelper.getByTime(20, 0);  /* TODO set to 20h */
@@ -19,11 +31,37 @@ public class Preferences {
     public static final long    notificationCleanGap            = postponeDelay * 2;
 
     private Context context;
+    private SharedPreferences settings;
 
     public Preferences(Context context) {
         this.context = context;
+        this.settings = context.getSharedPreferences(PREFS_NAME, PREFS_MODE);
     }
 
+
+
+
+    /* Getters */
+
+    public long getStartDate() {
+        if (false) { /* TODO go check the preferences */
+
+            return settings.getLong(PREFS_STARTDATE, TimeHelper.getTodayDate());
+        }
+        else { /* TODO return today's date */
+            return TimeHelper.getByDate(2014, 4, 20);/*TimeHelper.getTodayDate();*/
+        }
+    }
+
+    public boolean isFireNotifications() {
+        if (false) { /* TODO go check the preferences */
+
+            return true;
+        }
+        else { /* return the defaul */
+            return DEF_fireNotifications;
+        }
+    }
 
     public long getNotificationTime() {
         if (false) { /* TODO go check the preferences */
@@ -43,48 +81,6 @@ public class Preferences {
             /* DUMMY */
 
             //return DEF_notificationTime;
-        }
-    }
-
-    /* Getters */
-
-    public long getNotificationInterval() {
-        if (false) { /* TODO go check the preferences */
-
-            return 0;
-        }
-        else { /* return the defaul */
-            return notificationInterval;
-        }
-    }
-
-    public long getPostponeDelay() {
-        if (false) { /* TODO go check the preferences */
-
-            return 0;
-        }
-        else { /* return the defaul */
-            return postponeDelay;
-        }
-    }
-
-    public long getNotificationCleanGap() {
-        if (false) { /* TODO go check the preferences */
-
-            return 0;
-        }
-        else { /* return the defaul */
-            return notificationCleanGap;
-        }
-    }
-
-    public boolean isFireNotifications() {
-        if (false) { /* TODO go check the preferences */
-
-            return true;
-        }
-        else { /* return the defaul */
-            return DEF_fireNotifications;
         }
     }
 
@@ -118,22 +114,84 @@ public class Preferences {
         }
     }
 
-    public long getStartDate() {
+    public long getNotificationInterval() {
         if (false) { /* TODO go check the preferences */
 
             return 0;
         }
-        else { /* TODO return today's date */
-            return TimeHelper.getByDate(2014, 4, 20);/*TimeHelper.getTodayDate();*/
+        else { /* return the defaul */
+            return notificationInterval;
         }
     }
 
+    public long getPostponeDelay() {
+        if (false) { /* TODO go check the preferences */
+
+            return 0;
+        }
+        else { /* return the defaul */
+            return postponeDelay;
+        }
+    }
+
+    public long getNotificationCleanGap() {
+        if (false) { /* TODO go check the preferences */
+
+            return 0;
+        }
+        else { /* return the defaul */
+            return notificationCleanGap;
+        }
+    }
+
+
     /* Setters */
+    private void setStartDate(long l) {
+        commitPrefLong(PREFS_STARTDATE, l);
+    }
+    public void setFireNotifications(boolean b) {
+        commitPrefBoolean(PREFS_FIRENOTIFICATIONS, b);
+    }
+    public void setNotificationTime(long l) {
+        commitPrefLong(PREFS_NOTIFICATIONTIME, l);
+    }
+    public void setNotificationSound(String s) {
+        commitPrefString(PREFS_NOTIFICATIONSOUND, s);
+    }
+    public void setNotificationVibrate(boolean b) {
+        commitPrefBoolean(PREFS_NOTIFICATIONVIBRATE, b);
+    }
+    public void setShowDaillyMessage(boolean b) {
+        commitPrefBoolean(PREFS_SHOWDAILLYMESSAGE, b);
+    }
 
 
 
     /* Helpers */
 
+    /* Preferences Helpers */
+    private void commitPrefBoolean(String key, boolean b) {
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean(key, b);
+        editor.commit();
+    }
+    private void commitPrefString(String key, String s) {
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(key, s);
+        editor.commit();
+    }
+    private void commitPrefInt(String key, int i) {
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt(key, i);
+        editor.commit();
+    }
+    private void commitPrefLong(String key, long l) {
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putLong(key, l);
+        editor.commit();
+    }
+
+    /* TimeDate Helper */
     public abstract static class TimeHelper {
         public static long getNow() {
             Calendar cal = Calendar.getInstance();
