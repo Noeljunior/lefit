@@ -43,7 +43,7 @@
 
         <receiver
             android:name=".AlarmerManager"
-
+            android:process=":AlarmerProccess"
             android:enabled="true" >
 
             </receiver>

@@ -39,7 +39,7 @@ public class AlarmerManager extends BroadcastReceiver {
         Intent i = new Intent(context, AlarmerManager.class);
         i.putExtra(MainService.ALARM, id);
         PendingIntent pi = PendingIntent.getBroadcast(context, id, i, PendingIntent.FLAG_CANCEL_CURRENT);
-        am.setInexactRepeating(AlarmManager.RTC_WAKEUP, trigger, interval, pi);
+        am.setRepeating(AlarmManager.RTC_WAKEUP, trigger, interval, pi);
     }
 
     public static void setRelativeAlarm(Context context, int id, long trigger){
@@ -55,7 +55,7 @@ public class AlarmerManager extends BroadcastReceiver {
         Intent i = new Intent(context, AlarmerManager.class);
         i.putExtra(MainService.ALARM, id);
         PendingIntent pi = PendingIntent.getBroadcast(context, id, i, PendingIntent.FLAG_CANCEL_CURRENT);
-        am.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, trigger, interval, pi);
+        am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, trigger, interval, pi);
     }
 
     public static void cancelAlarm(Context context, int id) {
