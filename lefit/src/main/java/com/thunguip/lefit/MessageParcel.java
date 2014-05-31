@@ -20,10 +20,12 @@ public class MessageParcel implements Parcelable {
     public long initdate;
     public long referdate;
 
+    public int showpostpone;
+
     public MessageParcel() {
     }
 
-    public MessageParcel(int title, int phraseset, int minphrase, int maxphrase, int defphrase, int messageset, int messagesubset, int defmessage, int showmessage, long initdate, long referdate) {
+    public MessageParcel(int title, int phraseset, int minphrase, int maxphrase, int defphrase, int messageset, int messagesubset, int defmessage, int showmessage, long initdate, long referdate, int showpostpone) {
         this.title = title;
 
         this.phraseset = phraseset;
@@ -38,6 +40,8 @@ public class MessageParcel implements Parcelable {
 
         this.initdate = initdate;
         this.referdate = referdate;
+
+        this.showpostpone = showpostpone;
     }
 
     /* PARCELABLE SPECIFIC */
@@ -64,6 +68,8 @@ public class MessageParcel implements Parcelable {
         dest.writeInt(showmessage);
         dest.writeLong(initdate);
         dest.writeLong(referdate);
+
+        dest.writeInt(showpostpone);
     }
 
 
@@ -79,6 +85,7 @@ public class MessageParcel implements Parcelable {
         this.showmessage = in.readInt();
         this.initdate = in.readLong();
         this.referdate = in.readLong();
+        this.showpostpone = in.readInt();
     }
 
     public static final Parcelable.Creator CREATOR =

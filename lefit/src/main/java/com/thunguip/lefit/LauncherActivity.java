@@ -1,7 +1,9 @@
 package com.thunguip.lefit;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,12 +15,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
 import android.support.v7.app.ActionBarActivity;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TimePicker;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,14 +30,11 @@ import java.util.Calendar;
 
 
 public class LauncherActivity extends ActionBarActivity {
-    private static final int ACTRES_SELECTSOUND = 1;
+    private static final int ACTRES_SELECTSOUND = 1000;
 
-
-    private boolean shownotificationsmenus;
-    private boolean showdaillymessage;
+    private Preferences preferences;
 
     private LvCalendarAdaptor lvcalendaradaptor;
-
     private ListView listView;
     //public static final
 
@@ -55,9 +56,9 @@ public class LauncherActivity extends ActionBarActivity {
 
         requestLvItems();
 
-        // TODO get saved results
-        shownotificationsmenus = true;
-        showdaillymessage = true;
+        preferences = new Preferences(this);
+
+        MainService.sendIntent(this, MainService.CHECKALARMSETTINGS);
     }
 
 
@@ -108,16 +109,14 @@ public class LauncherActivity extends ActionBarActivity {
 
     AdapterView.OnItemClickListener ListViewOnItemClickedListner = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-
             LvItemParcel clickedItem = (LvItemParcel) listView.getAdapter().getItem(position);
 
-            Log.d("MainActivity", "position: " + position + " :: id: " + id + " :: " + MainService.getStringByMillis(clickedItem.referdate));
+            MainService.sendIntent(v.getContext(), MainService.INVOKEPOPUPBYLVITEM, clickedItem.referdate);
 
-
-            Intent intent = new Intent(v.getContext(), MainService.class);
+            /*Intent intent = new Intent(v.getContext(), MainService.class);
             intent.putExtra(MainService.SWITCH, MainService.INVOKEPOPUPBYLVITEM);
             intent.putExtra(MainService.INVOKEPOPUPBYLVITEM, clickedItem.referdate);
-            startService(intent);
+            startService(intent);*/
         }
     };
 
@@ -173,20 +172,18 @@ public class LauncherActivity extends ActionBarActivity {
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent intent)
     {
-        if (resultCode == Activity.RESULT_OK && requestCode == ACTRES_SELECTSOUND)
-        {
+        if (resultCode == Activity.RESULT_OK && requestCode == ACTRES_SELECTSOUND) {
             Uri uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
 
-            if (uri != null)
-            {
-                //this.chosenRingtone = uri.toString();
+            if (uri != null) {
+                preferences.setNotificationSound(uri.toString());
 
                 Log.d("LauncherActivity", "Ringtone selected: " + uri);
             }
-            else
-            {
+            else {
+                preferences.setNotificationSound(uri.toString());
+
                 Log.d("LauncherActivity", "Ringtone selected: NULL");
-                //this.chosenRingtone = null;
             }
         }
     }
@@ -203,15 +200,16 @@ public class LauncherActivity extends ActionBarActivity {
         MenuItem menuvibrate = menu.findItem(R.id.menuvibrate);
         MenuItem menutime = menu.findItem(R.id.menutime);
 
-        menunotifications.setChecked(shownotificationsmenus);
-        menunotifications.setIcon(shownotificationsmenus ? R.drawable.ic_action_bellon : R.drawable.ic_action_belloff);
-        menusound.setVisible(shownotificationsmenus);
-        menuvibrate.setVisible(shownotificationsmenus);
-        menutime.setVisible(shownotificationsmenus);
+        menunotifications.setChecked(preferences.isFireNotifications());
+        menunotifications.setIcon(preferences.isFireNotifications() ? R.drawable.ic_action_bellon : R.drawable.ic_action_belloff);
+        menusound.setVisible(preferences.isFireNotifications());
+        menuvibrate.setVisible(preferences.isFireNotifications());
+        menuvibrate.setChecked(preferences.isNotificationVibrate());
+        menutime.setVisible(preferences.isFireNotifications());
 
         // Dailly message
         MenuItem menumessage =  menu.findItem(R.id.menumessage);
-        menumessage.setChecked(showdaillymessage);
+        menumessage.setChecked(preferences.isShowDaillyMessage());
 
         return true;
     }
@@ -224,16 +222,17 @@ public class LauncherActivity extends ActionBarActivity {
                 return true;
 
             case R.id.menumessage:
-                showdaillymessage = !item.isChecked();
-                this.invalidateOptionsMenu();
+                preferences.setShowDaillyMessage(!item.isChecked());
 
+                this.invalidateOptionsMenu();
                 return true;
 
             case R.id.menunotifications:
-                shownotificationsmenus = !item.isChecked();
-                this.invalidateOptionsMenu();
+                preferences.setFireNotifications(!item.isChecked());
 
-                if (shownotificationsmenus) {
+
+
+                /*if (preferences.isFireNotifications()) {
                     Intent intent = new Intent(this, MainService.class);
                     intent.putExtra(MainService.SWITCH, MainService.ENABLENOTIFICATIONS);
                     startService(intent);
@@ -242,25 +241,30 @@ public class LauncherActivity extends ActionBarActivity {
                     Intent intent = new Intent(this, MainService.class);
                     intent.putExtra(MainService.SWITCH, MainService.DISABLENOTIFICATIONS);
                     startService(intent);
-                }
+                }*/
 
+                MainService.sendIntent(this, MainService.CHECKALARMSETTINGS);
+
+                this.invalidateOptionsMenu();
                 return true;
             case R.id.menusound:
                 Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Som de notificação");
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, (Uri) null);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Uri.parse(preferences.getNotificationSound()));
 
-                this.startActivityForResult(intent, ACTRES_SELECTSOUND);
+                startActivityForResult(intent, ACTRES_SELECTSOUND);
 
                 return true;
             case R.id.menuvibrate:
-                if (item.isChecked()) item.setChecked(false);
-                else item.setChecked(true);
+                preferences.setNotificationVibrate(!item.isChecked());
 
+                this.invalidateOptionsMenu();
                 return true;
             case R.id.menutime:
-                DialogFragment newFragment = new GettimeFragment();
+                DialogFragment newFragment = new DialogTimePicker();
+
                 newFragment.show(getFragmentManager(), "timePicker");
                 return true;
 
@@ -272,6 +276,39 @@ public class LauncherActivity extends ActionBarActivity {
 
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+
+
+
+
+    public class DialogTimePicker extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            Calendar c = Calendar.getInstance();
+            c.setTimeInMillis(preferences.getNotificationTime());
+
+            return new TimePickerDialog(getActivity(), this,
+                    c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE),
+                    DateFormat.is24HourFormat(getActivity()));
+        }
+
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            Log.d("InnerTimePicker", "TIME: " + hourOfDay + ":" + minute);
+
+            Calendar c = Calendar.getInstance();
+            c.setTimeInMillis(0);
+            c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            c.set(Calendar.MINUTE, minute);
+
+            preferences.setNotificationTime(c.getTimeInMillis());
+            //preferences.setNotificationTime(Preferences.TimeHelper.getByTime(hourOfDay, minute));
+
+            MainService.sendIntent(getActivity(), MainService.CHECKALARMSETTINGS);
+
         }
     }
 

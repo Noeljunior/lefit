@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.PowerManager;
+import android.util.Log;
 
 
 public class AlarmerManager extends BroadcastReceiver {
@@ -15,10 +16,12 @@ public class AlarmerManager extends BroadcastReceiver {
         PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "");
         wl.acquire();
 
-        Intent si = new Intent(context, MainService.class);
+        /*Intent si = new Intent(context, MainService.class);
         si.putExtra(MainService.SWITCH, MainService.ALARM);
         si.putExtra(MainService.ALARM, intent.getIntExtra(MainService.ALARM, -1));
-        context.startService(si);
+        context.startService(si);*/
+        MainService.sendIntent(context, MainService.ALARM, intent.getIntExtra(MainService.ALARM, -1));
+        Log.d("AlarmerManager", "ALARMFIRED | ID: " + intent.getIntExtra(MainService.ALARM, -1));
 
         wl.release();
     }

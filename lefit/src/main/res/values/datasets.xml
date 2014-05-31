@@ -3,7 +3,7 @@
     <!--  Titles -->
     <string-array name="titles">
         <!--  0 --> <item>Como é o seu estilo de vida?</item>
-        <!--  1 --> <item>Como foi o seu dia?</item>
+        <!--  1 --> <item>Como foi o seu dia?\ntwo lines</item>
         <!--  2 --> <item>Como foi o seu dia de ontem?</item>           <!--  se passar da meia noite -->
         <!--  3 --> <item>Como foi este dia?</item>                    <!--  se se abre na app -->
     </string-array>
@@ -34,7 +34,7 @@
         <!--  0 --> <item>Descansei.</item>
         <!--  1 --> <item>Não fiz grande coisa.</item>
         <!--  2 --> <item>Tive um dia calmo.</item>
-        <!--  3 --> <item>Tive um dia agitado.</item>
+        <!--  3 --> <item>Tive um dia agitado. word letter du d word letter du d word letter du d word letter du d word letter du d word letter du d word letter du d word letter du d </item>
         <!--  4 --> <item>Não treinei mas fiz alguma actividade.</item>
         <!--  5 --> <item>Não houve treino mas foi exigente.</item>
         <!--  6 --> <item>Fiz um treino ligeiro.</item>

@@ -4,9 +4,11 @@ import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +18,8 @@ import android.os.RemoteException;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -40,6 +44,8 @@ public class MainService extends IntentService {
 
     public static final String INVOKEPOPUPBYLVITEM  = "com.thunguip.lefit.mainservice.SWITCH.INVOKEPOPUPBYLVITEM";
 
+    public static final String CHECKALARMSETTINGS   = "com.thunguip.lefit.mainservice.SWITCH.CHECKALARMSETTINGS";
+
 
     /* Broadcasts senders */
     public static final String BROADCAST        = "com.thunguip.lefit.mainservice.BROADCAST";
@@ -59,15 +65,6 @@ public class MainService extends IntentService {
 
     /* Preferences */
     private Preferences preferences;
-    private long startDate;
-    private long notificationTime;
-    private long notificationInterval;
-    private long postponeDelay;
-    private long notificationCleanGap;
-    private boolean isFireNotifications;
-    private Uri notificationSound;
-    private boolean isToVibrate;
-    private boolean isShowDaillyMessages;
 
     public MainService() {
         super("MainService");
@@ -86,29 +83,12 @@ public class MainService extends IntentService {
         sendBroadcast(i);
     }
 
-    private void updatePreferences() {
-        startDate               = preferences.getStartDate();
-
-        notificationTime        = preferences.getNotificationTime();
-        notificationInterval    = preferences.getNotificationInterval();
-        postponeDelay           = preferences.getPostponeDelay();
-        notificationCleanGap    = preferences.getNotificationCleanGap();
-
-        isFireNotifications     = preferences.isFireNotifications();
-        notificationSound       = Uri.parse(preferences.getNotificationSound());
-        isToVibrate             = preferences.isNotificationVibrate();
-
-        isShowDaillyMessages    = preferences.isShowDaillyMessage();
-    }
-
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent.getStringExtra(SWITCH) == null) {
             // Unknown intent
             return;
         }
-
-        updatePreferences();
 
         Log.d("MainService", "New Intent: " + intent.getStringExtra(SWITCH));
 
@@ -142,6 +122,9 @@ public class MainService extends IntentService {
                 openPopupByRefer(intent.getLongExtra(INVOKEPOPUPBYLVITEM, -1));
                 return;
 
+            case CHECKALARMSETTINGS:
+                checkAlarmSettings();
+                return;
 
             case DEBUG:
 
@@ -243,8 +226,9 @@ public class MainService extends IntentService {
 
         MessageParcel m = new MessageParcel(1,
                 2, 2, 5, 4,
-                0, 1, 0, 1,
-                newZeroedNowCalendar().getTimeInMillis(), refer);
+                0, 1, 0, preferences.isShowDaillyMessage() ? 1 : 0,
+                newZeroedNowCalendar().getTimeInMillis(), refer,
+                0);
 
         intent.putExtra(PopupActivity.MESSAGE, m);
 
@@ -261,8 +245,9 @@ public class MainService extends IntentService {
 
         MessageParcel m = new MessageParcel(1,
                 2, 2, 5, 4,
-                1, 0, 0, 1,
-                newZeroedNowCalendar().getTimeInMillis(), Preferences.TimeHelper.getTodayDate());
+                1, 0, 0, preferences.isShowDaillyMessage() ? 1 : 0,
+                newZeroedNowCalendar().getTimeInMillis(), Preferences.TimeHelper.getTodayDate(),
+                1);
 
         intent.putExtra(PopupActivity.MESSAGE, m);
 
@@ -274,13 +259,13 @@ public class MainService extends IntentService {
     private void enableNotifications() {
         AlarmerManager.setRepeatingAlarm(this,
                 ALARMID_REPEATED,
-                notificationTime,
-                notificationInterval);
+                preferences.getNotificationTime(),
+                preferences.getNotificationInterval());
 
         AlarmerManager.setRepeatingAlarm(this,
                 ALARMID_CLEAN,
-                notificationTime - notificationCleanGap,
-                notificationInterval);
+                preferences.getNotificationTime() - preferences.getNotificationCleanGap(),
+                preferences.getNotificationInterval());
     }
 
     private void disableNotifications() {
@@ -294,7 +279,71 @@ public class MainService extends IntentService {
     private void setPostponeNotification() {
         AlarmerManager.setRelativeAlarm(this,
                 MainService.ALARMID_POSTPONED,
-                SystemClock.elapsedRealtime() + postponeDelay);
+                SystemClock.elapsedRealtime() + preferences.getPostponeDelay());
+    }
+
+    private void checkAlarmSettings() {
+        if (preferences.isFireNotifications()) {
+            /* Enable or updatate notifications alarms */
+            AlarmerManager.setRepeatingAlarm(this,
+                    ALARMID_REPEATED,
+                    Preferences.TimeHelper.getNextByTime(preferences.getNotificationTime()),
+                    preferences.getNotificationInterval());
+
+            AlarmerManager.setRepeatingAlarm(this,
+                    ALARMID_CLEAN,
+                    Preferences.TimeHelper.getNextByTime(
+                            preferences.getNotificationTime() - preferences.getNotificationCleanGap()),
+                    preferences.getNotificationInterval()
+            );
+
+            /* Set alarm at boot */
+            ComponentName receiver = new ComponentName(this, BootReceiver.class);
+            PackageManager pm = getPackageManager();
+            pm.setComponentEnabledSetting(receiver,
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                    PackageManager.DONT_KILL_APP);
+
+
+
+            Log.d("MainService", "CHECKALARMSETTINGS | TIME: " +
+                    Preferences.TimeHelper.toString(Preferences.TimeHelper.getNextByTime(preferences.getNotificationTime()))
+                    + "(" + Preferences.TimeHelper.getNextByTime(preferences.getNotificationTime()) + ")");
+            Log.d("MainService", "CHECKALARMSETTINGS | INTERVAL: " + Preferences.TimeHelper.toString(preferences.getNotificationInterval())
+                    + "(" + preferences.getNotificationInterval() + ")");
+
+            Log.d("MainService", "CHECKALARMSETTINGS | POSTDELAY: " + Preferences.TimeHelper.toString(preferences.getPostponeDelay())
+                    + "(" + preferences.getPostponeDelay() + ")");
+
+            Log.d("MainService", "CHECKALARMSETTINGS | CLEANGAP: " + Preferences.TimeHelper.toString(Preferences.TimeHelper.getNextByTime(
+                    preferences.getNotificationTime() - preferences.getNotificationCleanGap()))
+                    + "(" + Preferences.TimeHelper.getNextByTime(
+                    preferences.getNotificationTime() - preferences.getNotificationCleanGap()) + ")");
+
+            /*Log.d("MainService", "CHECKALARMSETTINGS | CLEANGAP: " + Preferences.TimeHelper.toString(preferences.getNotificationCleanGap()) +
+                    "(" + preferences.getNotificationCleanGap() + ")");
+            Log.d("MainService", "TEST " + Preferences.TimeHelper.getByTime(0, 0) + " :: " + Preferences.TimeHelper.toString(0));*/
+        }
+        else {
+            /* Disable notifications alarms */
+            AlarmerManager.cancelAlarm(this, ALARMID_REPEATED);
+            AlarmerManager.cancelAlarm(this, ALARMID_POSTPONED);
+            AlarmerManager.cancelAlarm(this, ALARMID_CLEAN);
+
+            removeNotificationByID(NOTIFID_MAIN);
+
+            /* Do not set alarm at boot */
+            ComponentName receiver = new ComponentName(this, BootReceiver.class);
+            PackageManager pm = getPackageManager();
+            pm.setComponentEnabledSetting(receiver,
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP);
+
+            Log.d("MainService", "CHECKALARMSETTINGS: Alarm unset");
+        }
+
+
+        Preferences.TimeHelper.getNextByTime(preferences.getNotificationTime());
     }
 
 
@@ -336,6 +385,8 @@ public class MainService extends IntentService {
         StorageDB database = new StorageDB(this);
         PopupEntryParcel[] entries = database.getAnsweredPopupEntries();
         PopupEntryParcel pep;
+
+        long startDate = preferences.getStartDate();
 
         while (iterator.getTimeInMillis() >= startDate) {
             if ((pep = PopupEntryParcel.findByDay(entries, iterator)) != null) { // Answered day
@@ -402,14 +453,14 @@ public class MainService extends IntentService {
         NotificationCompat.Builder mBuilder;
         mBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_stat)
-                .setSound(notificationSound)
+                .setSound(Uri.parse(preferences.getNotificationSound()))
                 .setContentTitle(title)
                 .setContentText(description)
                 .setContentIntent(resultPendingIntent)
                 /*.addAction (R.drawable.ic_navigation_cancel, "Dispensar", cancelPendingIntent)*/
-                .addAction (R.drawable.ic_device_access_time, "Lembrar mais tarde", postponePendingIntent);
+                .addAction(R.drawable.ic_device_access_time, "Lembrar mais tarde", postponePendingIntent);
 
-        if (isToVibrate) {
+        if (preferences.isNotificationVibrate()) {
             mBuilder.setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_LIGHTS);
         }
 
@@ -446,7 +497,7 @@ public class MainService extends IntentService {
         return newZeroedCalendarByCalendar(Calendar.getInstance());
     }
 
-    public static Calendar newCalendarByMillis(long millis) {
+    /*public static Calendar newCalendarByMillis(long millis) {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(millis);
         return cal;
@@ -458,12 +509,12 @@ public class MainService extends IntentService {
 
         /*newcal.set(Calendar.HOUR, hours);
         newcal.set(Calendar.MINUTE, minutes);
-        newcal.set(Calendar.SECOND, seconds);*/
+        newcal.set(Calendar.SECOND, seconds);
 
         return newcal;
-    }
+    }*/
 
-    public static String getStringByCalendar(Calendar cal) {
+    /*public static String getStringByCalendar(Calendar cal) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, d 'de' MMM");
         return dateFormat.format(cal.getTime());
     }
@@ -472,9 +523,9 @@ public class MainService extends IntentService {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(millis);
         return getStringByCalendar(cal);
-    }
+    }*/
 
-    public static Calendar newCalendarByTime(int hours, int minutes, int seconds) {
+    /*public static Calendar newCalendarByTime(int hours, int minutes, int seconds) {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(0);
 
@@ -483,6 +534,28 @@ public class MainService extends IntentService {
         cal.add(Calendar.SECOND, seconds);
 
         return cal;
+    }*/
+
+    public static void sendIntent(Context context, String switchitent) {
+        Intent intent = new Intent(context, MainService.class);
+        intent.putExtra(MainService.SWITCH, switchitent);
+        context.startService(intent);
     }
+
+    public static void sendIntent(Context context, String switchitent, long extra) {
+        Intent intent = new Intent(context, MainService.class);
+        intent.putExtra(MainService.SWITCH, switchitent);
+        intent.putExtra(switchitent, extra);
+        context.startService(intent);
+    }
+
+    public static void sendIntent(Context context, String switchitent, int extra) {
+        Intent intent = new Intent(context, MainService.class);
+        intent.putExtra(MainService.SWITCH, switchitent);
+        intent.putExtra(switchitent, extra);
+        context.startService(intent);
+    }
+
+
 
 }

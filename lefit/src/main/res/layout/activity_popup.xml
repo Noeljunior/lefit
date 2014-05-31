@@ -2,54 +2,44 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:layout_gravity="bottom" >
+    android:orientation="vertical" >
 
+    <!-- HEADER -->
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:id="@+id/header"
+        android:background="@color/actionbar_bg"
+        android:orientation="horizontal"
+        android:layout_gravity="top">
 
-        <!-- HEADER -->
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:id="@+id/logo"
+            android:src="@drawable/ic_titleicon"
+            android:layout_margin="5dp"
+            android:layout_gravity="center_vertical" />
 
-        <RelativeLayout
+        <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/header"
-            android:background="@color/actionbar_bg">
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="More than\none line\ntitle"
+            android:id="@+id/title"
+            android:gravity="center_vertical"
+            android:textColor="#ffe6fcf7"
+            android:layout_margin="5dp"
+            android:minHeight="32dp" />
 
-            <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:id="@+id/logo"
-                android:layout_alignParentEnd="false"
-                android:src="@drawable/ic_titleicon"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="5dp" />
 
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Title"
-                android:id="@+id/title"
-                android:layout_alignTop="@+id/logo"
-                android:layout_toRightOf="@+id/logo"
-                android:layout_alignBottom="@+id/logo"
-                android:gravity="center_vertical"
-                android:layout_marginRight="2dp"
-                android:layout_marginLeft="5dp"
-                android:textColor="#ffe6fcf7" />
-
-            <View
-                android:id="@+id/separator"
-                android:layout_width="fill_parent"
-                android:layout_height="2dp"
-                android:background="#ff33b5e5"
-                android:layout_below="@+id/logo"
-                android:layout_marginTop="5dp" />
-        </RelativeLayout>
 
     </LinearLayout>
+    <View
+        android:id="@+id/separator"
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:background="#ff33b5e5" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -73,75 +63,80 @@
 
                 <RelativeLayout
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/choicelayout"
-                    android:layout_marginBottom="10dp">
+                    android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:id="@+id/phraselogo"
-                        android:src="@drawable/ic_phraseicon_0"
-                        android:layout_marginRight="5dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentStart="false"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentLeft="false" />
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:orientation="horizontal"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:text="Answer description"
-                        android:id="@+id/phrase"
-                        android:layout_toLeftOf="@+id/phraselogo"
-                        android:layout_alignBottom="@+id/phraselogo"
-                        android:layout_marginLeft="5dp"
-                        android:paddingLeft="5dp"
-                        android:textColor="@color/view_fg_light"
-                        android:layout_alignTop="@+id/phraselogo"
-                        android:layout_alignParentEnd="false"
-                        android:layout_alignParentStart="true"
-                        android:singleLine="false"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:gravity="center_vertical" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:minHeight="100dp"
+                            android:layout_margin="5dp"
+                            android:text="Answer description"
+                            android:id="@+id/phrase"
+                            android:paddingLeft="5dp"
+                            android:textColor="@color/view_fg_light"
+                            android:singleLine="false"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:gravity="center_vertical" />
+
+
+                        <ImageView
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:id="@+id/phraselogo"
+                            android:src="@drawable/ic_phraseicon_0"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="5dp" />
+
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:orientation="horizontal"
+                    android:layout_height="wrap_content" >
+
+
 
                     <ImageButton
                         android:layout_width="40dp"
                         android:layout_height="40dp"
+                        android:layout_margin="5dp"
                         android:id="@+id/ibless"
-                        android:layout_below="@+id/phrase"
-                        android:layout_alignLeft="@+id/phrase"
-                        android:layout_alignStart="@+id/phrase"
                         android:background="?android:selectableItemBackground"
                         android:src="@drawable/ic_navigation_previous_item"
-                        android:layout_marginRight="5dp"
-                        android:onClick="decrementSeek"
-                        android:layout_marginTop="5dp" />
-
-                    <ImageButton
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:id="@+id/ibmore"
-                        android:layout_alignRight="@+id/phraselogo"
-                        android:layout_alignEnd="@+id/phraselogo"
-                        android:layout_below="@+id/phrase"
-                        android:background="?android:selectableItemBackground"
-                        android:src="@drawable/ic_navigation_next_item"
-                        android:layout_marginLeft="5dp"
-                        android:onClick="incrementSeek"
-                        android:layout_marginTop="5dp" />
+                        android:onClick="decrementSeek" />
 
                     <SeekBar
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:id="@+id/seekbar"
                         android:layout_alignTop="@+id/ibless"
                         android:layout_toRightOf="@+id/ibless"
                         android:layout_toLeftOf="@+id/ibmore"
-                        style="@style/SeekBarLefitwhite" />
+                        style="@style/SeekBarLefitwhite"
+                        android:layout_gravity="center_vertical" />
 
-                </RelativeLayout>
+                    <ImageButton
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="5dp"
+                        android:id="@+id/ibmore"
+                        android:background="?android:selectableItemBackground"
+                        android:src="@drawable/ic_navigation_next_item"
+                        android:onClick="incrementSeek" />
+
+
+
+
+                </LinearLayout>
 
                 <View
                     android:id="@+id/separatorn"
@@ -171,13 +166,13 @@
                             android:src="@drawable/ic_content_remove"
                             android:layout_marginLeft="5dp"
                             android:background="?android:selectableItemBackground"
-                            android:onClick="hideMessage" />
+                            android:onClick="hideMessageClick" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:text="Message of the day  df sdf sdf sd  fsdf sd f sf fs df sdf  fs fsdjfsd fj shjfd jsdf hjf sdf jsf jsd fh jsdf sdfhjsd fhj sdjhjf sdjMessage of the day  df sdf sdf sd  fsdf sd f sf fs df sdf  fs fsdjfsd fj shjfd jsdf hjf sdf jsf jsd fh jsdf sdfhjsd fhj sdjhjf sdj"
+                            android:text="Message of the day\nwich will\nhave much\nmore line\nthan just\nthree or four"
                             android:id="@+id/message"
                             android:minHeight="48dp"
                             android:gravity="center_vertical|center_horizontal"

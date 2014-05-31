@@ -10,7 +10,7 @@ import android.provider.BaseColumns;
 import java.util.ArrayList;
 
 public class StorageDB extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "lefit";
 
     public static final int TYPE_POPUP = 1;
@@ -88,8 +88,9 @@ public class StorageDB extends SQLiteOpenHelper {
     /* - - - Own methods - - - */
     public long addEntry(PopupEntryParcel entry) {
         SQLiteDatabase db = getWritableDatabase();
-
-        return db.insert(UniqTable.TABLE_NAME, null, entry.getContentValues());
+        long res = db.insert(UniqTable.TABLE_NAME, null, entry.getContentValues());
+        db.close();
+        return res;
     }
 
     /* * * * DATABASES QUERIES * * * */
@@ -130,6 +131,8 @@ public class StorageDB extends SQLiteOpenHelper {
 
             cursor.moveToNext();
         }
+
+        db.close();
 
         return results.toArray(new PopupEntryParcel[results.size()]);
     }

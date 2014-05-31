@@ -39,7 +39,7 @@ public class DebugActivity extends Activity {
         MessageParcel m = new MessageParcel(1,
                 2, 3, 4, 3,
                 1, 0, 0, 1,
-                0, 0);
+                0, 0, 0);
 
         intent.putExtra("msg", m);
 
@@ -67,9 +67,7 @@ public class DebugActivity extends Activity {
     }*/
 
     public void showNotification(View view) {
-        Intent intent = new Intent(this, MainService.class);
-        //intent.putExtra(MainService.SWITCH, MainService.FIRENOTIFICATION);
-        startService(intent);
+        MainService.sendIntent(this, MainService.ALARM, 1);
     }
     
 

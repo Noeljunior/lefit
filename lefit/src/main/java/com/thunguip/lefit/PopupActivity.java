@@ -114,13 +114,12 @@ public class PopupActivity extends Activity {
 
         /* END Initialize this new popup*/
 
-        /* Check if this intent if for today */
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(message.referdate);
+        if (message.showmessage == 0) {
+            hideMessage();
+        }
 
-        if (!MainService.isSameDay(cal, Calendar.getInstance())) {
-            findViewById(R.id.ibpostpone).setVisibility(View.GONE);
-            findViewById(R.id.separator2).setVisibility(View.GONE);
+        if (message.showpostpone == 0) {
+            hidePostpone();
         }
 
 
@@ -200,12 +199,25 @@ public class PopupActivity extends Activity {
         msgresult.messagehitmore++;
     }
 
-    public void hideMessage(View view) {
-        RelativeLayout messagelayout = (RelativeLayout) findViewById(R.id.messagelayout);
-        messagelayout.setVisibility(RelativeLayout.GONE);
+
+
+    public void hideMessageClick(View view) {
+        hideMessage();
+
+        new Preferences(this).setShowDaillyMessage(false);
 
         // STATS
         msgresult.messagehithide = PopupEntryParcel.POPUP_HIDE_TRUE;
+    }
+
+    public void hideMessage() {
+        RelativeLayout messagelayout = (RelativeLayout) findViewById(R.id.messagelayout);
+        messagelayout.setVisibility(RelativeLayout.GONE);
+    }
+
+    public void hidePostpone() {
+        findViewById(R.id.ibpostpone).setVisibility(View.GONE);
+        findViewById(R.id.separator2).setVisibility(View.GONE);
     }
 
 

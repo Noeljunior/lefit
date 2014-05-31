@@ -4,10 +4,16 @@ package com.thunguip.lefit;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.RingtoneManager;
+import android.util.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class Preferences {
+    public static final long SECOND = 1000L;
+    public static final long MINUTE = SECOND * 60L;
+    public static final long HOUR   = MINUTE * 60L;
+
     /* Prefrences File */
     public static final String  PREFS_NAME                  = "MainPrefs";
     public static final int     PREFS_MODE                  = Context.MODE_PRIVATE | Context.MODE_MULTI_PROCESS;
@@ -21,13 +27,13 @@ public class Preferences {
 
     /* DEFAULTS */
     public static final boolean     DEF_fireNotifications       = true;
-    public static final long        DEF_notificationTime        = TimeHelper.getByTime(20, 0);  /* TODO set to 20h */
+    public static final long        DEF_notificationTime        = TimeHelper.getByTimeCal(20, 0);
     public static final String      DEF_notificationSound       = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION).toString();
     public static final boolean     DEF_notificationVibrate     = true;
     public static final boolean     DEF_showDaillyMessage       = true;
 
-    public static final long    notificationInterval            = TimeHelper.getByTimeSeconds(0, 5, 0); /* TODO set to 24h */
-    public static final long    postponeDelay                   = TimeHelper.getByTimeSeconds(0, 1, 0); /* TODO set to 1h */
+    public static final long    notificationInterval            = /*5 * 60 * 1000;*/ TimeHelper.getByTime(24, 0); /* TODO set to 24h */
+    public static final long    postponeDelay                   =  /*1 * 60 * 1000;*/ TimeHelper.getByTime(1, 0); /* TODO set to 1h */
     public static final long    notificationCleanGap            = postponeDelay * 2;
 
     private Context context;
@@ -42,133 +48,101 @@ public class Preferences {
 
 
     /* Getters */
-
     public long getStartDate() {
-        if (false) { /* TODO go check the preferences */
-
+        if (settings.contains(PREFS_STARTDATE)) {
             return settings.getLong(PREFS_STARTDATE, TimeHelper.getTodayDate());
         }
-        else { /* TODO return today's date */
-            return TimeHelper.getByDate(2014, 4, 20);/*TimeHelper.getTodayDate();*/
+        else { /* return the default */
+            return setStartDate(TimeHelper.getTodayDate());
         }
     }
 
     public boolean isFireNotifications() {
-        if (false) { /* TODO go check the preferences */
-
-            return true;
+        if (settings.contains(PREFS_FIRENOTIFICATIONS)) {
+            return settings.getBoolean(PREFS_FIRENOTIFICATIONS, DEF_fireNotifications);
         }
-        else { /* return the defaul */
-            return DEF_fireNotifications;
+        else { /* return the default */
+            return setFireNotifications(DEF_fireNotifications);
         }
     }
 
     public long getNotificationTime() {
-        if (false) { /* TODO go check the preferences */
-
-            return 0;
+        if (settings.contains(PREFS_NOTIFICATIONTIME)) {
+            return settings.getLong(PREFS_NOTIFICATIONTIME, DEF_notificationTime);
         }
-        else { /* return the defaul */
-
-            /* DUMMY */
-            Calendar cal = Calendar.getInstance();
-            //cal.setTimeInMillis(0);
-            cal.set(Calendar.HOUR, Calendar.getInstance().get(Calendar.HOUR));
-            cal.set(Calendar.MINUTE, Calendar.getInstance().get(Calendar.MINUTE));
-            cal.set(Calendar.SECOND, Calendar.getInstance().get(Calendar.SECOND));
-            cal.add(Calendar.SECOND, 15);
-            return cal.getTimeInMillis();
-            /* DUMMY */
-
-            //return DEF_notificationTime;
+        else { /* return the default */
+            return setNotificationTime(DEF_notificationTime);
         }
     }
 
     public String getNotificationSound() {
-        if (false) { /* TODO go check the preferences */
-
-            return "";
+        if (settings.contains(PREFS_NOTIFICATIONSOUND)) {
+            return settings.getString(PREFS_NOTIFICATIONSOUND, DEF_notificationSound);
         }
-        else { /* return the defaul */
-            return DEF_notificationSound;
+        else { /* return the default */
+            return setNotificationSound(DEF_notificationSound);
         }
     }
 
     public boolean isNotificationVibrate() {
-        if (false) { /* TODO go check the preferences */
-
-            return true;
+        if (settings.contains(PREFS_NOTIFICATIONVIBRATE)) {
+            return settings.getBoolean(PREFS_NOTIFICATIONVIBRATE, DEF_notificationVibrate);
         }
-        else { /* return the defaul */
-            return DEF_notificationVibrate;
+        else { /* return the default */
+            return setNotificationVibrate(DEF_notificationVibrate);
         }
     }
 
     public boolean isShowDaillyMessage() {
-        if (false) { /* TODO go check the preferences */
-
-            return true;
+        if (settings.contains(PREFS_SHOWDAILLYMESSAGE)) {
+            return settings.getBoolean(PREFS_SHOWDAILLYMESSAGE, DEF_showDaillyMessage);
         }
-        else { /* return the defaul */
-            return DEF_showDaillyMessage;
+        else { /* return the default */
+            return setShowDaillyMessage(DEF_showDaillyMessage);
         }
     }
 
     public long getNotificationInterval() {
-        if (false) { /* TODO go check the preferences */
-
-            return 0;
-        }
-        else { /* return the defaul */
-            return notificationInterval;
-        }
+        return notificationInterval;
     }
 
     public long getPostponeDelay() {
-        if (false) { /* TODO go check the preferences */
-
-            return 0;
-        }
-        else { /* return the defaul */
-            return postponeDelay;
-        }
+        return postponeDelay;
     }
 
     public long getNotificationCleanGap() {
-        if (false) { /* TODO go check the preferences */
-
-            return 0;
-        }
-        else { /* return the defaul */
-            return notificationCleanGap;
-        }
+        return notificationCleanGap;
     }
 
 
     /* Setters */
-    private void setStartDate(long l) {
+    private long setStartDate(long l) {
         commitPrefLong(PREFS_STARTDATE, l);
+        return l;
     }
-    public void setFireNotifications(boolean b) {
+    public boolean setFireNotifications(boolean b) {
         commitPrefBoolean(PREFS_FIRENOTIFICATIONS, b);
+        return b;
     }
-    public void setNotificationTime(long l) {
+    public long setNotificationTime(long l) {
         commitPrefLong(PREFS_NOTIFICATIONTIME, l);
+        return l;
     }
-    public void setNotificationSound(String s) {
+    public String setNotificationSound(String s) {
         commitPrefString(PREFS_NOTIFICATIONSOUND, s);
+        return s;
     }
-    public void setNotificationVibrate(boolean b) {
+    public boolean setNotificationVibrate(boolean b) {
         commitPrefBoolean(PREFS_NOTIFICATIONVIBRATE, b);
+        return b;
     }
-    public void setShowDaillyMessage(boolean b) {
+    public boolean setShowDaillyMessage(boolean b) {
         commitPrefBoolean(PREFS_SHOWDAILLYMESSAGE, b);
+        return b;
     }
-
 
 
     /* Helpers */
-
     /* Preferences Helpers */
     private void commitPrefBoolean(String key, boolean b) {
         SharedPreferences.Editor editor = settings.edit();
@@ -200,21 +174,18 @@ public class Preferences {
         }
 
         public static long getByTime(int hour, int minute) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTimeInMillis(0);
-            cal.add(Calendar.HOUR, hour);
-            cal.add(Calendar.MINUTE, minute);
-
-            return cal.getTimeInMillis();
+            return hour * HOUR + minute * MINUTE;
         }
 
-        public static long getByTimeSeconds(int hour, int minute, int second) {
+        public static long getByTime(int hour, int minute, int second) {
+            return getByTime(hour, minute) + second * SECOND;
+        }
+
+        public static long getByTimeCal(int hour, int minute) {
             Calendar cal = Calendar.getInstance();
             cal.setTimeInMillis(0);
-            cal.add(Calendar.HOUR, hour);
-            cal.add(Calendar.MINUTE, minute);
-            cal.add(Calendar.SECOND, second);
-
+            cal.set(Calendar.HOUR, hour);
+            cal.set(Calendar.MINUTE, minute);
             return cal.getTimeInMillis();
         }
 
@@ -239,6 +210,42 @@ public class Preferences {
             nowClean.set(Calendar.DAY_OF_MONTH, now.get(Calendar.DAY_OF_MONTH));
 
             return nowClean.getTimeInMillis();
+        }
+
+
+        public static long getNextByTime (Calendar time) {
+            Calendar now = Calendar.getInstance();
+            now.set(Calendar.SECOND, 0);
+            now.set(Calendar.MILLISECOND, 0);
+
+            Calendar target = Calendar.getInstance();
+            target.set(Calendar.HOUR_OF_DAY, time.get(Calendar.HOUR_OF_DAY));
+            target.set(Calendar.MINUTE, time.get(Calendar.MINUTE));
+            target.set(Calendar.SECOND, 0);
+            target.set(Calendar.MILLISECOND, 0);
+
+            if (target.getTimeInMillis() <= now.getTimeInMillis()) {
+                target.add(Calendar.DAY_OF_MONTH, 1);
+            }
+
+            return target.getTimeInMillis();
+        }
+
+        public static long getNextByTime(long time) {
+            Calendar timecal = Calendar.getInstance();
+            timecal.setTimeInMillis(time);
+            return getNextByTime(timecal);
+        }
+
+        public static String toString(Calendar cal) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss, dd/MM/yyyy");
+            return dateFormat.format(cal.getTime());
+        }
+
+        public static String toString(long l) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(l);
+            return toString(cal);
         }
     }
 }
