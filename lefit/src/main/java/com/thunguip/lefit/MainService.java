@@ -306,7 +306,7 @@ public class MainService extends IntentService {
 
 
 
-            Log.d("MainService", "CHECKALARMSETTINGS | TIME: " +
+            /*Log.d("MainService", "CHECKALARMSETTINGS | TIME: " +
                     Preferences.TimeHelper.toString(Preferences.TimeHelper.getNextByTime(preferences.getNotificationTime()))
                     + "(" + Preferences.TimeHelper.getNextByTime(preferences.getNotificationTime()) + ")");
             Log.d("MainService", "CHECKALARMSETTINGS | INTERVAL: " + Preferences.TimeHelper.toString(preferences.getNotificationInterval())
@@ -320,7 +320,7 @@ public class MainService extends IntentService {
                     + "(" + Preferences.TimeHelper.getNextByTime(
                     preferences.getNotificationTime() - preferences.getNotificationCleanGap()) + ")");
 
-            /*Log.d("MainService", "CHECKALARMSETTINGS | CLEANGAP: " + Preferences.TimeHelper.toString(preferences.getNotificationCleanGap()) +
+            Log.d("MainService", "CHECKALARMSETTINGS | CLEANGAP: " + Preferences.TimeHelper.toString(preferences.getNotificationCleanGap()) +
                     "(" + preferences.getNotificationCleanGap() + ")");
             Log.d("MainService", "TEST " + Preferences.TimeHelper.getByTime(0, 0) + " :: " + Preferences.TimeHelper.toString(0));*/
         }

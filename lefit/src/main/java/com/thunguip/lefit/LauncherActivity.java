@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ApplicationInfo;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -210,6 +211,12 @@ public class LauncherActivity extends ActionBarActivity {
         // Dailly message
         MenuItem menumessage =  menu.findItem(R.id.menumessage);
         menumessage.setChecked(preferences.isShowDaillyMessage());
+
+
+        if (( 0 != ( getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE ) )) {
+            MenuItem menudebug =  menu.findItem(R.id.menudebug);
+            menudebug.setVisible(false);
+        }
 
         return true;
     }
