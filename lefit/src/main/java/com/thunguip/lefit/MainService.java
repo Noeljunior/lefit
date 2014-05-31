@@ -214,7 +214,9 @@ public class MainService extends IntentService {
 
     private void addAnswerToDB(PopupEntryParcel pep) {
         /* TODO Check if the answer was from a popup which may had a notification and remove that notification */
-        removeNotificationByID(NOTIFID_MAIN);
+        if (pep.action != PopupEntryParcel.POPUP_ACTION_IGNORE) {
+            removeNotificationByID(NOTIFID_MAIN);
+        }
 
         StorageDB db = new StorageDB(this);
         db.addEntry(pep);
