@@ -1,5 +1,6 @@
 package com.thunguip.lefit;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -215,7 +216,7 @@ public class LauncherActivity extends ActionBarActivity {
 
         if (( 0 != ( getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE ) )) {
             MenuItem menudebug =  menu.findItem(R.id.menudebug);
-            menudebug.setVisible(false);
+            menudebug.setVisible(true);
         }
 
         return true;
@@ -286,11 +287,8 @@ public class LauncherActivity extends ActionBarActivity {
         }
     }
 
-
-
-
-
-
+    /* TODO solve this pretty shit time picker dialog thing */
+    @SuppressLint("ValidFragment")
     public class DialogTimePicker extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
