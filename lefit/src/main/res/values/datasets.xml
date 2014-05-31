@@ -3,9 +3,9 @@
     <!--  Titles -->
     <string-array name="titles">
         <!--  0 --> <item>Como é o seu estilo de vida?</item>
-        <!--  1 --> <item>Como foi o seu dia?\ntwo lines</item>
-        <!--  2 --> <item>Como foi o seu dia de ontem?</item>           <!--  se passar da meia noite -->
-        <!--  3 --> <item>Como foi este dia?</item>                    <!--  se se abre na app -->
+        <!--  1 --> <item>Como foi o seu dia?</item>
+        <!--  2 --> <item>Como foi o seu dia de ontem?</item>          <!--  se passar da meia noite -->
+        <!--  3 --> <item>Como foi este dia?</item>                    <!--  se se abre na app       -->
     </string-array>
 
     <!--  Phrases -->
@@ -34,7 +34,7 @@
         <!--  0 --> <item>Descansei.</item>
         <!--  1 --> <item>Não fiz grande coisa.</item>
         <!--  2 --> <item>Tive um dia calmo.</item>
-        <!--  3 --> <item>Tive um dia agitado. word letter du d word letter du d word letter du d word letter du d word letter du d word letter du d word letter du d word letter du d </item>
+        <!--  3 --> <item>Tive um dia agitado.</item>
         <!--  4 --> <item>Não treinei mas fiz alguma actividade.</item>
         <!--  5 --> <item>Não houve treino mas foi exigente.</item>
         <!--  6 --> <item>Fiz um treino ligeiro.</item>
@@ -76,9 +76,9 @@
         <!--  2 --> <item>O exercício melhora a boa disposição.</item>
     </string-array>
     <string-array name="messagesinfo1">                         <!-- Perda de peso -->
-        <!--  0 --> <item>Fazer exercício não é sinónimo de perda de peso! É preciso ter cuidado para não aumentar a ingestão de alimentos quando se inicia a prática desportiva.</item>
+        <!--  0 --> <item>Fazer exercício não é sinónimo de perda de peso! É preciso ter cuidado para não se comer mais do que se comia antes de se praticar exercício.</item>
         <!--  1 --> <item>Para perder peso é preciso fazer uma alimentação equilibrada e regrada, sem exageros.</item>
-        <!--  2 --> <item>Quando o objectivo é a perda de peso, o tempo de exercício físico ao longo da semana deve ser de pelo menos 300 minutos espalhados ao longo da semana.</item>
+        <!--  2 --> <item>Se o seu objectivo é perder peso, deve fazer pelo menos 5 horas de exercício físico ao longo da semana.</item>
     </string-array>
     <string-array name="messagesinfo2">                         <!-- Diabetes - glicemias-->
         <!--  0 --> <item>O exercício ajuda a prevenir as complicações da diabetes.</item>
@@ -86,23 +86,23 @@
         <!--  2 --> <item>O exercício ajuda a dimunir a dose de insulina que é injectada diariamente.</item>
     </string-array>
     <string-array name="messagesinfo3">                         <!-- Peso-->
-        <!--  0 --> <item>O exercício físico aliado a uma boa alimentação ajuda a manter o peso controlado.</item>
-        <!--  1 --> <item>A prática de exercício faz aumentar o metabolismo basal, que faz com que o corpo gaste mais energia em repouso, facilitando a perda de peso.</item>
-        <!--  2 --> <item>Praticar exercício físico possibilita a perda de peso, mesmo sem restrições à dieta.</item>
+        <!--  0 --> <item>O exercício físico e comer bem ajuda a manter o peso controlado.</item>
+        <!--  1 --> <item>Fazer exercício faz com que o corpo gaste mais energia em repouso, facilitando a perda de peso.</item>
+        <!--  2 --> <item>Fazer exercício é suficiente para se perder peso, mesmo que não se faça dieta.</item>
     </string-array>
     <string-array name="messagesinfo4">                         <!-- Regularidade-->
         <!--  0 --> <item>Praticar exercício físico de forma regular traz mais benefícios do que praticar exporadicamente.</item>
-        <!--  1 --> <item>É a prática regular de exercício permite uma evolução da resistência cardiorespiratória e da força muscular.</item>
-        <!--  2 --> <item>As indicações para a prática de exercício físico são de praticar pelo menos 30 minutos de exercício moderado, ou 15 de exercício intenso, 5 dias por semana.</item>
+        <!--  1 --> <item>É a prática regular de exercício que permite uma evolução da resistência cardiorespiratória e da força muscular.</item>
+        <!--  2 --> <item>Devem praticar-se pelo menos 30 minutos de exercício moderado, ou 15 minutos de exercício intenso, 5 vezes por semana.</item>
     </string-array>
     <string-array name="messagesinfo5">                         <!-- Intensidade-->
-        <!--  0 --> <item>Ter uma vida activa é bom, mas não substitui uma caminhada com passo acelerado ou uma volta de bicicleta.</item>
-        <!--  1 --> <item>O exercício físico que traz benefício cardiovascular é caracterizado por uma elevação dos batimentos cardíacos. Portanto, o exercício só conta como tal quando faz o coração acelerar. Caso tenha neuropatia, o ritmo cardíaco não é um bom indicador da intensidade do exercício.</item>
-        <!--  2 --> <item>Se tem algum problema cardíaco diagnosticado, informe-se com o seu médico sobre o ritmo cardíaco que deve ter como objectivo durante o seu exercício físico.</item>
+        <!--  0 --> <item>Ter uma vida activa é bom, mas não substitui o exercício físico.</item>
+        <!--  1 --> <item>O exercício físico que traz benefício cardiovascular é aquele que o faz sentir-se cansado.</item>
+        <!--  2 --> <item>O exercício praticado com uma intensidade elevada traz mais benefícios a todos os níveis. </item>
     </string-array>
     <string-array name="messagesinfo6">                         <!-- Beneficios gerais 2-->
-        <!--  0 --> <item>O exercício físico reduz o risco de morte prematura, de doenças cardíacas, de cancro e de diabetes tipo 2.</item>
-        <!--  1 --> <item>O exercício físico ajuda a reduzir o risco de osteoporose e de fracturas ósseas.</item>
+        <!--  0 --> <item>Se pensa que o que está na mensagem a seguir não se adequa a si, saiba que estas doenças aparecem cada vez mais em pessoas mais novas, dado o estilo de vida de hoje em dia.</item>
+        <!--  1 --> <item>O exercício físico reduz o risco de morte prematura, de doenças cardíacas, de cancro e de diabetes tipo 2.</item>
         <!--  2 --> <item>O exercício físico ajuda a reduzir os níveis de stress, ansiedade e depressão.</item>
     </string-array>
     <string-array name="messagesinfo7">                         <!-- Tempo-->
@@ -111,7 +111,7 @@
         <!--  2 --> <item>Por exemplo, a seguir ao almoço ir dar um passeio à rua ou pelos corredores do seu local de trabalho. E que tal uma passagem pelas escadas?</item>
     </string-array>
     <string-array name="messagesinfo8">                         <!-- Distribuição ao longo do dia-->
-        <!--  0 --> <item>As recomendações para a prática de exercício físico são de 150 minutos semanais com intensidade moderada ou 75 minutos semanais com intensidade elevada.</item>
+        <!--  0 --> <item>As recomendações para a prática de exercício físico são de 2 horas e meia semanais com intensidade moderada ou 1 hora e 15 minutos semanais com intensidade elevada.</item>
         <!--  1 --> <item>Este tempo deve ser distribuido ao longo dos vários dias da semana, por períodos de pelo menos 10 minutos cada.</item>
         <!--  2 --> <item>Isto significa que um passeio ao domingo de 3 horas não é suficiente para tirar benefícios do exercício físico.</item>
     </string-array>
@@ -121,44 +121,37 @@
         <!--  2 --> <item>Por exemplo, se estiver lesionado de uma perna pode optar pela natação e se estiver lesionado de um braço, pelo ciclismo.</item>
     </string-array>
     <string-array name="messagesinfo10">                         <!-- Quem-->
-        <!--  0 --> <item>Todas as pessoas podem praticar exercício físico, mesmo as da terceira idade e as portadoras de deficiência. O exercício nesses casos é que pode ter de ser adaptado.</item>
-        <!--  1 --> <item>A maior parte das lesões e das dores que sentem os idosos acontecem por falta de exercício físico e podem ser evitadas e mesmo aliviadas com a prática do mesmo.</item>
-        <!--  2 --> <item>Não obstante o que aqui vem dito, cada caso é um caso e deve ser analisado por um médico competente.</item>
+        <!--  0 --> <item>Todas as pessoas podem praticar exercício físico, mesmo as da terceira idade e as portadoras de deficiência, podendo o exercício ter de ser adaptado.</item>
+        <!--  1 --> <item>A maior parte das lesões e das dores de que os idosos se queixam acontecem por falta de exercício físico.</item>
+        <!--  2 --> <item>Na maior parte dos casos os problemas podem ser evitados e as dores aliviadas com a prática do mesmo.</item>
     </string-array>
     <string-array name="messagesinfo11">                         <!-- Alimentação-->
-        <!--  0 --> <item>Antes e depois de um treino ou de qualquer actividade deve sempre comer-se para evitar hipoglicémias e mesmo a quebra de rendimento.</item>
-        <!--  1 --> <item>Durante o exercício o corpo vai buscar a energia que precisa para se mexer aos alimentos ingeridos. Quando fazemos exercício sem ter comido antes, o corpo vai comer-se a si próprio para ter energia.</item>
-        <!--  2 --> <item>Como o processo de se autodestruir para obter energia é mais lento do que ir buscar a energia aos alimentos, o corpo nestas situações é como se trabalhasse a meio gás.</item>
+        <!--  0 --> <item>Antes e depois de um treino ou de qualquer actividade física, deve sempre comer-se qualquer coisa.</item>
+        <!--  1 --> <item>Se não comer antes do treino, corre o risco de vir a ter uma hipoglicémia e uma dimiuição do rendimento.</item>
+        <!--  2 --> <item>Antes de fazer exercício opte sempre pela ingestão de hidratos de carbono, como pão, cereais, arroz, fruta e sementes.</item>
     </string-array>
     <string-array name="messagesinfo12">                         <!-- Dormir-->
         <!--  0 --> <item>Dormir é uma parte tão importante do treino como o treino em si.</item>
         <!--  1 --> <item>Dormir permite descansar os músculos e reabilitá-los para os esforços do dia a seguir.</item>
-        <!--  2 --> <item>Quando dormimos o cérebro vai reflectir sobre o que aprendemos para interiorizar esse conhecimento. Se dormirmos bem, quando repetimos um treino, este parece-nos mais fácil e automatizado.</item>
+        <!--  2 --> <item>Dormir permite ao cérebro descansar para estar activo e reactivo para um melhor desempenho no treino.</item>
     </string-array>
     <string-array name="messagesinfo13">                         <!-- Desmistificação-->
-        <!--  0 --> <item>Ao contrário do que se pensa, durante o treino não se ganha massa muscular. Durante o treino perde-se massa muscular.</item>
-        <!--  1 --> <item>Por se perder massa muscular durante o treino é muito importante alimentar-se bem antes e depois do treino e fazer um descanso adequado.</item>
+        <!--  0 --> <item>Ao contrário do que se pensa, durante o treino perde-se massa muscular.</item>
+        <!--  1 --> <item>Por se perder massa muscular, é muito importante alimentar-se bem antes e depois do treino e fazer um descanso adequado.</item>
         <!--  2 --> <item>Um descanso adequado passa por boas noites de sono e por dias de descanso ao longo da semana.</item>
     </string-array>
-    <string-array name="messagesinfo14">                         <!-- Biomquímica-->
-        <!--  0 --> <item>Durante o exercício físico são libertadas endorfinas que dão sensação de prazer e que nos fazem sentir bem.</item>
-        <!--  1 --> <item>Durante o exercício são libertadas outras hormonas que fazem a pele ficar bonita.</item>
-        <!--  2 --> <item>A prática de exercício físico intenso regular e sistemático leva a uma diminuição do stress oxidativo, ou por outras palavras, do envelhecimento precoce.</item>
-    </string-array>
-    <string-array name="messagesinfo15">                         <!-- Diabetes-->
-        <!--  0 --> <item>Caso tenha diabetes, deve evitar praticar exercício se a glicose sanguínea exceder os 300mg/dl.</item>
-        <!--  1 --> <item>Tenha extremo cuidado com os seus pés para evitar o pé diabético. Use calçado e meias adequados. </item>
-        <!--  2 --> <item>Caso tome insulina, evite praticar exercício durante o pico de actividade de insulina durante um período de uma hora após as injecções intramusculares.</item>
+    <string-array name="messagesinfo14">                         <!-- Bioquímica-->
+    <!--  0 --> <item>Durante o exercício físico são libertadas endorfinas que dão sensação de prazer e que nos fazem sentir bem.</item>
+    <!--  1 --> <item>Durante o exercício são libertadas outras hormonas que fazem a pele ficar bonita.</item>
+    <!--  2 --> <item>A prática de exercício físico intenso regular e sistemático ajuda a evitar o envelhecimento precoce.</item>
     </string-array>
 
-    <!--  Motivacionais -->
+
+   <!--  Motivacionais -->
     <array name="messagesmotiv">
         <item>@array/messagesmotiv0</item>
     </array>
-    <string-array name="messagesmotiv0">                         <!-- ...-->
-        <!--  0 --> <item>Mensagem motivacinal A1</item>
-        <!--  1 --> <item>Mensagem motivacinal A2</item>
-        <!--  2 --> <item>Mensagem motivacinal A3</item>
+    <string-array name="messagesmotiv0">
     </string-array>
 
     <!--  Logos -->

@@ -259,7 +259,7 @@ public class MainService extends IntentService {
 
         MessageParcel m = new MessageParcel(1,
                 2, 2, 5, 4,
-                1, 0, 0, preferences.isShowDaillyMessage() ? 1 : 0,
+                0, 0, 0, preferences.isShowDaillyMessage() ? 1 : 0,
                 Preferences.TimeHelper.getTodayDate(), Preferences.TimeHelper.getTodayDate(),
                 1);
 
@@ -375,7 +375,7 @@ public class MainService extends IntentService {
         mp.defphrase = 4;
 
         /* TODO select which message set, message subset, default message and if it is to show */
-        mp.messageset = 1;
+        mp.messageset = 0;
         mp.messagesubset = 0;
         mp.defmessage = 0;
         mp.showmessage = 1;
