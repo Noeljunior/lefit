@@ -1,12 +1,15 @@
 package com.thunguip.lefit;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -45,6 +48,7 @@ public class PopupActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //setFinishOnTouchOutside(true);
 
         /* Get the message */
         message = getIntent().getExtras().getParcelable(MESSAGE);
@@ -69,7 +73,7 @@ public class PopupActivity extends Activity {
         msgresult.action = PopupEntryParcel.POPUP_ACTION_IGNORE;
         msgresult.messagehithide = message.showmessage == 1 ? PopupEntryParcel.POPUP_HIDE_FALSE : PopupEntryParcel.POPUP_HIDE_HIDEN;
         msgresult.daterefer = message.referdate;
-                msgresult.dateinit = MainService.newZeroedNowCalendar().getTimeInMillis();
+        msgresult.dateinit = Preferences.TimeHelper.getTodayDateTime();
 
 
         Log.d("PopupActivity", "REFERDATE: " + msgresult.daterefer);
@@ -225,33 +229,17 @@ public class PopupActivity extends Activity {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(message.referdate);
 
-        if (MainService.isSameDay(cal, Calendar.getInstance())) {
-            Intent intent = new Intent(this, MainService.class);
-            //intent.putExtra(MainService.SWITCH, MainService.REMOVETODAYNOTIF);
-            startService(intent);
-        }
-
         // STATS
         msgresult.action = PopupEntryParcel.POPUP_ACTION_CANCEL;
 
-        closeAndSendData();
+        finish();
     }
 
     public void actionPostpone(View view) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(message.referdate);
-
-        if (MainService.isSameDay(cal, Calendar.getInstance())) {
-            Intent intent = new Intent(this, MainService.class);
-            //intent.putExtra(MainService.SWITCH, MainService.POSTPONE);
-            startService(intent);
-        }
-
-
         // STATS
         msgresult.action = PopupEntryParcel.POPUP_ACTION_POSTPONE;
 
-        closeAndSendData();
+        finish();
     }
 
     public void actionSubmit(View view) {
@@ -259,24 +247,26 @@ public class PopupActivity extends Activity {
         // STATS
         msgresult.action = PopupEntryParcel.POPUP_ACTION_SUBMIT;
 
-        closeAndSendData();
+        finish();
     }
 
-    private void closeAndSendData() {
+    /*private void closeAndSendData() {
+
+        finish();
+    }*/
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
         PopupEntryParcel pep = new PopupEntryParcel(msgresult.title,
                 msgresult.phrasesset, msgresult.phrasesmin, msgresult.phrasesmax, msgresult.phrasesanswered, msgresult.phraseshitsmore, msgresult.phraseshitsless,
                 msgresult.messageset, msgresult.messagesubset, msgresult.messagehithide, msgresult.messagehitmore,
                 msgresult.action,
-                msgresult.daterefer, msgresult.dateinit, MainService.newZeroedNowCalendar().getTimeInMillis());
+                msgresult.daterefer, msgresult.dateinit, Preferences.TimeHelper.getTodayDateTime());
 
-        Intent intent = new Intent(this, MainService.class);
-        intent.putExtra(MainService.SWITCH, MainService.ADDANSWERTODB);
-        intent.putExtra(MainService.ADDANSWERTODB, pep);
-        startService(intent);
-
-
-        // Closing
-        finish();
+        MainService.sendIntent(this, MainService.ADDANSWERTODB, pep);
     }
+
 
 }

@@ -4,8 +4,8 @@
     tools:context="com.thunguip.lefit.LauncherActivity" >
 
     <item android:id="@+id/menumessage"
-        android:title="Mostrar mensagens diária"
-        android:titleCondensed="Mensagem Diária"
+        android:title="Mostrar mensagem diária"
+        android:titleCondensed="Mensagem diária"
         android:checkable="true" />
 
     <item android:id="@+id/menunotifications"

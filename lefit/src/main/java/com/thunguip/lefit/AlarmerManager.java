@@ -16,12 +16,7 @@ public class AlarmerManager extends BroadcastReceiver {
         PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "");
         wl.acquire();
 
-        /*Intent si = new Intent(context, MainService.class);
-        si.putExtra(MainService.SWITCH, MainService.ALARM);
-        si.putExtra(MainService.ALARM, intent.getIntExtra(MainService.ALARM, -1));
-        context.startService(si);*/
         MainService.sendIntent(context, MainService.ALARM, intent.getIntExtra(MainService.ALARM, -1));
-        Log.d("AlarmerManager", "ALARMFIRED | ID: " + intent.getIntExtra(MainService.ALARM, -1));
 
         wl.release();
     }

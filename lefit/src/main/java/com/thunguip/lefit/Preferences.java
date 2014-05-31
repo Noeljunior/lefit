@@ -212,6 +212,14 @@ public class Preferences {
             return nowClean.getTimeInMillis();
         }
 
+        public static long getTodayDateTime() {
+            Calendar now = Calendar.getInstance();
+
+            now.set(Calendar.MILLISECOND, 0);
+
+            return now.getTimeInMillis();
+        }
+
 
         public static long getNextByTime (Calendar time) {
             Calendar now = Calendar.getInstance();
@@ -246,6 +254,20 @@ public class Preferences {
             Calendar cal = Calendar.getInstance();
             cal.setTimeInMillis(l);
             return toString(cal);
+        }
+
+        public static boolean isSameDay(Calendar a, Calendar b) {
+            return (a.get(Calendar.YEAR) == b.get(Calendar.YEAR)) &&
+                    (a.get(Calendar.MONTH) == b.get(Calendar.MONTH)) &&
+                    (a.get(Calendar.DAY_OF_MONTH) == b.get(Calendar.DAY_OF_MONTH));
+        }
+
+        public static boolean isSameDay(long a, long b) {
+            Calendar ca = Calendar.getInstance();
+            Calendar cb = Calendar.getInstance();
+            ca.setTimeInMillis(a);
+            cb.setTimeInMillis(b);
+            return isSameDay(ca, cb);
         }
     }
 }

@@ -87,7 +87,7 @@ public class PopupEntryParcel implements Parcelable {
 
     public static PopupEntryParcel findByDay(PopupEntryParcel[] peps, Calendar cal) {
         for (int i = 0; i < peps.length; i++) {
-            if (MainService.isSameDay(peps[i].getDateRefer(), cal))
+            if (Preferences.TimeHelper.isSameDay(peps[i].getDateRefer(), cal))
                 return peps[i];
         }
         return null;

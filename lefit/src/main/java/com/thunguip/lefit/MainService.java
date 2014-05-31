@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Messenger;
+import android.os.Parcelable;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
@@ -212,11 +213,22 @@ public class MainService extends IntentService {
     }
 
     private void addAnswerToDB(PopupEntryParcel pep) {
+        /* TODO Check if the answer was from a popup which may had a notification and remove that notification */
+        removeNotificationByID(NOTIFID_MAIN);
+
         StorageDB db = new StorageDB(this);
         db.addEntry(pep);
 
-        if (pep.action == PopupEntryParcel.POPUP_ACTION_SUBMIT)
-            sendBroadcast(BC_UPDATEITEMS);
+        switch (pep.action) {
+            case PopupEntryParcel.POPUP_ACTION_SUBMIT:
+                sendBroadcast(BC_UPDATEITEMS);
+                break;
+            case PopupEntryParcel.POPUP_ACTION_POSTPONE:
+                setPostponeNotification();
+                break;
+            default:;
+        }
+
     }
 
     private void openPopupByRefer(long refer) {
@@ -227,7 +239,7 @@ public class MainService extends IntentService {
         MessageParcel m = new MessageParcel(1,
                 2, 2, 5, 4,
                 0, 1, 0, preferences.isShowDaillyMessage() ? 1 : 0,
-                newZeroedNowCalendar().getTimeInMillis(), refer,
+                Preferences.TimeHelper.getTodayDate(), refer,
                 0);
 
         intent.putExtra(PopupActivity.MESSAGE, m);
@@ -246,7 +258,7 @@ public class MainService extends IntentService {
         MessageParcel m = new MessageParcel(1,
                 2, 2, 5, 4,
                 1, 0, 0, preferences.isShowDaillyMessage() ? 1 : 0,
-                newZeroedNowCalendar().getTimeInMillis(), Preferences.TimeHelper.getTodayDate(),
+                Preferences.TimeHelper.getTodayDate(), Preferences.TimeHelper.getTodayDate(),
                 1);
 
         intent.putExtra(PopupActivity.MESSAGE, m);
@@ -367,7 +379,7 @@ public class MainService extends IntentService {
         mp.showmessage = 1;
 
         /* Set the refer */
-        mp.referdate = newZeroedNowCalendar().getTimeInMillis();
+        mp.referdate = Preferences.TimeHelper.getTodayDate();
 
         return mp;
     }
@@ -379,8 +391,8 @@ public class MainService extends IntentService {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, d 'de' MMM");
 
-        Calendar today = Calendar.getInstance();
-        Calendar iterator = (Calendar) today.clone();
+        Calendar iterator = Calendar.getInstance();
+        iterator.setTimeInMillis(Preferences.TimeHelper.getTodayDate());
 
         StorageDB database = new StorageDB(this);
         PopupEntryParcel[] entries = database.getAnsweredPopupEntries();
@@ -409,7 +421,7 @@ public class MainService extends IntentService {
                 items.add(new LvItemParcel(LvItemParcel.Type.ITEM_UNFILLED,
                         R.drawable.ic_questionmark, "Clique para preencher",
                         dateFormat.format(iterator.getTime()),
-                        newZeroedCalendarByCalendar(iterator).getTimeInMillis()));
+                        iterator.getTimeInMillis()));
             }
             iterator.add(Calendar.DAY_OF_MONTH, -1);
 
@@ -474,68 +486,6 @@ public class MainService extends IntentService {
 
 
     /* STATIC METHODS */
-    public static boolean isSameDay(Calendar a, Calendar b) {
-        return (a.get(Calendar.YEAR) == b.get(Calendar.YEAR)) &&
-                (a.get(Calendar.MONTH) == b.get(Calendar.MONTH)) &&
-                (a.get(Calendar.DAY_OF_MONTH) == b.get(Calendar.DAY_OF_MONTH));
-    }
-
-    public static Calendar newCalendarByDate(int day, int month, int year) {
-        Calendar now = Calendar.getInstance();
-        now.setTimeInMillis(0);
-        now.set(Calendar.YEAR, year);
-        now.set(Calendar.MONTH, month);
-        now.set(Calendar.DAY_OF_MONTH, day);
-        return now;
-    }
-
-    public static Calendar newZeroedCalendarByCalendar(Calendar cal) {
-        return newCalendarByDate(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR));
-    }
-
-    public static Calendar newZeroedNowCalendar() {
-        return newZeroedCalendarByCalendar(Calendar.getInstance());
-    }
-
-    /*public static Calendar newCalendarByMillis(long millis) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(millis);
-        return cal;
-    }
-
-    public static Calendar trimCalendarToTime(Calendar cal) {
-        Calendar newcal = Calendar.getInstance();
-        newcal.setTimeInMillis(0);
-
-        /*newcal.set(Calendar.HOUR, hours);
-        newcal.set(Calendar.MINUTE, minutes);
-        newcal.set(Calendar.SECOND, seconds);
-
-        return newcal;
-    }*/
-
-    /*public static String getStringByCalendar(Calendar cal) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, d 'de' MMM");
-        return dateFormat.format(cal.getTime());
-    }
-
-    public static String getStringByMillis(long millis) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(millis);
-        return getStringByCalendar(cal);
-    }*/
-
-    /*public static Calendar newCalendarByTime(int hours, int minutes, int seconds) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(0);
-
-        cal.add(Calendar.HOUR, hours);
-        cal.add(Calendar.MINUTE, minutes);
-        cal.add(Calendar.SECOND, seconds);
-
-        return cal;
-    }*/
-
     public static void sendIntent(Context context, String switchitent) {
         Intent intent = new Intent(context, MainService.class);
         intent.putExtra(MainService.SWITCH, switchitent);
@@ -556,6 +506,12 @@ public class MainService extends IntentService {
         context.startService(intent);
     }
 
+    public static void sendIntent(Context context, String switchitent, Parcelable extra) {
+        Intent intent = new Intent(context, MainService.class);
+        intent.putExtra(MainService.SWITCH, switchitent);
+        intent.putExtra(switchitent, extra);
+        context.startService(intent);
+    }
 
 
 }
