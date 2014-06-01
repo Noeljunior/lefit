@@ -101,23 +101,23 @@ public class PopupActivity extends Activity {
         // And set the default
         setPhrase(message.defphrase);
 
-        // Get messages
-        ids = getResources().obtainTypedArray(R.array.messages);
-        int messageids = ids.getResourceId(message.messageset, -1);
-        ids.recycle();
-        ids = getResources().obtainTypedArray(messageids);
-        messageids = ids.getResourceId(message.messagesubset, -1);
-        ids.recycle();
-        messages = getResources().getStringArray(messageids);
-        selectedmessage = message.defmessage;
-        // And set the default
-        tvmessage.setText(messages[selectedmessage]);
-
 
         /* END Initialize this new popup*/
 
         if (message.showmessage == 0) {
             hideMessage();
+        } else {
+            // Get messages
+            ids = getResources().obtainTypedArray(R.array.messages);
+            int messageids = ids.getResourceId(message.messageset, -1);
+            ids.recycle();
+            ids = getResources().obtainTypedArray(messageids);
+            messageids = ids.getResourceId(message.messagesubset, -1);
+            ids.recycle();
+            messages = getResources().getStringArray(messageids);
+            selectedmessage = message.defmessage;
+            // And set the default
+            tvmessage.setText(messages[selectedmessage]);
         }
 
         if (message.showpostpone == 0) {

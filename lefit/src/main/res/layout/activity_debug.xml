@@ -64,10 +64,10 @@
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Unset alarm"
+                    android:text="Reset Preferences"
                     android:id="@+id/button5"
                     android:layout_gravity="center_horizontal"
-                    android:onClick="unsetalarmService"
+                    android:onClick="resetPreferences"
                     android:background="@drawable/roundedbg"
                     android:textColor="@color/view_fg_light"
                     android:layout_margin="5dp" />

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -13,6 +14,12 @@ public class Preferences {
     public static final long SECOND = 1000L;
     public static final long MINUTE = SECOND * 60L;
     public static final long HOUR   = MINUTE * 60L;
+
+    public static final int PERSONSTYLE_NOTDEFINED  = -1;
+    public static final int PERSONSTYLE_SEDENTARY   =  0;
+    public static final int PERSONSTYLE_ACTIVE      =  1;
+    public static final int PERSONSTYLE_MODERATE    =  2;
+    public static final int PERSONSTYLE_INTENSE     =  3;
 
     /* Prefrences File */
     public static final String  PREFS_NAME                  = "MainPrefs";
@@ -24,6 +31,7 @@ public class Preferences {
     public static final String  PREFS_NOTIFICATIONSOUND     = "MAINPREFES.PREFS_NOTIFICATIONSOUND";
     public static final String  PREFS_NOTIFICATIONVIBRATE   = "MAINPREFES.PREFS_NOTIFICATIONVIBRATE";
     public static final String  PREFS_SHOWDAILLYMESSAGE     = "MAINPREFES.PREFS_SHOWDAILLYMESSAGE";
+    public static final String  PREFS_PERSONSTYLE           = "MAINPREFES.PREFS_PERSONSTYLE";
 
     /* DEFAULTS */
     public static final boolean     DEF_fireNotifications       = true;
@@ -35,6 +43,8 @@ public class Preferences {
     public static final long    notificationInterval            = /*5 * 60 * 1000;*/ TimeHelper.getByTime(24, 0); /* TODO set to 24h */
     public static final long    postponeDelay                   =  /*1 * 60 * 1000;*/ TimeHelper.getByTime(1, 0); /* TODO set to 1h */
     public static final long    notificationCleanGap            = postponeDelay * 2;
+
+    public static final int     DEF_personStyle                 = PERSONSTYLE_NOTDEFINED;
 
     private Context context;
     private SharedPreferences settings;
@@ -53,7 +63,7 @@ public class Preferences {
             return settings.getLong(PREFS_STARTDATE, TimeHelper.getTodayDate());
         }
         else { /* return the default */
-            return setStartDate(TimeHelper.getTodayDate());
+            return TimeHelper.getTodayDate();
         }
     }
 
@@ -102,6 +112,15 @@ public class Preferences {
         }
     }
 
+    public int getPersonStyle() {
+        if (settings.contains(PREFS_PERSONSTYLE)) {
+            return settings.getInt(PREFS_PERSONSTYLE, DEF_personStyle);
+        }
+        else { /* return the default */
+            return setPersonStyle(DEF_personStyle);
+        }
+    }
+
     public long getNotificationInterval() {
         return notificationInterval;
     }
@@ -139,6 +158,22 @@ public class Preferences {
     public boolean setShowDaillyMessage(boolean b) {
         commitPrefBoolean(PREFS_SHOWDAILLYMESSAGE, b);
         return b;
+    }
+
+    public int setPersonStyle(int i) {
+        commitPrefInt(PREFS_PERSONSTYLE, i);
+        return i;
+    }
+
+
+
+    public void reset() {
+        SharedPreferences.Editor editor = settings.edit();
+        editor.clear();
+        editor.commit();
+
+        if (MainService.isDebuggable(context))
+            Toast.makeText(context, "Preferences were resetted", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -184,7 +219,7 @@ public class Preferences {
         public static long getByTimeCal(int hour, int minute) {
             Calendar cal = Calendar.getInstance();
             cal.setTimeInMillis(0);
-            cal.set(Calendar.HOUR, hour);
+            cal.set(Calendar.HOUR_OF_DAY, hour);
             cal.set(Calendar.MINUTE, minute);
             return cal.getTimeInMillis();
         }
@@ -208,6 +243,17 @@ public class Preferences {
             nowClean.set(Calendar.YEAR, now.get(Calendar.YEAR));
             nowClean.set(Calendar.MONTH, now.get(Calendar.MONTH));
             nowClean.set(Calendar.DAY_OF_MONTH, now.get(Calendar.DAY_OF_MONTH));
+
+            return nowClean.getTimeInMillis();
+        }
+
+        public static long getTodayTime() {
+            Calendar now = Calendar.getInstance();
+            Calendar nowClean = Calendar.getInstance();
+            nowClean.setTimeInMillis(0);
+
+            nowClean.set(Calendar.HOUR_OF_DAY, now.get(Calendar.HOUR_OF_DAY));
+            nowClean.set(Calendar.MINUTE, now.get(Calendar.MINUTE));
 
             return nowClean.getTimeInMillis();
         }

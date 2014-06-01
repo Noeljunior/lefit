@@ -98,7 +98,7 @@ public class MainService extends IntentService {
         switch (intent.getStringExtra(SWITCH)) {
             /* Request and receive data */
             case GETLVITEMS:
-                sendLvItems((Messenger) intent.getExtras().get(MESSENGER));
+                sendLvItems((Messenger) intent.getExtras().get(GETLVITEMS));
                 return;
             case ADDANSWERTODB:
                 addAnswerToDB((PopupEntryParcel) intent.getParcelableExtra(ADDANSWERTODB));
@@ -180,7 +180,6 @@ public class MainService extends IntentService {
         Log.d("MainService", "HANDLENOTIFICATION: " + action);
         switch (action) {
             case NOTIFCATION_OPNEN:
-                //removeNotificationByID(NOTIFID_MAIN);
                 openPopupByNotification();
 
                 return;
@@ -235,18 +234,19 @@ public class MainService extends IntentService {
             default:;
         }
 
+        if (pep.title == 0 && pep.action == PopupEntryParcel.POPUP_ACTION_SUBMIT) {
+            /* The person just answered the first time, so set the start date by now */
+            preferences.setStartDate(Preferences.TimeHelper.getTodayDate());
+
+            preferences.setPersonStyle(pep.phraseanswer);
+        }
+
     }
 
     private void openPopupByRefer(long refer) {
-        /* TODO know what to send to popup */
-
         Intent intent = new Intent(this, PopupActivity.class);
 
-        MessageParcel m = new MessageParcel(1,
-                2, 2, 5, 4,
-                0, 1, 0, preferences.isShowDaillyMessage() ? 1 : 0,
-                Preferences.TimeHelper.getTodayDate(), refer,
-                0);
+        MessageParcel m = new Decision(this).getNotificationTodaysMessage(Decision.CONTEXT_LVITEM, refer);
 
         intent.putExtra(PopupActivity.MESSAGE, m);
 
@@ -256,16 +256,9 @@ public class MainService extends IntentService {
     }
 
     private void openPopupByNotification() {
-        /* TODO know what to send to popup */
-        /* TODO select refer to either today or yesterday */
-
         Intent intent = new Intent(this, PopupActivity.class);
 
-        MessageParcel m = new MessageParcel(1,
-                2, 2, 5, 4,
-                0, 0, 0, preferences.isShowDaillyMessage() ? 1 : 0,
-                Preferences.TimeHelper.getTodayDate(), Preferences.TimeHelper.getTodayDate(),
-                1);
+        MessageParcel m = new Decision(this).getNotificationTodaysMessage(Decision.CONTEXT_NOTIFICATION, 0);
 
         intent.putExtra(PopupActivity.MESSAGE, m);
 
@@ -366,29 +359,7 @@ public class MainService extends IntentService {
 
 
 
-    private MessageParcel getTodaysMessageParcel() {
-        MessageParcel mp = new MessageParcel();
 
-        /* TODO select which title */
-        mp.title = 1;
-
-        /* TODO select which phrase set, min, max and default */
-        mp.phraseset = 1;
-        mp.minphrase = 2;
-        mp.maxphrase = 5;
-        mp.defphrase = 4;
-
-        /* TODO select which message set, message subset, default message and if it is to show */
-        mp.messageset = 0;
-        mp.messagesubset = 0;
-        mp.defmessage = 0;
-        mp.showmessage = 1;
-
-        /* Set the refer */
-        mp.referdate = Preferences.TimeHelper.getTodayDate();
-
-        return mp;
-    }
 
 
 
@@ -404,7 +375,14 @@ public class MainService extends IntentService {
         PopupEntryParcel[] entries = database.getAnsweredPopupEntries();
         PopupEntryParcel pep;
 
-        long startDate = preferences.getStartDate();
+        long startDate;
+
+        if (preferences.getPersonStyle() == Preferences.PERSONSTYLE_NOTDEFINED) {
+            startDate = Preferences.TimeHelper.getTodayDate();
+        }
+        else {
+            startDate = preferences.getStartDate();
+        }
 
         while (iterator.getTimeInMillis() >= startDate) {
             if ((pep = PopupEntryParcel.findByDay(entries, iterator)) != null) { // Answered day

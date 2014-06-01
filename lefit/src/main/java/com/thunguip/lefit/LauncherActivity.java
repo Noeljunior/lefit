@@ -64,34 +64,36 @@ public class LauncherActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         registerReceiver(setLvItemsReceiver, new IntentFilter(MainService.BROADCAST));
+        requestLvItems();
+        this.invalidateOptionsMenu();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        try {
+            unregisterReceiver(setLvItemsReceiver);
+        }
+        catch (java.lang.IllegalArgumentException e) {
+            /* Already unregistred */
+            Log.d("LauncherActivity","EXCEPTION: Already Unregistered");
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(setLvItemsReceiver);
+        try {
+            unregisterReceiver(setLvItemsReceiver);
+        }
+        catch (java.lang.IllegalArgumentException e) {
+            /* Already unregistred */
+            Log.d("LauncherActivity","EXCEPTION: Already Unregistered");
+        }
     }
-
-    public void getItems(View view) {
-        requestLvItems();
-    }
-
-
-    public void testBehave(View view) {
-        requestLvItems();
-    }
-
 
     public void requestLvItems() {
-        Intent intent = new Intent(this, MainService.class);
-        intent.putExtra(MainService.MESSENGER, new Messenger(handler));
-        intent.putExtra(MainService.SWITCH, MainService.GETLVITEMS);
-        startService(intent);
+        MainService.sendIntent(this, MainService.GETLVITEMS, new Messenger(handler));
     }
 
     Handler handler = new Handler() {
@@ -127,37 +129,10 @@ public class LauncherActivity extends ActionBarActivity {
             LvItemParcel clickedItem = (LvItemParcel) listView.getAdapter().getItem(position);
 
             MainService.sendIntent(v.getContext(), MainService.INVOKEPOPUPBYLVITEM, clickedItem.referdate);
-
-            /*Intent intent = new Intent(v.getContext(), MainService.class);
-            intent.putExtra(MainService.SWITCH, MainService.INVOKEPOPUPBYLVITEM);
-            intent.putExtra(MainService.INVOKEPOPUPBYLVITEM, clickedItem.referdate);
-            startService(intent);*/
         }
     };
 
-    public void testBroadcast(View view) {
-        /*Intent intent = new Intent(this, MainService.class);
-        intent.putExtra(MainService.SWITCH, MainService.DEBUG);
-        startService(intent);*/
 
-        StorageDB db = new StorageDB(this);
-
-        Calendar initCalendar = Calendar.getInstance();
-        initCalendar.set(Calendar.YEAR, 2014);
-        initCalendar.set(Calendar.MONTH, 4);
-        initCalendar.set(Calendar.DAY_OF_MONTH, 25);
-
-        //int title,
-        //int phraseset, int phrasemin, int phrasemax, int phraseanswer, int phrasehitmore, int phrasehitless,
-        // int messageset, int messagesubset, int messagehide, int messagemore,
-        // int action,
-        // int daterefer, int dateinit, int dateaction
-        db.addEntry(new PopupEntryParcel(1,
-                2, 2, 8, 4, 0, 0,
-                0, 0, 0, 0,
-                PopupEntryParcel.POPUP_ACTION_SUBMIT,
-                initCalendar.getTimeInMillis(), initCalendar.getTimeInMillis(), initCalendar.getTimeInMillis()));
-    }
 
     private BroadcastReceiver setLvItemsReceiver = new BroadcastReceiver() {
         @Override
@@ -250,19 +225,6 @@ public class LauncherActivity extends ActionBarActivity {
 
             case R.id.menunotifications:
                 preferences.setFireNotifications(!item.isChecked());
-
-
-
-                /*if (preferences.isFireNotifications()) {
-                    Intent intent = new Intent(this, MainService.class);
-                    intent.putExtra(MainService.SWITCH, MainService.ENABLENOTIFICATIONS);
-                    startService(intent);
-                }
-                else {
-                    Intent intent = new Intent(this, MainService.class);
-                    intent.putExtra(MainService.SWITCH, MainService.DISABLENOTIFICATIONS);
-                    startService(intent);
-                }*/
 
                 MainService.sendIntent(this, MainService.CHECKALARMSETTINGS);
 

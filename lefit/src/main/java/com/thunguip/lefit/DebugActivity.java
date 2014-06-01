@@ -53,8 +53,8 @@ public class DebugActivity extends Activity {
     }
 
 
-    public void unsetalarmService(View view) {
-
+    public void resetPreferences(View view) {
+        new Preferences(this).reset();
     }
 
     public void showNotification(View view) {
