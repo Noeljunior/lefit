@@ -29,7 +29,8 @@ public class PopupActivity extends Activity {
     private String[] messages;
     private int selectedmessage;
 
-    private MessageResultParcel msgresult;
+    /* Result message */
+    private PopupEntryParcel popupentry;
 
     /* States */
     private boolean showMessage;
@@ -48,8 +49,6 @@ public class PopupActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //setFinishOnTouchOutside(true);
-
         /* Get the message */
         message = getIntent().getExtras().getParcelable(MESSAGE);
         if (message == null) {
@@ -62,21 +61,19 @@ public class PopupActivity extends Activity {
         setContentView(R.layout.activity_popup);
 
         // Start new result message
-        msgresult = new MessageResultParcel();
+        popupentry = new PopupEntryParcel();
 
-        msgresult.title = message.title;
-        msgresult.phrasesset = message.phraseset;
-        msgresult.phrasesmax = message.maxphrase;
-        msgresult.phrasesmin = message.minphrase;
-        msgresult.messageset = message.messageset;
-        msgresult.messagesubset = message.messagesubset;
-        msgresult.action = PopupEntryParcel.POPUP_ACTION_IGNORE;
-        msgresult.messagehithide = message.showmessage == 1 ? PopupEntryParcel.POPUP_HIDE_FALSE : PopupEntryParcel.POPUP_HIDE_HIDEN;
-        msgresult.daterefer = message.referdate;
-        msgresult.dateinit = Preferences.TimeHelper.getTodayDateTime();
+        popupentry.title = message.title;
+        popupentry.phraseset = message.phraseset;
+        popupentry.phrasemax = message.maxphrase;
+        popupentry.phrasemin = message.minphrase;
+        popupentry.messageset = message.messageset;
+        popupentry.messagesubset = message.messagesubset;
+        popupentry.action = PopupEntryParcel.POPUP_ACTION_IGNORE;
+        popupentry.messagehide = message.showmessage == 1 ? PopupEntryParcel.POPUP_HIDE_FALSE : PopupEntryParcel.POPUP_HIDE_HIDEN;
+        popupentry.daterefer = message.referdate;
+        popupentry.dateinit = Preferences.TimeHelper.getTodayDateTime();
 
-
-        Log.d("PopupActivity", "REFERDATE: " + msgresult.daterefer);
 
         /* Initialize this new popup */
         seekbar = (SeekBar) findViewById(R.id.seekbar);
@@ -156,7 +153,7 @@ public class PopupActivity extends Activity {
             seekbar.setMax(seekbar.getMax() + 1);
 
             // STATS
-            msgresult.phraseshitsmore++;
+            popupentry.phrasehitmore++;
         }
 
         seekbar.setProgress(seekbar.getProgress() + 1);
@@ -167,7 +164,7 @@ public class PopupActivity extends Activity {
             seekbar.setMax(seekbar.getMax() + 1);
 
             // STATS
-            msgresult.phraseshitsless++;
+            popupentry.phrasehitless++;
         }
 
         seekbar.setProgress(seekbar.getProgress() - 1);
@@ -192,7 +189,7 @@ public class PopupActivity extends Activity {
             ivphraselogo.setImageResource(phraseid);
 
         // STATS
-        msgresult.phrasesanswered = id;
+        popupentry.phraseanswer = id;
     }
 
     public void nextMessage(View view) {
@@ -200,7 +197,7 @@ public class PopupActivity extends Activity {
         tvmessage.setText(messages[selectedmessage]);
 
         // STATS
-        msgresult.messagehitmore++;
+        popupentry.messagemore++;
     }
 
 
@@ -211,7 +208,7 @@ public class PopupActivity extends Activity {
         new Preferences(this).setShowDaillyMessage(false);
 
         // STATS
-        msgresult.messagehithide = PopupEntryParcel.POPUP_HIDE_TRUE;
+        popupentry.messagehide = PopupEntryParcel.POPUP_HIDE_TRUE;
     }
 
     public void hideMessage() {
@@ -230,14 +227,14 @@ public class PopupActivity extends Activity {
         cal.setTimeInMillis(message.referdate);
 
         // STATS
-        msgresult.action = PopupEntryParcel.POPUP_ACTION_CANCEL;
+        popupentry.action = PopupEntryParcel.POPUP_ACTION_CANCEL;
 
         finish();
     }
 
     public void actionPostpone(View view) {
         // STATS
-        msgresult.action = PopupEntryParcel.POPUP_ACTION_POSTPONE;
+        popupentry.action = PopupEntryParcel.POPUP_ACTION_POSTPONE;
 
         finish();
     }
@@ -245,27 +242,17 @@ public class PopupActivity extends Activity {
     public void actionSubmit(View view) {
 
         // STATS
-        msgresult.action = PopupEntryParcel.POPUP_ACTION_SUBMIT;
+        popupentry.action = PopupEntryParcel.POPUP_ACTION_SUBMIT;
 
         finish();
     }
-
-    /*private void closeAndSendData() {
-
-        finish();
-    }*/
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
-        PopupEntryParcel pep = new PopupEntryParcel(msgresult.title,
-                msgresult.phrasesset, msgresult.phrasesmin, msgresult.phrasesmax, msgresult.phrasesanswered, msgresult.phraseshitsmore, msgresult.phraseshitsless,
-                msgresult.messageset, msgresult.messagesubset, msgresult.messagehithide, msgresult.messagehitmore,
-                msgresult.action,
-                msgresult.daterefer, msgresult.dateinit, Preferences.TimeHelper.getTodayDateTime());
-
-        MainService.sendIntent(this, MainService.ADDANSWERTODB, pep);
+        popupentry.dateaction = Preferences.TimeHelper.getTodayDateTime();
+        MainService.sendIntent(this, MainService.ADDANSWERTODB, popupentry);
     }
 
 

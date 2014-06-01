@@ -49,9 +49,6 @@ public class LauncherActivity extends ActionBarActivity {
         lvcalendaradaptor = new LvCalendarAdaptor(this);
 
 
-        registerReceiver(setLvItemsReceiver, new IntentFilter(MainService.BROADCAST));
-
-
         listView = (ListView)findViewById(R.id.lvcalendar);
         listView.setAdapter(lvcalendaradaptor);
         listView.setOnItemClickListener(ListViewOnItemClickedListner);
@@ -63,6 +60,22 @@ public class LauncherActivity extends ActionBarActivity {
         MainService.sendIntent(this, MainService.CHECKALARMSETTINGS);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(setLvItemsReceiver, new IntentFilter(MainService.BROADCAST));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(setLvItemsReceiver);
+    }
 
     public void getItems(View view) {
         requestLvItems();
