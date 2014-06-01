@@ -101,7 +101,7 @@ public class DebugActivity extends Activity {
             Calendar c = Calendar.getInstance();
             c.setTimeInMillis(new Preferences(getActivity()).getStartDate());
 
-            return new DatePickerDialog(getActivity(),  DatePickerDialog.THEME_HOLO_DARK,this,
+            return new DatePickerDialog(getActivity(), DatePickerDialog.THEME_HOLO_DARK,this,
                     c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
         }
 

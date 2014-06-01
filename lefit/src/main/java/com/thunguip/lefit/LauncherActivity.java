@@ -308,7 +308,7 @@ public class LauncherActivity extends ActionBarActivity {
             Calendar c = Calendar.getInstance();
             c.setTimeInMillis(preferences.getNotificationTime());
 
-            return new TimePickerDialog(getActivity(), this,
+            return new TimePickerDialog(getActivity(), TimePickerDialog.THEME_HOLO_DARK, this,
                     c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE),
                     DateFormat.is24HourFormat(getActivity()));
         }

@@ -7,38 +7,24 @@
     android:layout_height="wrap_content"
     android:paddingRight="10dp"
     android:paddingLeft="10dp"
-    android:clickable="false"
-    android:background="@drawable/alltransparent">
+    android:clickable="false">
 
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/lvitembg_unfilled">
+        android:background="@drawable/lvitembg_unfilled"
+        android:paddingBottom="10dp">
 
         <ImageView
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:id="@+id/ivlogo"
-            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
+            android:layout_alignParentStart="false"
             android:src="@drawable/ic_questionmark"
-            android:layout_margin="8dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearance"
-            android:text="Some feedback"
-            android:id="@+id/tvdescription"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/ivlogo"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="5dp"
-            android:textColor="@color/lighttext" />
+            android:layout_margin="5dp"
+            android:layout_centerVertical="true" />
 
         <TextView
             android:layout_width="100dp"
@@ -53,6 +39,26 @@
             android:layout_marginRight="8dp"
             android:textColor="@color/lighttext"
             android:layout_marginTop="5dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearance"
+            android:text="Some feedback"
+            android:id="@+id/tvdescription"
+            android:layout_toRightOf="@+id/ivlogo"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="false"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/lighttext"
+            android:layout_marginTop="5dp"
+            android:layout_alignParentBottom="false"
+            android:layout_below="@+id/tvdate"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentStart="false" />
+
 
     </RelativeLayout>
 
