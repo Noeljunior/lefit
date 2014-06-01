@@ -63,6 +63,7 @@ public class PopupActivity extends Activity {
         // Start new result message
         popupentry = new PopupEntryParcel();
 
+        popupentry._type = StorageDB.TYPE_POPUP;
         popupentry.title = message.title;
         popupentry.phraseset = message.phraseset;
         popupentry.phrasemax = message.maxphrase;

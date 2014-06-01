@@ -155,4 +155,26 @@ public class PopupEntryParcel implements Parcelable {
                     return new PopupEntryParcel[size];
                 }
             };
+
+
+    @Override
+    public String toString() {
+        return "[" + _id +" : " + _type + " | " + _sent + "] " + "{" +
+                title + "; " +
+                phraseset + "; " +
+                phrasemin + "; " +
+                phrasemax + "; " +
+                phraseanswer + "; " +
+                phrasehitmore + "; " +
+                phrasehitless + "; " +
+                messageset + "; " +
+                messagesubset + "; " +
+                messagehide + "; " +
+                messagemore + "; " +
+                action + "; " +
+                Preferences.TimeHelper.toString(daterefer) + "; " +
+                Preferences.TimeHelper.toString(dateinit) + "; " +
+                Preferences.TimeHelper.toString(dateaction) +
+                "}";
+    }
 }

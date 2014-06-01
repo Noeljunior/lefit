@@ -116,7 +116,7 @@ public class Preferences {
 
 
     /* Setters */
-    private long setStartDate(long l) {
+    public long setStartDate(long l) {
         commitPrefLong(PREFS_STARTDATE, l);
         return l;
     }

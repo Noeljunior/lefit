@@ -2,13 +2,22 @@ package com.thunguip.lefit;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.DatePicker;
+import android.widget.TimePicker;
+
+import java.util.Calendar;
 
 public class DebugActivity extends Activity {
 
@@ -27,44 +36,26 @@ public class DebugActivity extends Activity {
 
 
     public void showDialog(View view) {
-        Intent intent = new Intent(this, PopupActivity.class);
+        MainService.sendIntent(this, MainService.INVOKEPOPUPBYLVITEM, Preferences.TimeHelper.getTodayDate());
+    }
 
-        /*MessageParcel m = new MessageParcel("Como é o seu estilo de vida?",
-                new String[] {"Sou sedentário", "Sou activo mas não pratico exercício", "Faço algum exercicio", "Faço muito"},
-                new int[] {R.drawable.ic_phraseicon_0, R.drawable.ic_phraseicon_1, R.drawable.ic_phraseicon_2, R.drawable.ic_phraseicon_3},
-                new String[] {"A vida é bela", "Faça exercicio fisico!", "Lamba-me o escroto"},
-                2, 0,
-                1);*/
-
-        MessageParcel m = new MessageParcel(1,
-                2, 3, 4, 3,
-                1, 0, 0, 1,
-                0, 0, 0);
-
-        intent.putExtra("msg", m);
-
-        startActivity(intent);
+    public void clearAllDb(View view) {
+        new StorageDB(this).resetDataBase();
 
     }
 
-    /*public void checkService(View view) {
-        Intent mServiceIntent = new Intent(this, MainService.class);
+    public void setStartDate(View view) {
+        DialogFragment newFragment = new DialogDatePicker();
 
-        mServiceIntent.putExtra(MainService.DOCHECK, "");
-        this.startService(mServiceIntent);
-    }
-    public void setalarmService(View view) {
-        Intent mServiceIntent = new Intent(this, MainService.class);
+        newFragment.show(getFragmentManager(), "datePicker");
 
-        mServiceIntent.putExtra(MainService.DOSETALARM, "");
-        this.startService(mServiceIntent);
+
     }
+
+
     public void unsetalarmService(View view) {
-        Intent mServiceIntent = new Intent(this, MainService.class);
 
-        mServiceIntent.putExtra(MainService.DOUNSETALARM, "");
-        this.startService(mServiceIntent);
-    }*/
+    }
 
     public void showNotification(View view) {
         MainService.sendIntent(this, MainService.ALARM, 1);
@@ -73,40 +64,18 @@ public class DebugActivity extends Activity {
 
 
     public void WriteItem(View view) {
-        //StorageDB db = new StorageDB(this);
 
-        //db.addDailyRow(69, "hell yeah");
-
-        Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Som de notificação");
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, (Uri) null);
-        this.startActivityForResult(intent, 5);
 
     }
 
     public void ReadItems(View view) {
-        StorageDB db = new StorageDB(this);
 
-        //db.readDaily();
 
     }
 
 
 
-    public void setalarmService(View view) {
-        /*Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.SECOND, 5);
 
-        AlarmerManager.setAlarm(this, MainService.ALARMID_REPEATED, cal.getTimeInMillis());*/
-
-        Intent intent = new Intent(this, MainService.class);
-        intent.putExtra(MainService.SWITCH, MainService.ENABLENOTIFICATIONS);
-        startService(intent);
-
-        Log.d("DebugActivity", "SETTING ALLARM OK");
-
-    }
 
 
 
@@ -118,6 +87,29 @@ public class DebugActivity extends Activity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+
+
+
+
+    public class DialogDatePicker extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            Calendar c = Calendar.getInstance();
+            c.setTimeInMillis(new Preferences(getActivity()).getStartDate());
+
+            return new DatePickerDialog(getActivity(),  DatePickerDialog.THEME_HOLO_DARK,this,
+                    c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+        }
+
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            Log.d("InnerDatePicker", "DATE: " + dayOfMonth + "/" + monthOfYear + "/" + year);
+
+            new Preferences(getActivity()).setStartDate(Preferences.TimeHelper.getByDate(year, monthOfYear, dayOfMonth));
         }
     }
 }

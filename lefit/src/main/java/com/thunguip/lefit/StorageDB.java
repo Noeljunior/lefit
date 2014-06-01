@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -18,6 +19,8 @@ public class StorageDB extends SQLiteOpenHelper {
     public static final int SENT_FALSE = 0;
     /* TODO add an ID to each day */
     /* TODO add how was popup action fired [notification | mainactivity] */
+
+    private Context context;
 
     public static abstract class UniqTable implements BaseColumns {
         public static final String TABLE_NAME = "uniqtable";
@@ -70,6 +73,7 @@ public class StorageDB extends SQLiteOpenHelper {
 
     public StorageDB(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -84,6 +88,14 @@ public class StorageDB extends SQLiteOpenHelper {
         onUpgrade(db, oldVersion, newVersion);
     }
 
+    public void resetDataBase() {
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL(UniqTable.SQL_DELETE_ENTRIES);
+        onCreate(db);
+
+        if (MainService.isDebuggable(context))
+            Toast.makeText(context, "Database was deleted", Toast.LENGTH_SHORT).show();
+    }
 
     /* - - - Own methods - - - */
     public long addEntry(PopupEntryParcel entry) {

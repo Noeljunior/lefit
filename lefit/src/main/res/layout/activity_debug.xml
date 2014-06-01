@@ -4,10 +4,12 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:layout_gravity="bottom" >
+    android:layout_gravity="bottom"
+    android:background="@color/actionbar_bg">
         <ScrollView
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:background="@color/view_bg">
 
             <LinearLayout
                 android:id="@+id/infos_LL"
@@ -17,68 +19,81 @@
                 android:gravity="center_vertical">
 
                 <Button
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Show Dialog"
+                    android:text="Show Dialog (simul listview click)"
                     android:id="@+id/button"
                     android:layout_gravity="center_horizontal"
-                    android:onClick="showDialog"/>
+                    android:onClick="showDialog"
+                    android:background="@drawable/roundedbg"
+                    android:textColor="@color/view_fg_light"
+                    android:layout_margin="5dp" />
 
                 <Button
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Notification"
+                    android:text="Fire notification (simul repeated alarm)"
                     android:id="@+id/button2"
                     android:layout_gravity="center_horizontal"
-                    android:onClick="showNotification" />
+                    android:onClick="showNotification"
+                    android:background="@drawable/roundedbg"
+                    android:textColor="@color/view_fg_light"
+                    android:layout_margin="5dp" />
 
                 <Button
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Check"
+                    android:text="Clear All databases"
                     android:id="@+id/button3"
                     android:layout_gravity="center_horizontal"
-                    android:onClick="checkService" />
+                    android:onClick="clearAllDb"
+                    android:background="@drawable/roundedbg"
+                    android:textColor="@color/view_fg_light"
+                    android:layout_margin="5dp" />
                 <Button
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Set alarm"
+                    android:text="Set init date"
                     android:id="@+id/button4"
                     android:layout_gravity="center_horizontal"
-                    android:onClick="setalarmService" />
+                    android:onClick="setStartDate"
+                    android:background="@drawable/roundedbg"
+                    android:textColor="@color/view_fg_light"
+                    android:layout_margin="5dp" />
 
                 <Button
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Unset alarm"
                     android:id="@+id/button5"
                     android:layout_gravity="center_horizontal"
-                    android:onClick="unsetalarmService" />
+                    android:onClick="unsetalarmService"
+                    android:background="@drawable/roundedbg"
+                    android:textColor="@color/view_fg_light"
+                    android:layout_margin="5dp" />
 
                 <Button
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Add Item to DB"
                     android:id="@+id/btwrite"
                     android:layout_gravity="center_horizontal"
-                    android:onClick="WriteItem" />
+                    android:onClick="WriteItem"
+                    android:background="@drawable/roundedbg"
+                    android:textColor="@color/view_fg_light"
+                    android:layout_margin="5dp" />
 
                 <Button
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Read Items from DB"
                     android:id="@+id/btread"
                     android:layout_gravity="center_horizontal"
-                    android:onClick="ReadItems" />
-
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="Small Text"
-                    android:id="@+id/tvdb"
-                    android:layout_gravity="center_horizontal"
+                    android:onClick="ReadItems"
+                    android:background="@drawable/roundedbg"
+                    android:textColor="@color/view_fg_light"
                     android:layout_margin="5dp" />
+
             </LinearLayout>
         </ScrollView>
 </LinearLayout>

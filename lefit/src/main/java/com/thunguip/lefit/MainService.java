@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.net.Uri;
@@ -19,6 +20,7 @@ import android.os.RemoteException;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.view.MenuItem;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
@@ -220,6 +222,8 @@ public class MainService extends IntentService {
 
         StorageDB db = new StorageDB(this);
         db.addEntry(pep);
+
+        Log.d("MainService", "NewPEP: " + pep.toString());
 
         switch (pep.action) {
             case PopupEntryParcel.POPUP_ACTION_SUBMIT:
@@ -515,5 +519,8 @@ public class MainService extends IntentService {
         context.startService(intent);
     }
 
+    public static boolean isDebuggable(Context context) {
+        return ( 0 != ( context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE ) );
+    }
 
 }
