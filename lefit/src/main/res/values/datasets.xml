@@ -8,6 +8,13 @@
         <!--  3 --> <item>Como foi este dia?</item>                    <!--  se se abre na app       -->
     </string-array>
 
+    <!--  Notofication descriptions -->
+    <string-array name="notifdesc">
+        <!--  0 --> <item>Defina o seu estilo de vida</item>
+        <!--  1 --> <item>Preencha o dia de hoje</item>
+        <!--  2 --> <item>Preencha o dia de ontem</item>
+    </string-array>
+
     <!--  Phrases -->
     <array name="phrases">
         <item>@array/phrases0</item>

@@ -4,7 +4,6 @@ import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -20,9 +19,7 @@ import android.os.RemoteException;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.view.MenuItem;
 
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -60,6 +57,8 @@ public class MainService extends IntentService {
     public static final int ALARMID_REPEATED    = 1;
     public static final int ALARMID_POSTPONED   = 2;
     public static final int ALARMID_CLEAN       = 3;
+    public static final int ALARMID_MIDNIGHT    = 3;
+    public static final int ALARMID_REMPOSTPONE = 3;
 
     /* Notification Identifiers */
     public static final int NOTIFID_MAIN        = 1;
@@ -110,12 +109,12 @@ public class MainService extends IntentService {
                 return;
 
             /* Notification */
-            case ENABLENOTIFICATIONS:
+            /*case ENABLENOTIFICATIONS:
                 enableNotifications();
                 return;
             case DISABLENOTIFICATIONS:
                 disableNotifications();
-                return;
+                return;*/
             case NOTIFICATIONACTION:
                 handleNotificationAction(intent.getStringExtra(NOTIFICATIONACTION));
                 return;
@@ -143,11 +142,12 @@ public class MainService extends IntentService {
             case ALARMID_REPEATED:
                 Log.d("MainService", "HANDLEALARM: ALARMID_REPEATED");
                 /* TODO set notification's title and descritions based on something */
-                String title = "Como foi o seu dia?";
+                /*String title = "Como foi o seu dia?";
                 String description = "Toque para registar como foi o seu dia.";
 
 
-                sendNotificationByMessage(NOTIFID_MAIN, title, description);
+                sendNotificationByMessage(NOTIFID_MAIN, title, description);*/
+                sendNotification(new Decision(this).getNotificationBuilderByContext(), NOTIFID_MAIN);
                 return;
             case ALARMID_POSTPONED:
                 Log.d("MainService", "HANDLEALARM: ALARMID_POSTPONED");
@@ -156,9 +156,10 @@ public class MainService extends IntentService {
                 /* TODO check if refer date is older then yerterday  */
 
 
-                sendNotificationByMessage(NOTIFID_MAIN,
+                /*sendNotificationByMessage(NOTIFID_MAIN,
                         "Como foi o seu dia ontem?",
-                        "Toque para registar como foi o seu dia de ontem.");
+                        "Toque para registar como foi o seu dia de ontem.");*/
+                sendNotification(new Decision(this).getNotificationBuilderByContext(), NOTIFID_MAIN);
                 return;
             case ALARMID_CLEAN:
                 Log.d("MainService", "HANDLEALARM: ALARMID_CLEAN");
@@ -246,7 +247,7 @@ public class MainService extends IntentService {
     private void openPopupByRefer(long refer) {
         Intent intent = new Intent(this, PopupActivity.class);
 
-        MessageParcel m = new Decision(this).getNotificationTodaysMessage(Decision.CONTEXT_LVITEM, refer);
+        MessageParcel m = new Decision(this).getMessageParcelByContext(Decision.CONTEXT_LVITEM, refer);
 
         intent.putExtra(PopupActivity.MESSAGE, m);
 
@@ -258,7 +259,7 @@ public class MainService extends IntentService {
     private void openPopupByNotification() {
         Intent intent = new Intent(this, PopupActivity.class);
 
-        MessageParcel m = new Decision(this).getNotificationTodaysMessage(Decision.CONTEXT_NOTIFICATION, 0);
+        MessageParcel m = new Decision(this).getMessageParcelByContext(Decision.CONTEXT_NOTIFICATION, 0);
 
         intent.putExtra(PopupActivity.MESSAGE, m);
 
@@ -267,7 +268,7 @@ public class MainService extends IntentService {
         startActivity(intent);
     }
 
-    private void enableNotifications() {
+    /*private void enableNotifications() {
         AlarmerManager.setRepeatingAlarm(this,
                 ALARMID_REPEATED,
                 preferences.getNotificationTime(),
@@ -285,7 +286,7 @@ public class MainService extends IntentService {
         AlarmerManager.cancelAlarm(this, ALARMID_CLEAN);
 
         removeNotificationByID(NOTIFID_MAIN);
-    }
+    }*/
 
     private void setPostponeNotification() {
         AlarmerManager.setRelativeAlarm(this,
@@ -424,10 +425,13 @@ public class MainService extends IntentService {
     }
 
 
+    private void sendNotification(NotificationCompat.Builder mBuilder, int mid) {
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(mid, mBuilder.build());
+    }
 
 
-
-    private void sendNotificationByMessage(int mid, String title, String description) {
+    private void sendSimpleNotification(int mid, String title, String description) {
         /* Actions callbacks */
         /*Intent cancelIntent = new Intent(this, MainService.class);
         cancelIntent.putExtra(MainService.SWITCH, MainService.REMOVETODAYNOTIF);
