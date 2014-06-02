@@ -119,6 +119,49 @@ public class StorageDB extends SQLiteOpenHelper {
         String where = UniqTable.COLUMN_NAME_TYPE + " = " + TYPE_POPUP + " AND " +
                 UniqTable.COLUMN_NAME_VAL12 + " = " + PopupEntryParcel.POPUP_ACTION_SUBMIT;
 
+        String order = UniqTable.COLUMN_NAME_VAL13 + " ASC";
+
+        Cursor cursor = db.query(
+                UniqTable.TABLE_NAME,       // The table to query
+                projection,                 // The columns to return
+                where,                      // The columns for the WHERE clause
+                null,                       // The values for the WHERE clause
+                null,                       // don't group the rows
+                null,                       // don't filter by row groups
+                order                       // The sort order
+        );
+
+        cursor.moveToFirst();
+        while (cursor.isAfterLast() == false) {
+            PopupEntryParcel pe = new PopupEntryParcel();
+
+            pe.phraseset = cursor.getInt(cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL2));
+            pe.phraseanswer = cursor.getInt(cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL5));
+            pe.daterefer = cursor.getLong(cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL13));
+
+            results.add(pe);
+
+            cursor.moveToNext();
+        }
+
+        db.close();
+
+        return results.toArray(new PopupEntryParcel[results.size()]);
+    }
+
+    public PopupEntryParcel[] getAnsweredPopupEntries(long today, long yesterday) {
+        ArrayList<PopupEntryParcel> results = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+
+        String[] projection = {
+                UniqTable.COLUMN_NAME_VAL2,
+                UniqTable.COLUMN_NAME_VAL5,
+                UniqTable.COLUMN_NAME_VAL13
+        };
+
+        String where = UniqTable.COLUMN_NAME_TYPE + " = " + TYPE_POPUP + " AND " +
+                UniqTable.COLUMN_NAME_VAL12 + " = " + PopupEntryParcel.POPUP_ACTION_SUBMIT;
+
         String order = UniqTable.COLUMN_NAME_VAL15 + " ASC";
 
         Cursor cursor = db.query(

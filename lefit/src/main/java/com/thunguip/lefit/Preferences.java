@@ -21,6 +21,8 @@ public class Preferences {
     public static final int PERSONSTYLE_MODERATE    =  2;
     public static final int PERSONSTYLE_INTENSE     =  3;
 
+    public static final int VERSIONINGVERIFICATION  =  1;
+
     /* Prefrences File */
     public static final String  PREFS_NAME                  = "MainPrefs";
     public static final int     PREFS_MODE                  = Context.MODE_PRIVATE | Context.MODE_MULTI_PROCESS;
@@ -264,6 +266,13 @@ public class Preferences {
             now.set(Calendar.MILLISECOND, 0);
 
             return now.getTimeInMillis();
+        }
+
+        public static long getYesterdayDate() {
+            Calendar yesterday = Calendar.getInstance();
+            yesterday.setTimeInMillis(getTodayDate());
+            yesterday.add(Calendar.DAY_OF_MONTH, -1);
+            return yesterday.getTimeInMillis();
         }
 
 

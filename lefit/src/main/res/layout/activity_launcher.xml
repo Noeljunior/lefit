@@ -7,32 +7,12 @@
 
     android:background="@color/actionbar_bg" >
 
-    <!--<RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/button"
-            android:onClick="getItems"
-            android:text="Get Items" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TestBC"
-            android:id="@+id/button3"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/button"
-            android:onClick="testBroadcast" />
-    </RelativeLayout> -->
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:background="#43555555" >
+        android:background="#43555555"
+        android:visibility="gone">
 
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -70,7 +50,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
-        android:background="@color/background">
+        android:background="@color/background"
+        android:fitsSystemWindows="true">
 
         <ListView
             android:layout_width="fill_parent"
@@ -86,7 +67,8 @@
             android:stackFromBottom="false"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:layout_gravity="top" />
+            android:layout_gravity="top"
+            android:fitsSystemWindows="true" />
     </FrameLayout>
 
 </LinearLayout>

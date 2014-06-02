@@ -1,7 +1,6 @@
 package com.thunguip.lefit;
 
 
-import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -18,8 +17,7 @@ public class Decision {
     private Preferences preferences;
 
     public static final int CONTEXT_NOTIFICATION            = 0;
-    public static final int CONTEXT_POSTPONEDNOTIFICATION   = 1;
-    public static final int CONTEXT_LVITEM                  = 2;
+    public static final int CONTEXT_LVITEM                  = 1;
 
     public Decision(Context context) {
         this.context = context;
@@ -44,48 +42,6 @@ public class Decision {
             mp.title = 1;
         }
 
-        /* Select which phrase set, min, max and default */
-        if (whichProfile() == -1) { /* The first time */
-            mp.phraseset = 0;
-            mp.minphrase = 0;
-
-            TypedArray ids = context.getResources().obtainTypedArray(R.array.phrases);
-            int phraseid = ids.getResourceId(mp.phraseset, -1);
-            ids.recycle();
-
-            mp.maxphrase = context.getResources().getStringArray(phraseid).length - 1;
-            mp.defphrase = 1;
-        }
-        else { /* Not the first time, get the prase set based on formula */
-            if (whichProfile() == 0)
-                mp.phraseset = 1;
-            else
-                mp.phraseset = 2;
-
-            // TODO get min, max and default
-        }
-
-        /* Select dailly message */
-        if (isFirstTime() || (preferences.isShowDaillyMessage() == false)) {
-            /* Do not show if it is the first time or if the user ask to hide those messages */
-            mp.showmessage = 0;
-        }
-        else { /* Else, show the messages */
-            mp.showmessage = 1;
-
-            // TODO get message set/subset based on how many days does the person answered
-            // TODO get message set/subset based on how many times did the person see the message
-        }
-
-        /* Select if this popup can be postponed or not */
-        if (!isClickedOnLvItem(clickedcontext) && canPostpone()) {
-            mp.showpostpone = 1;
-        }
-        else { /* It was clicked on LvItem or it is too closed to next day notification,
-                    else cannot be postponed */
-            mp.showpostpone = 0;
-        }
-
         /* Get refer date */
         if (isClickedOnLvItem(clickedcontext)) {
             mp.referdate = refer;
@@ -100,10 +56,143 @@ public class Decision {
             mp.referdate = Preferences.TimeHelper.getTodayDate();
         }
 
+
+
+        /* Select which phrase set, min, max and default */
+        int profile = whichProfile();
+
+        if (profile == -1)
+            mp.phraseset = 0;
+        else if (profile == 0)
+            mp.phraseset = 1;
+        else
+            mp.phraseset = 2;
+
+        Log.d("Decision","PROFILE: " + profile);
+
+        PopupEntryParcel peps[] = new StorageDB(context).getAnsweredPopupEntries();
+
+        TypedArray ids = context.getResources().obtainTypedArray(R.array.phrases);
+        int phraseid = ids.getResourceId(mp.phraseset, -1);
+        ids.recycle();
+        int phrasecount = context.getResources().getStringArray(phraseid).length;
+
+
+        int countuntilnow = 0;
+
+        for (PopupEntryParcel pep : peps) {
+            if (pep.daterefer < refer)
+                countuntilnow++;
+            else
+                break;
+        }
+
+        switch (countuntilnow) {
+            case 0:
+                mp.minphrase = 0;
+                mp.defphrase = 1;
+                mp.maxphrase = phrasecount -1;
+                break;
+            case 1:
+                switch (preferences.getPersonStyle()) {
+                    case Preferences.PERSONSTYLE_SEDENTARY:
+                        mp.minphrase = 0;
+                        mp.defphrase = 1;
+                        mp.maxphrase = 3;
+                        break;
+                    case Preferences.PERSONSTYLE_ACTIVE:
+                        mp.minphrase = 2;
+                        mp.defphrase = 3;
+                        mp.maxphrase = 5;
+                        break;
+                    case Preferences.PERSONSTYLE_MODERATE:
+                        mp.minphrase = 4;
+                        mp.defphrase = 5;
+                        mp.maxphrase = 7;
+                        break;
+                    case Preferences.PERSONSTYLE_INTENSE:
+                        mp.minphrase = 6;
+                        mp.defphrase = 7;
+                        mp.maxphrase = 9;
+                        break;
+                }
+                break;
+            default:
+                int x = peps[countuntilnow - 1].phraseanswer;
+                mp.minphrase = x - 1;
+                mp.defphrase = x;
+                mp.maxphrase = x + 2;
+
+                if (mp.minphrase < 0) {
+                    mp.maxphrase = mp.maxphrase - mp.minphrase;
+                    mp.minphrase = 0;
+                }
+                else if (mp.maxphrase >= phrasecount) {
+                    mp.minphrase = mp.minphrase - (mp.maxphrase - phrasecount + 1);
+                    mp.maxphrase = phrasecount - 1;
+                }
+
+                break;
+        }
+
+        /* Select dailly message */
+        if (isFirstTime() || (preferences.isShowDaillyMessage() == false)) {
+            /* Do not show if it is the first time or if the user ask to hide those messages */
+            mp.showmessage = 0;
+        }
+        else { /* Else, show the messages */
+            mp.showmessage = 1;
+            mp.messageset = 0;
+
+            // get message set/subset based on how many times did the person see the message?
+
+            /* Based on how many answeres already done */
+            int totalansered = (new StorageDB(context).getAnsweredPopupEntries()).length;
+
+
+            ids = context.getResources().obtainTypedArray(R.array.messages);
+            int messageids = ids.getResourceId(mp.messageset, -1);
+            ids.recycle();
+            ids = context.getResources().obtainTypedArray(messageids);
+            int msgcount = ids.length();
+            ids.recycle();
+
+
+            mp.messagesubset = totalansered - 1;
+
+            mp.messagesubset = mp.messagesubset < 0 ? 0 : mp.messagesubset;
+            mp.messagesubset = mp.messagesubset >= msgcount ? mp.messagesubset % msgcount : mp.messagesubset;
+        }
+
+        /* Select if this popup can be postponed or not */
+        if (!isClickedOnLvItem(clickedcontext) && canPostpone()) {
+            mp.showpostpone = 1;
+        }
+        else { /* It was clicked on LvItem or it is too closed to next day notification,
+                    else cannot be postponed */
+            mp.showpostpone = 0;
+        }
+
         return mp;
     }
 
     public NotificationCompat.Builder getNotificationBuilderByContext(boolean fireAlarms) {
+        /* Is, by context, needed to fire notification? */
+        PopupEntryParcel[] peps = new StorageDB(context).getAnsweredPopupEntries();
+
+        long checktime = Preferences.TimeHelper.getTodayDate();
+        if (Preferences.TimeHelper.getTodayTime() < preferences.getNotificationTime()) {
+            checktime = Preferences.TimeHelper.getYesterdayDate();
+        }
+
+        for (PopupEntryParcel pep : peps) {
+            if (Preferences.TimeHelper.isSameDay(pep.daterefer, checktime)) {
+                /* Abort notification */
+                return null;
+            }
+        }
+
+
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
         mBuilder.setSmallIcon(R.drawable.ic_stat);
 

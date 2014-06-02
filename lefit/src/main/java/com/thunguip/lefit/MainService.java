@@ -132,24 +132,12 @@ public class MainService extends IntentService {
         switch (as) {
             case ALARMID_REPEATED:
                 Log.d("MainService", "HANDLEALARM: ALARMID_REPEATED");
-                /* TODO set notification's title and descritions based on something */
-                /*String title = "Como foi o seu dia?";
-                String description = "Toque para registar como foi o seu dia.";
 
-
-                sendNotificationByMessage(NOTIFID_MAIN, title, description);*/
                 sendNotification(new Decision(this).getNotificationBuilderByContext(true), NOTIFID_MAIN);
                 return;
             case ALARMID_POSTPONED:
                 Log.d("MainService", "HANDLEALARM: ALARMID_POSTPONED");
-                /* TODO get last postponed  */
 
-                /* TODO check if refer date is older then yerterday  */
-
-
-                /*sendNotificationByMessage(NOTIFID_MAIN,
-                        "Como foi o seu dia ontem?",
-                        "Toque para registar como foi o seu dia de ontem.");*/
                 sendNotification(new Decision(this).getNotificationBuilderByContext(true), NOTIFID_MAIN);
                 return;
             case ALARMID_CLEAN:
@@ -205,12 +193,12 @@ public class MainService extends IntentService {
         try {
             messenger.send(msg);
         } catch (RemoteException e) {
-            Log.i("ERROR", "Error send lv items back");
+            Log.i("ERROR", "Error sending lv items back");
         }
     }
 
     private void addAnswerToDB(PopupEntryParcel pep) {
-        Log.d("MainService", "NewPEP: " + pep.toString());
+        //Log.d("MainService", "NewPEP: " + pep.toString());
 
         switch (pep.action) {
             case PopupEntryParcel.POPUP_ACTION_SUBMIT:
@@ -322,25 +310,6 @@ public class MainService extends IntentService {
                     PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                     PackageManager.DONT_KILL_APP);
 
-
-
-            /*Log.d("MainService", "CHECKALARMSETTINGS | TIME: " +
-                    Preferences.TimeHelper.toString(Preferences.TimeHelper.getNextByTime(preferences.getNotificationTime()))
-                    + "(" + Preferences.TimeHelper.getNextByTime(preferences.getNotificationTime()) + ")");
-            Log.d("MainService", "CHECKALARMSETTINGS | INTERVAL: " + Preferences.TimeHelper.toString(preferences.getNotificationInterval())
-                    + "(" + preferences.getNotificationInterval() + ")");
-
-            Log.d("MainService", "CHECKALARMSETTINGS | POSTDELAY: " + Preferences.TimeHelper.toString(preferences.getPostponeDelay())
-                    + "(" + preferences.getPostponeDelay() + ")");
-
-            Log.d("MainService", "CHECKALARMSETTINGS | CLEANGAP: " + Preferences.TimeHelper.toString(Preferences.TimeHelper.getNextByTime(
-                    preferences.getNotificationTime() - preferences.getNotificationCleanGap()))
-                    + "(" + Preferences.TimeHelper.getNextByTime(
-                    preferences.getNotificationTime() - preferences.getNotificationCleanGap()) + ")");
-
-            Log.d("MainService", "CHECKALARMSETTINGS | CLEANGAP: " + Preferences.TimeHelper.toString(preferences.getNotificationCleanGap()) +
-                    "(" + preferences.getNotificationCleanGap() + ")");
-            Log.d("MainService", "TEST " + Preferences.TimeHelper.getByTime(0, 0) + " :: " + Preferences.TimeHelper.toString(0));*/
         }
         else {
             /* Disable notifications alarms */
@@ -382,48 +351,51 @@ public class MainService extends IntentService {
         PopupEntryParcel[] entries = database.getAnsweredPopupEntries();
         PopupEntryParcel pep;
 
-        long startDate;
-
         if (preferences.getPersonStyle() == Preferences.PERSONSTYLE_NOTDEFINED) {
-            startDate = Preferences.TimeHelper.getTodayDate();
+            items.add(new LvItemParcel(LvItemParcel.Type.ITEM_UNFILLED,
+                    R.drawable.ic_questionmark,
+                    getResources().getString(R.string.firstdaylvitem),
+                    "",
+                    iterator.getTimeInMillis()));
+
         }
         else {
-            startDate = preferences.getStartDate();
-        }
+            long startDate = preferences.getStartDate();
 
-        while (iterator.getTimeInMillis() >= startDate) {
-            if ((pep = PopupEntryParcel.findByDay(entries, iterator)) != null) { // Answered day
-                // Get logo drwable id
-                TypedArray ids = getResources().obtainTypedArray(R.array.phraseicons);
-                int logoid = ids.getResourceId(pep.phraseanswer, -1);
-                ids.recycle();
-                // Get phrase string
-                ids = getResources().obtainTypedArray(R.array.phrases);
-                int phraseid = ids.getResourceId(pep.phraseset, -1);
-                ids.recycle();
-                String phrase = getResources().getStringArray(phraseid)[pep.phraseanswer];
+            while (iterator.getTimeInMillis() >= startDate) {
+                if ((pep = PopupEntryParcel.findByDay(entries, iterator)) != null) { // Answered day
+                    // Get logo drwable id
+                    TypedArray ids = getResources().obtainTypedArray(R.array.phraseicons);
+                    int logoid = ids.getResourceId(pep.phraseanswer, -1);
+                    ids.recycle();
+                    // Get phrase string
+                    ids = getResources().obtainTypedArray(R.array.phrases);
+                    int phraseid = ids.getResourceId(pep.phraseset, -1);
+                    ids.recycle();
+                    String phrase = getResources().getStringArray(phraseid)[pep.phraseanswer];
 
-                items.add(new LvItemParcel(LvItemParcel.Type.ITEM_FILLED,
-                        logoid,
-                        phrase,
-                        dateFormat.format(iterator.getTime())));
-            }
-            else { // Unanswered day
-                items.add(new LvItemParcel(LvItemParcel.Type.ITEM_UNFILLED,
-                        R.drawable.ic_questionmark, "Clique para preencher",
-                        dateFormat.format(iterator.getTime()),
-                        iterator.getTimeInMillis()));
-            }
-            iterator.add(Calendar.DAY_OF_MONTH, -1);
+                    items.add(new LvItemParcel(LvItemParcel.Type.ITEM_FILLED,
+                            logoid,
+                            phrase,
+                            dateFormat.format(iterator.getTime())));
+                }
+                else { // Unanswered day
+                    items.add(new LvItemParcel(LvItemParcel.Type.ITEM_UNFILLED,
+                            R.drawable.ic_questionmark, "Clique para preencher",
+                            dateFormat.format(iterator.getTime()),
+                            iterator.getTimeInMillis()));
+                }
+                iterator.add(Calendar.DAY_OF_MONTH, -1);
 
-            if (iterator.getTimeInMillis() >= startDate && iterator.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-                SimpleDateFormat sepdateFormat = new SimpleDateFormat("d 'de' MMMM");
-                Calendar cloned = (Calendar) iterator.clone();
-                String text = " a " + sepdateFormat.format(cloned.getTime());
-                cloned.add(Calendar.DAY_OF_MONTH, -6);
-                text = "De " + sepdateFormat.format(cloned.getTime()) + text;
+                if (iterator.getTimeInMillis() >= startDate && iterator.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                    SimpleDateFormat sepdateFormat = new SimpleDateFormat("d 'de' MMMM");
+                    Calendar cloned = (Calendar) iterator.clone();
+                    String text = " a " + sepdateFormat.format(cloned.getTime());
+                    cloned.add(Calendar.DAY_OF_MONTH, -6);
+                    text = "De " + sepdateFormat.format(cloned.getTime()) + text;
 
-                items.add(new LvItemParcel(LvItemParcel.Type.SEPRATOR, text));
+                    items.add(new LvItemParcel(LvItemParcel.Type.SEPRATOR, text));
+                }
             }
         }
 
@@ -432,6 +404,10 @@ public class MainService extends IntentService {
 
 
     private void sendNotification(NotificationCompat.Builder mBuilder, int mid) {
+        if (mBuilder == null) {
+            MainService.sendIntent(this, MainService.ALARM, MainService.ALARMID_CLEAN);
+            return;
+        }
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(mid, mBuilder.build());
     }
