@@ -77,6 +77,10 @@
 
     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
+    <style name="ScrollListsMargin">
+        <item name="android:layout_marginTop">0dp</item>
+        <item name="android:layout_marginBottom">0dp</item>
+    </style>
 
     <!-- - - - - - ActionBar Widgets Styles Definitions - - - - - -->
     <style name="LeFitBlue.ActionBar.Solid" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">

@@ -5,62 +5,17 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     tools:context=".LauncherActivity"
 
-    android:background="@color/actionbar_bg" >
+    android:background="@color/background" >
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:background="#43555555"
-        android:visibility="gone">
 
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_gravity="center"
-            android:padding="10dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Title"
-                android:id="@+id/textView3"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:textColor="@color/lighttext"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Description"
-                android:id="@+id/textView6"
-                android:layout_below="@+id/textView3"
-                android:textColor="@color/lighttext"
-                android:gravity="center_vertical"
-                android:clickable="true"
-                android:layout_marginTop="10dp" />
-        </RelativeLayout>
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal"
-        android:background="@color/background"
-        android:fitsSystemWindows="true">
 
         <ListView
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:id="@+id/lvcalendar"
             android:dividerHeight="10dp"
             android:divider="#00ffffff"
             android:smoothScrollbar="true"
-            android:clipToPadding="false"
             android:scrollbarThumbVertical="@drawable/scrollbarstyle"
             android:drawSelectorOnTop="false"
             android:scrollingCache="true"
@@ -68,7 +23,10 @@
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:layout_gravity="top"
-            android:fitsSystemWindows="true" />
-    </FrameLayout>
+            android:clipToPadding="false"
+            android:fitsSystemWindows="true"
+            style="@style/ScrollListsMargin"
+             />
+
 
 </LinearLayout>

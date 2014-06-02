@@ -17,6 +17,8 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
+import com.readystatesoftware.systembartint.SystemBarTintManager;
+
 import java.util.Calendar;
 
 public class DebugActivity extends Activity {
@@ -29,6 +31,10 @@ public class DebugActivity extends Activity {
         ActionBar actionBar = getActionBar();
 
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+        tintManager.setStatusBarTintEnabled(true);
+        tintManager.setTintResource(R.color.actionbar_bg);
     }
 
 

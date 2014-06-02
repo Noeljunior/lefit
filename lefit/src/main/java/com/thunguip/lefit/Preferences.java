@@ -21,7 +21,8 @@ public class Preferences {
     public static final int PERSONSTYLE_MODERATE    =  2;
     public static final int PERSONSTYLE_INTENSE     =  3;
 
-    public static final int VERSIONINGVERIFICATION  =  1;
+    public static final int     VERSIONINGVERIFICATION  =  1;
+    public static final String  PREFS_VERVERIF          = "MAINPREFES.PREFS_VERVERIF";
 
     /* Prefrences File */
     public static final String  PREFS_NAME                  = "MainPrefs";
@@ -54,6 +55,14 @@ public class Preferences {
     public Preferences(Context context) {
         this.context = context;
         this.settings = context.getSharedPreferences(PREFS_NAME, PREFS_MODE);
+
+        /* Verify if it is to clean everything */
+        if (settings.getInt(PREFS_VERVERIF, -1) < VERSIONINGVERIFICATION) {
+            /* Clean everything */
+            reset();
+            commitPrefInt(PREFS_VERVERIF, VERSIONINGVERIFICATION);
+            new StorageDB(context).resetDataBase();
+        }
     }
 
 
