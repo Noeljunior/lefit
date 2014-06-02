@@ -103,7 +103,7 @@ public class Decision {
         return mp;
     }
 
-    public NotificationCompat.Builder getNotificationBuilderByContext() {
+    public NotificationCompat.Builder getNotificationBuilderByContext(boolean fireAlarms) {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
         mBuilder.setSmallIcon(R.drawable.ic_stat);
 
@@ -128,6 +128,7 @@ public class Decision {
         }
         mBuilder.setContentTitle(context.getResources().getStringArray(R.array.titles)[strid]);
         mBuilder.setContentText(context.getResources().getStringArray(R.array.notifdesc)[strid]);
+        mBuilder.setTicker(context.getResources().getStringArray(R.array.titles)[strid]);
 
         /* Select if can be postponed */
         if (canPostpone()) {
@@ -145,6 +146,11 @@ public class Decision {
         }
 
         /* Select if it is to update or to launch new */
+        if (!fireAlarms) {
+            mBuilder.setOnlyAlertOnce(true);
+            mBuilder.setTicker(null);
+        }
+
 
         return mBuilder;
     }
@@ -160,8 +166,9 @@ public class Decision {
         return Preferences.TimeHelper.getTodayTime() < preferences.getNotificationTime();
     }
     public boolean canPostpone() {
-        return Preferences.TimeHelper.getTodayTime() <
-                (preferences.getNotificationTime() - preferences.getNotificationCleanGap() - preferences.getPostponeDelay());
+        return (Preferences.TimeHelper.getTodayTime() <
+                (preferences.getNotificationTime() - preferences.getNotificationCleanGap() - preferences.getPostponeDelay())) ||
+                (Preferences.TimeHelper.getTodayTime() >= preferences.getNotificationTime());
     }
     public int whichProfile() {
         if (preferences.getPersonStyle() == Preferences.PERSONSTYLE_SEDENTARY ||

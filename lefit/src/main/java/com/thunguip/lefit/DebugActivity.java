@@ -63,8 +63,8 @@ public class DebugActivity extends Activity {
     
 
 
-    public void WriteItem(View view) {
-
+    public void updateNotif(View view) {
+        MainService.sendIntent(this, MainService.ALARM, MainService.ALARMID_RENOTIF);
 
     }
 

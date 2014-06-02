@@ -43,20 +43,20 @@
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="Update Notification (simul alarm renotif)"
+                    android:id="@+id/btwrite"
+                    android:onClick="updateNotif"
+                    android:background="@drawable/roundedbg"
+                    android:textColor="@color/view_fg_light"
+                    android:layout_margin="5dp" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:text="Clear All databases"
                     android:id="@+id/button3"
                     android:layout_gravity="center_horizontal"
                     android:onClick="clearAllDb"
-                    android:background="@drawable/roundedbg"
-                    android:textColor="@color/view_fg_light"
-                    android:layout_margin="5dp" />
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Set init date"
-                    android:id="@+id/button4"
-                    android:layout_gravity="center_horizontal"
-                    android:onClick="setStartDate"
                     android:background="@drawable/roundedbg"
                     android:textColor="@color/view_fg_light"
                     android:layout_margin="5dp" />
@@ -75,10 +75,9 @@
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Add Item to DB"
-                    android:id="@+id/btwrite"
-                    android:layout_gravity="center_horizontal"
-                    android:onClick="WriteItem"
+                    android:text="Set init date"
+                    android:id="@+id/button4"
+                    android:onClick="setStartDate"
                     android:background="@drawable/roundedbg"
                     android:textColor="@color/view_fg_light"
                     android:layout_margin="5dp" />

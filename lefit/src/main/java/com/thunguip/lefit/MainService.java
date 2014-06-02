@@ -36,8 +36,6 @@ public class MainService extends IntentService {
 
     public static final String ALARM                = "com.thunguip.lefit.mainservice.SWITCH.ALARM";
 
-    public static final String ENABLENOTIFICATIONS  = "com.thunguip.lefit.mainservice.SWITCH.ENABLENOTIFICATIONS";
-    public static final String DISABLENOTIFICATIONS = "com.thunguip.lefit.mainservice.SWITCH.DISABLENOTIFICATIONS";
     public static final String NOTIFICATIONACTION   = "com.thunguip.lefit.mainservice.SWITCH.NOTIFICATIONACTION";
     public static final String NOTIFCATION_POSTPONE = "com.thunguip.lefit.mainservice.SWITCH.NOTIFICATIONACTION.NOTIFCATION_POSTPONE";
     public static final String NOTIFCATION_OPNEN    = "com.thunguip.lefit.mainservice.SWITCH.NOTIFICATIONACTION.NOTIFCATION_OPNEN";
@@ -57,8 +55,7 @@ public class MainService extends IntentService {
     public static final int ALARMID_REPEATED    = 1;
     public static final int ALARMID_POSTPONED   = 2;
     public static final int ALARMID_CLEAN       = 3;
-    public static final int ALARMID_MIDNIGHT    = 3;
-    public static final int ALARMID_REMPOSTPONE = 3;
+    public static final int ALARMID_RENOTIF     = 4;
 
     /* Notification Identifiers */
     public static final int NOTIFID_MAIN        = 1;
@@ -109,12 +106,6 @@ public class MainService extends IntentService {
                 return;
 
             /* Notification */
-            /*case ENABLENOTIFICATIONS:
-                enableNotifications();
-                return;
-            case DISABLENOTIFICATIONS:
-                disableNotifications();
-                return;*/
             case NOTIFICATIONACTION:
                 handleNotificationAction(intent.getStringExtra(NOTIFICATIONACTION));
                 return;
@@ -147,7 +138,7 @@ public class MainService extends IntentService {
 
 
                 sendNotificationByMessage(NOTIFID_MAIN, title, description);*/
-                sendNotification(new Decision(this).getNotificationBuilderByContext(), NOTIFID_MAIN);
+                sendNotification(new Decision(this).getNotificationBuilderByContext(true), NOTIFID_MAIN);
                 return;
             case ALARMID_POSTPONED:
                 Log.d("MainService", "HANDLEALARM: ALARMID_POSTPONED");
@@ -159,7 +150,7 @@ public class MainService extends IntentService {
                 /*sendNotificationByMessage(NOTIFID_MAIN,
                         "Como foi o seu dia ontem?",
                         "Toque para registar como foi o seu dia de ontem.");*/
-                sendNotification(new Decision(this).getNotificationBuilderByContext(), NOTIFID_MAIN);
+                sendNotification(new Decision(this).getNotificationBuilderByContext(true), NOTIFID_MAIN);
                 return;
             case ALARMID_CLEAN:
                 Log.d("MainService", "HANDLEALARM: ALARMID_CLEAN");
@@ -167,6 +158,10 @@ public class MainService extends IntentService {
                 AlarmerManager.cancelAlarm(this, ALARMID_POSTPONED);
                 /* Remove notification, if any */
                 removeNotificationByID(NOTIFID_MAIN);
+                return;
+
+            case ALARMID_RENOTIF:
+                sendNotification(new Decision(this).getNotificationBuilderByContext(false), NOTIFID_MAIN);
                 return;
 
             default:
@@ -215,32 +210,63 @@ public class MainService extends IntentService {
     }
 
     private void addAnswerToDB(PopupEntryParcel pep) {
-        /* TODO Check if the answer was from a popup which may had a notification and remove that notification */
-        if (pep.action != PopupEntryParcel.POPUP_ACTION_IGNORE) {
-            removeNotificationByID(NOTIFID_MAIN);
-        }
-
-        StorageDB db = new StorageDB(this);
-        db.addEntry(pep);
-
         Log.d("MainService", "NewPEP: " + pep.toString());
 
         switch (pep.action) {
             case PopupEntryParcel.POPUP_ACTION_SUBMIT:
                 sendBroadcast(BC_UPDATEITEMS);
+
+
+                /* Remove notifications if already answered */
+                if (Preferences.TimeHelper.getTodayTime() < preferences.getNotificationTime()) {
+                    Calendar yesterday = Calendar.getInstance();
+                    yesterday.setTimeInMillis(Preferences.TimeHelper.getTodayDate());
+                    yesterday.add(Calendar.DAY_OF_MONTH, -1);
+
+                    if (Preferences.TimeHelper.isSameDay(pep.daterefer, yesterday.getTimeInMillis())) {
+                        MainService.sendIntent(this, MainService.ALARM, MainService.ALARMID_CLEAN);
+                    }
+
+                } else if (Preferences.TimeHelper.isSameDay(pep.daterefer, Preferences.TimeHelper.getTodayDate())) {
+                    MainService.sendIntent(this, MainService.ALARM, MainService.ALARMID_CLEAN);
+                }
+
+                /* Set the StartDate */
+                if (pep.title == 0) {
+                    /* The person just answered the first time, so set the start date by now */
+                    preferences.setStartDate(Preferences.TimeHelper.getTodayDate());
+
+                    preferences.setPersonStyle(pep.phraseanswer);
+                }
                 break;
+
+            case PopupEntryParcel.POPUP_ACTION_CANCEL:
+                /* Remove notifications if already answered */
+                if (Preferences.TimeHelper.getTodayTime() < preferences.getNotificationTime()) {
+                    Calendar yesterday = Calendar.getInstance();
+                    yesterday.setTimeInMillis(Preferences.TimeHelper.getTodayDate());
+                    yesterday.add(Calendar.DAY_OF_MONTH, -1);
+
+                    if (Preferences.TimeHelper.isSameDay(pep.daterefer, yesterday.getTimeInMillis())) {
+                        MainService.sendIntent(this, MainService.ALARM, MainService.ALARMID_CLEAN);
+                    }
+
+                } else if (Preferences.TimeHelper.isSameDay(pep.daterefer, Preferences.TimeHelper.getTodayDate())) {
+                    MainService.sendIntent(this, MainService.ALARM, MainService.ALARMID_CLEAN);
+                }
+                break;
+
             case PopupEntryParcel.POPUP_ACTION_POSTPONE:
+                removeNotificationByID(NOTIFID_MAIN);
                 setPostponeNotification();
                 break;
-            default:;
+
+
+            default:
         }
 
-        if (pep.title == 0 && pep.action == PopupEntryParcel.POPUP_ACTION_SUBMIT) {
-            /* The person just answered the first time, so set the start date by now */
-            preferences.setStartDate(Preferences.TimeHelper.getTodayDate());
-
-            preferences.setPersonStyle(pep.phraseanswer);
-        }
+        StorageDB db = new StorageDB(this);
+        db.addEntry(pep);
 
     }
 
@@ -267,26 +293,6 @@ public class MainService extends IntentService {
 
         startActivity(intent);
     }
-
-    /*private void enableNotifications() {
-        AlarmerManager.setRepeatingAlarm(this,
-                ALARMID_REPEATED,
-                preferences.getNotificationTime(),
-                preferences.getNotificationInterval());
-
-        AlarmerManager.setRepeatingAlarm(this,
-                ALARMID_CLEAN,
-                preferences.getNotificationTime() - preferences.getNotificationCleanGap(),
-                preferences.getNotificationInterval());
-    }
-
-    private void disableNotifications() {
-        AlarmerManager.cancelAlarm(this, ALARMID_REPEATED);
-        AlarmerManager.cancelAlarm(this, ALARMID_POSTPONED);
-        AlarmerManager.cancelAlarm(this, ALARMID_CLEAN);
-
-        removeNotificationByID(NOTIFID_MAIN);
-    }*/
 
     private void setPostponeNotification() {
         AlarmerManager.setRelativeAlarm(this,
@@ -426,44 +432,6 @@ public class MainService extends IntentService {
 
 
     private void sendNotification(NotificationCompat.Builder mBuilder, int mid) {
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(mid, mBuilder.build());
-    }
-
-
-    private void sendSimpleNotification(int mid, String title, String description) {
-        /* Actions callbacks */
-        /*Intent cancelIntent = new Intent(this, MainService.class);
-        cancelIntent.putExtra(MainService.SWITCH, MainService.REMOVETODAYNOTIF);
-        PendingIntent cancelPendingIntent = PendingIntent.getService(this, 0, cancelIntent, 0);*/
-
-        /* Result Action */
-        Intent resultIntent = new Intent(this, MainService.class);
-        resultIntent.putExtra(SWITCH, NOTIFICATIONACTION);
-        resultIntent.putExtra(NOTIFICATIONACTION, NOTIFCATION_OPNEN);
-        PendingIntent resultPendingIntent = PendingIntent.getService(this, NOTIFID_PIRESULT, resultIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-
-        /* Postpone Action */
-        Intent postponeIntent = new Intent(this, MainService.class);
-        postponeIntent.putExtra(SWITCH, NOTIFICATIONACTION);
-        postponeIntent.putExtra(NOTIFICATIONACTION, NOTIFCATION_POSTPONE);
-        PendingIntent postponePendingIntent = PendingIntent.getService(this, NOTIFID_PIPOSTPONE, postponeIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-
-
-        NotificationCompat.Builder mBuilder;
-        mBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_stat)
-                .setSound(Uri.parse(preferences.getNotificationSound()))
-                .setContentTitle(title)
-                .setContentText(description)
-                .setContentIntent(resultPendingIntent)
-                /*.addAction (R.drawable.ic_navigation_cancel, "Dispensar", cancelPendingIntent)*/
-                .addAction(R.drawable.ic_device_access_time, "Lembrar mais tarde", postponePendingIntent);
-
-        if (preferences.isNotificationVibrate()) {
-            mBuilder.setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_LIGHTS);
-        }
-
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(mid, mBuilder.build());
     }
