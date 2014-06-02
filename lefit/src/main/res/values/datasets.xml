@@ -14,6 +14,9 @@
         <!--  1 --> <item>Preencha o dia de hoje</item>
         <!--  2 --> <item>Preencha o dia de ontem</item>
     </string-array>
+    <string name="notifpostpone">Lembrar mais tarde</string>
+
+    <string name="firstdaylvitem">Defina o seu estilo de vida</string>>
 
     <!--  Phrases -->
     <array name="phrases">
