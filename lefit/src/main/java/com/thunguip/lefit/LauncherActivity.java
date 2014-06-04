@@ -186,7 +186,7 @@ public class LauncherActivity extends ActionBarActivity {
                 Log.d("LauncherActivity", "Ringtone selected: " + uri);
             }
             else {
-                preferences.setNotificationSound(uri.toString());
+                preferences.setNotificationSound(null);
 
                 Log.d("LauncherActivity", "Ringtone selected: NULL");
             }
