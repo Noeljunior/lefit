@@ -198,7 +198,7 @@ public class MainService extends IntentService {
     }
 
     private void addAnswerToDB(PopupEntryParcel pep) {
-        //Log.d("MainService", "NewPEP: " + pep.toString());
+        Log.d("MainService", "NewPEP: " + pep.toString());
 
         switch (pep.action) {
             case PopupEntryParcel.POPUP_ACTION_SUBMIT:

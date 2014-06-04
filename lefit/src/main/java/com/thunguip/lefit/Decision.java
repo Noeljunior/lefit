@@ -50,23 +50,24 @@ public class Decision {
             Calendar cal = Calendar.getInstance();
             cal.setTimeInMillis(Preferences.TimeHelper.getTodayDate());
             cal.add(Calendar.DAY_OF_MONTH, -1);
-            mp.referdate = cal.getTimeInMillis();
+            refer = mp.referdate = cal.getTimeInMillis();
         }
         else {
-            mp.referdate = Preferences.TimeHelper.getTodayDate();
+            refer = mp.referdate = Preferences.TimeHelper.getTodayDate();
         }
 
 
 
         /* Select which phrase set, min, max and default */
         int profile = whichProfile();
+        mp.phraseset = profile + 1;
 
-        if (profile == -1)
+        /*if (profile == -1)
             mp.phraseset = 0;
         else if (profile == 0)
             mp.phraseset = 1;
         else
-            mp.phraseset = 2;
+            mp.phraseset = 2;*/
 
         Log.d("Decision","PROFILE: " + profile);
 
@@ -76,7 +77,6 @@ public class Decision {
         int phraseid = ids.getResourceId(mp.phraseset, -1);
         ids.recycle();
         int phrasecount = context.getResources().getStringArray(phraseid).length;
-
 
         int countuntilnow = 0;
 
