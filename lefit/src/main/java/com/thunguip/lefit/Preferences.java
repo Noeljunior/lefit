@@ -4,6 +4,7 @@ package com.thunguip.lefit;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.RingtoneManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -143,6 +144,11 @@ public class Preferences {
     public long getNotificationCleanGap() {
         return notificationCleanGap;
     }
+
+    public int getAndroidId() {
+        return Settings.Secure.ANDROID_ID.hashCode();
+    }
+
 
 
     /* Setters */

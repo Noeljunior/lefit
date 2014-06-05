@@ -74,8 +74,8 @@ public class DebugActivity extends Activity {
 
     }
 
-    public void ReadItems(View view) {
-
+    public void sendItems(View view) {
+        new UploaderDB(this).sendAllUnsent();
 
     }
 

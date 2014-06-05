@@ -8,7 +8,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.widget.Toast;
 
+import org.apache.http.message.BasicNameValuePair;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class StorageDB extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
@@ -190,6 +193,69 @@ public class StorageDB extends SQLiteOpenHelper {
         db.close();
 
         return results.toArray(new PopupEntryParcel[results.size()]);
+    }
+
+
+    /* Send stats to the google forms */
+
+    public ArrayList<List> getAllUnsent() {
+        SQLiteDatabase db = getReadableDatabase();
+
+        String[] projection = {
+                UniqTable.COLUMN_NAME_VAL2,
+                UniqTable.COLUMN_NAME_VAL5,
+                UniqTable.COLUMN_NAME_VAL13
+        };
+
+        String where = UniqTable.COLUMN_NAME_TYPE + " = " + TYPE_POPUP + " AND " +
+                UniqTable.COLUMN_NAME_SENT + " = " + SENT_FALSE;
+
+        String order = UniqTable.COLUMN_NAME_VAL15 + " ASC";
+
+        Cursor cursor = db.query(
+                UniqTable.TABLE_NAME,       // The table to query
+                null,                       // The columns to return
+                where,                      // The columns for the WHERE clause
+                null,                       // The values for the WHERE clause
+                null,                       // don't group the rows
+                null,                       // don't filter by row groups
+                null                        // The sort order
+        );
+
+        ArrayList<List> results = new ArrayList<>();
+
+        cursor.moveToFirst();
+        while (cursor.isAfterLast() == false) {
+            List item = new ArrayList();
+
+            item.add(new BasicNameValuePair(UploaderDB.FORM_DBVERSION, DATABASE_VERSION + ""));
+            item.add(new BasicNameValuePair(UploaderDB.FORM_TYPE,  cursor.getInt(cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_TYPE))  + ""));
+            item.add(new BasicNameValuePair(UploaderDB.FORM_ID,    cursor.getInt(cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_TYPE))  + ""));
+
+            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL1,  cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL1))  + ""));
+            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL2,  cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL2))  + ""));
+            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL3,  cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL3))  + ""));
+            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL4,  cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL4))  + ""));
+            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL5,  cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL5))  + ""));
+            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL6,  cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL6))  + ""));
+            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL7,  cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL7))  + ""));
+            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL8,  cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL8))  + ""));
+            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL9,  cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL9))  + ""));
+            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL10, cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL10)) + ""));
+            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL11, cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL11)) + ""));
+            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL12, cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL12)) + ""));
+            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL13, cursor.getLong(cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL13)) + ""));
+            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL14, cursor.getLong(cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL14)) + ""));
+            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL15, cursor.getLong(cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL15)) + ""));
+
+            results.add(item);
+
+            cursor.moveToNext();
+        }
+
+        db.close();
+
+        return results;
     }
 
 

@@ -8,7 +8,7 @@
     android:background="@color/actionbar_bg">
         <ScrollView
             android:layout_width="fill_parent"
-            android:layout_height="match_parent"
+            android:layout_height="fill_parent"
             android:background="@color/view_bg"
             android:clipToPadding="false"
             android:fitsSystemWindows="true"
@@ -28,7 +28,7 @@
                     android:id="@+id/button"
                     android:layout_gravity="center_horizontal"
                     android:onClick="showDialog"
-                    android:background="@drawable/roundedbg"
+                    android:background="@drawable/lvitembg_unfilled"
                     android:textColor="@color/view_fg_light"
                     android:layout_margin="5dp" />
 
@@ -39,7 +39,7 @@
                     android:id="@+id/button2"
                     android:layout_gravity="center_horizontal"
                     android:onClick="showNotification"
-                    android:background="@drawable/roundedbg"
+                    android:background="@drawable/lvitembg_unfilled"
                     android:textColor="@color/view_fg_light"
                     android:layout_margin="5dp" />
 
@@ -49,7 +49,7 @@
                     android:text="Update Notification (simul alarm renotif)"
                     android:id="@+id/btwrite"
                     android:onClick="updateNotif"
-                    android:background="@drawable/roundedbg"
+                    android:background="@drawable/lvitembg_unfilled"
                     android:textColor="@color/view_fg_light"
                     android:layout_margin="5dp" />
 
@@ -60,7 +60,7 @@
                     android:id="@+id/button3"
                     android:layout_gravity="center_horizontal"
                     android:onClick="clearAllDb"
-                    android:background="@drawable/roundedbg"
+                    android:background="@drawable/lvitembg_unfilled"
                     android:textColor="@color/view_fg_light"
                     android:layout_margin="5dp" />
 
@@ -71,7 +71,7 @@
                     android:id="@+id/button5"
                     android:layout_gravity="center_horizontal"
                     android:onClick="resetPreferences"
-                    android:background="@drawable/roundedbg"
+                    android:background="@drawable/lvitembg_unfilled"
                     android:textColor="@color/view_fg_light"
                     android:layout_margin="5dp" />
 
@@ -81,18 +81,18 @@
                     android:text="Set init date"
                     android:id="@+id/button4"
                     android:onClick="setStartDate"
-                    android:background="@drawable/roundedbg"
+                    android:background="@drawable/lvitembg_unfilled"
                     android:textColor="@color/view_fg_light"
                     android:layout_margin="5dp" />
 
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Read Items from DB"
+                    android:text="Send all unsent items to web form"
                     android:id="@+id/btread"
                     android:layout_gravity="center_horizontal"
-                    android:onClick="ReadItems"
-                    android:background="@drawable/roundedbg"
+                    android:onClick="sendItems"
+                    android:background="@drawable/lvitembg_unfilled"
                     android:textColor="@color/view_fg_light"
                     android:layout_margin="5dp" />
 
