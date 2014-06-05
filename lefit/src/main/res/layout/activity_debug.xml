@@ -4,12 +4,10 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:layout_gravity="bottom"
-    android:background="@color/actionbar_bg">
+    android:layout_gravity="bottom" >
         <ScrollView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="@color/view_bg"
             android:clipToPadding="false"
             android:fitsSystemWindows="true"
             >

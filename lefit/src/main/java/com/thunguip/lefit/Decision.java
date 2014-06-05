@@ -56,18 +56,9 @@ public class Decision {
             refer = mp.referdate = Preferences.TimeHelper.getTodayDate();
         }
 
-
-
         /* Select which phrase set, min, max and default */
         int profile = whichProfile();
         mp.phraseset = profile + 1;
-
-        /*if (profile == -1)
-            mp.phraseset = 0;
-        else if (profile == 0)
-            mp.phraseset = 1;
-        else
-            mp.phraseset = 2;*/
 
         Log.d("Decision","PROFILE: " + profile);
 

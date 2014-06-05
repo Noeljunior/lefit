@@ -54,15 +54,10 @@ public class UploaderDB {
 
     public void sendAllUnsent() {
         ArrayList<List> items = new StorageDB(context).getAllUnsent();
-
         final ArrayList<HttpPost> postclients = new ArrayList<>();
 
-        Log.d("UploaderDB", "Printing all items");
-
         for (List item : items) {
-            Log.d("UploaderDB", itemToString(item, 0));
-
-
+            // TODO get device ID and user ID
             item.add(new BasicNameValuePair(UploaderDB.FORM_DEVICEID,  "TESTDEVICEENV"));
             item.add(new BasicNameValuePair(UploaderDB.FORM_USERID,    "TESTUSERENV"));
 
@@ -70,12 +65,8 @@ public class UploaderDB {
                 HttpPost httppost = new HttpPost(URL_FORM);
                 httppost.setEntity(new UrlEncodedFormEntity(item));
                 postclients.add(httppost);
-
-                //new DefaultHttpClient().execute(httppost);
             }
             catch (IOException e) {}
-
-
         }
 
 

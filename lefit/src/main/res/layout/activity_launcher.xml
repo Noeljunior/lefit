@@ -1,32 +1,29 @@
-<LinearLayout xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+<LinearLayout
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     tools:context=".LauncherActivity"
 
-    android:background="@color/background" >
-
-
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
 
         <ListView
+            android:id="@+id/lvcalendar"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:id="@+id/lvcalendar"
-            android:dividerHeight="10dp"
-            android:divider="#00ffffff"
-            android:smoothScrollbar="true"
-            android:scrollbarThumbVertical="@drawable/scrollbarstyle"
-            android:drawSelectorOnTop="false"
-            android:scrollingCache="true"
-            android:stackFromBottom="false"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:layout_gravity="top"
             android:clipToPadding="false"
             android:fitsSystemWindows="true"
-            style="@style/ScrollListsMargin"
-             />
 
+            style="@style/ScrollListsMargin"
+            android:dividerHeight="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:divider="#00ffffff"
+
+            android:scrollbarThumbVertical="@drawable/scrollbarstyle"
+            android:layout_gravity="top"
+            android:listSelector="@android:color/transparent"
+            />
 
 </LinearLayout>
