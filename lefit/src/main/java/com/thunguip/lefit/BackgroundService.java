@@ -3,6 +3,9 @@ package com.thunguip.lefit;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.SystemClock;
 import android.util.Log;
 
 import org.apache.http.HttpResponse;
@@ -56,9 +59,17 @@ public class BackgroundService extends IntentService {
     }
 
     private void uploadItems() {
-        if (!canUpload()) {
-            Log.d(CNAME, "Upload items ABORTED due to postpone");
-            return;
+        NetworkInfo activeNetwork = ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        boolean thereAreItems = new StorageDB(this).countUnsetItems() > 0;
+
+        if (thereAreItems && !isConnected) { /* There are items to send but there is NO connection */
+            Log.d(CNAME, "Upload items ABORTED due to not connection");
+            MainService.setInternetChangeBroadcastReceiver(this, true);
+        }
+        else if (!thereAreItems) { /* There are no items to send, unsetting internetchange broadcast receiver */
+            Log.d(CNAME, "Upload items ABORTED due to no items to send");
+            MainService.setInternetChangeBroadcastReceiver(this, false);
         }
 
         int MAX_ERRORS = 3;
@@ -102,31 +113,21 @@ public class BackgroundService extends IntentService {
         }
 
         if (errorcount > 0){
-            MainService.sendIntent(this, MainService.CHECKINTERNETSTATE);
-            postponeUpload();
+            /* Set an alarm to check later */
+            AlarmerManager.setRelativeAlarm(this,
+                    MainService.ALARMID_POSTPONEUPLOAD,
+                    SystemClock.elapsedRealtime() + preferences.getUploadDelay());
+
+            MainService.setInternetChangeBroadcastReceiver(this, false);
+
             Log.d(CNAME, "Some erros occured: " + errorcount + " errors");
         }
         else {
             Log.d(CNAME, "All items were uploaded");
-            MainService.sendIntent(this, MainService.CHECKINTERNETSTATE);
+            MainService.setInternetChangeBroadcastReceiver(this, false);
         }
     }
 
-    public boolean canUpload() {
-        if (preferences.getUploadGap() <= Preferences.TimeHelper.getNow())
-            return true;
-        return false;
-    }
-
-    public static boolean canUploadContext(Context context) {
-        if (new Preferences(context).getUploadGap() <= Preferences.TimeHelper.getNow())
-            return true;
-        return false;
-    }
-
-    public void postponeUpload() {
-        preferences.setUploadGap(Preferences.TimeHelper.getNow() + preferences.getUploadDelay());
-    }
 
 
 
@@ -144,7 +145,6 @@ public class BackgroundService extends IntentService {
         }
         return 0;
     }
-
 
     private static String itemToString(List<BasicNameValuePair> item) {
         String out = "";

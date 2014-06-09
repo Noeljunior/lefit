@@ -43,7 +43,7 @@ public class MainService extends IntentService {
 
     public static final String CHECKALARMSETTINGS   = "com.thunguip.lefit.mainservice.SWITCH.CHECKALARMSETTINGS";
 
-    public static final String CHECKINTERNETSTATE   = "com.thunguip.lefit.mainservice.SWITCH.CHECKINTERNETSTATE";
+    //public static final String CHECKINTERNETSTATE   = "com.thunguip.lefit.mainservice.SWITCH.CHECKINTERNETSTATE";
 
 
     /* Broadcasts senders */
@@ -53,10 +53,11 @@ public class MainService extends IntentService {
     public static final String BC_UPDATEITEMS   = "com.thunguip.lefit.mainservice.BROADCAST.BC_UPDATEITEMS";
 
     /* Alarm Identifiers */
-    public static final int ALARMID_REPEATED    = 1;
-    public static final int ALARMID_POSTPONED   = 2;
-    public static final int ALARMID_CLEAN       = 3;
-    public static final int ALARMID_RENOTIF     = 4;
+    public static final int ALARMID_REPEATED        = 1;
+    public static final int ALARMID_POSTPONED       = 2;
+    public static final int ALARMID_CLEAN           = 3;
+    public static final int ALARMID_RENOTIF         = 4;
+    public static final int ALARMID_POSTPONEUPLOAD  = 5;
 
     /* Notification Identifiers */
     public static final int NOTIFID_MAIN        = 1;
@@ -120,10 +121,6 @@ public class MainService extends IntentService {
                 checkAlarmSettings();
                 return;
 
-            case CHECKINTERNETSTATE:
-                checkInternetState();
-                return;
-
 
             case DEBUG:
 
@@ -156,6 +153,10 @@ public class MainService extends IntentService {
 
             case ALARMID_RENOTIF:
                 sendNotification(new Decision(this).getNotificationBuilderByContext(false), NOTIFID_MAIN);
+                return;
+
+            case ALARMID_POSTPONEUPLOAD:
+                BackgroundService.sendIntent(this, BackgroundService.UPLOADITEMS);
                 return;
 
             default:
@@ -262,30 +263,9 @@ public class MainService extends IntentService {
         StorageDB db = new StorageDB(this);
         db.addEntry(pep);
 
-
-        sendIntent(this, CHECKINTERNETSTATE);
+        BackgroundService.sendIntent(this, BackgroundService.UPLOADITEMS);
 
     }
-
-    private void checkInternetState() {
-        NetworkInfo activeNetwork = ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-        boolean thereAreItems = new StorageDB(this).countUnsetItems() > 0;
-
-
-        /* Check if there are items to send */
-        if (thereAreItems && isConnected) { /* There are items to send and there is connection */
-            BackgroundService.sendIntent(this, BackgroundService.UPLOADITEMS);
-        }
-        else if (thereAreItems && !isConnected) { /* There are items to send but there is NO connection */
-            setInternetChangeBroadcastReceiver(true);
-        }
-        else if (!thereAreItems) {
-            /* There are no items to send, unsetting internetchange broadcast receiver */
-            setInternetChangeBroadcastReceiver(false);
-        }
-    }
-
 
     private void openPopupByRefer(long refer) {
         Intent intent = new Intent(this, PopupActivity.class);
@@ -360,13 +340,8 @@ public class MainService extends IntentService {
 
 
         /* Also check if there are thing to upload */
-        sendIntent(this, CHECKINTERNETSTATE);
+        BackgroundService.sendIntent(this, BackgroundService.UPLOADITEMS);
     }
-
-
-
-
-
 
 
     private LvItemParcel[] loadItemsFromDB() {
@@ -432,7 +407,6 @@ public class MainService extends IntentService {
         return items.toArray(new LvItemParcel[items.size()]);
     }
 
-
     private void sendNotification(NotificationCompat.Builder mBuilder, int mid) {
         if (mBuilder == null) {
             MainService.sendIntent(this, MainService.ALARM, MainService.ALARMID_CLEAN);
@@ -448,12 +422,12 @@ public class MainService extends IntentService {
 
 
     /* STATIC METHODS */
-    public void setInternetChangeBroadcastReceiver(boolean enable) {
+    public static void setInternetChangeBroadcastReceiver(Context context, boolean enable) {
         if (enable) {
             Log.d("MainService", "CheckInternetChangedBroadcast ENEABLED");
             /* Set the broadcast to true */
-            ComponentName receiver = new ComponentName(this, InternetChangeReceiver.class);
-            PackageManager pm = getPackageManager();
+            ComponentName receiver = new ComponentName(context, InternetChangeReceiver.class);
+            PackageManager pm = context.getPackageManager();
             pm.setComponentEnabledSetting(receiver,
                     PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                     PackageManager.DONT_KILL_APP);
@@ -462,8 +436,8 @@ public class MainService extends IntentService {
         else {
             Log.d("MainService", "CheckInternetChangedBroadcast DISABLE");
             /* Disable the broadcast */
-            ComponentName receiver = new ComponentName(this, InternetChangeReceiver.class);
-            PackageManager pm = getPackageManager();
+            ComponentName receiver = new ComponentName(context, InternetChangeReceiver.class);
+            PackageManager pm = context.getPackageManager();
             pm.setComponentEnabledSetting(receiver,
                     PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                     PackageManager.DONT_KILL_APP);
@@ -520,8 +494,7 @@ public class MainService extends IntentService {
             if (!intent.getAction().equals("android.net.conn.CONNECTIVITY_CHANGE"))
                 return;
 
-            if (BackgroundService.canUploadContext(context))
-                MainService.sendIntent(context, MainService.CHECKINTERNETSTATE);
+            BackgroundService.sendIntent(context, BackgroundService.UPLOADITEMS);
 
             Log.d("InternetChangeReceiver", "INTERNET STATE CHANGED");
         }
