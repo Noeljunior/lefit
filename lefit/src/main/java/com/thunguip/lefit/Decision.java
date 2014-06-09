@@ -220,8 +220,8 @@ public class Decision {
         }
 
         /* Set the notifications user preferences */
+        mBuilder.setSound(Uri.parse(preferences.getNotificationSound()));
         if (preferences.isNotificationVibrate()) {
-            mBuilder.setSound(Uri.parse(preferences.getNotificationSound()));
             mBuilder.setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_LIGHTS);
         }
 

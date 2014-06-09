@@ -186,7 +186,7 @@ public class LauncherActivity extends ActionBarActivity {
                 Log.d("LauncherActivity", "Ringtone selected: " + uri);
             }
             else {
-                preferences.setNotificationSound(null);
+                preferences.setNotificationSound("");
 
                 Log.d("LauncherActivity", "Ringtone selected: NULL");
             }
@@ -250,7 +250,8 @@ public class LauncherActivity extends ActionBarActivity {
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Som de notificação");
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Uri.parse(preferences.getNotificationSound()));
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI,
+                        preferences.getNotificationSound().equals("") ? null : Uri.parse(preferences.getNotificationSound()));
 
                 startActivityForResult(intent, ACTRES_SELECTSOUND);
 
