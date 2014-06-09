@@ -23,9 +23,17 @@ public class BackgroundService extends IntentService {
     public static final String SWITCH               = "com.thunguip.lefit.backgroundservice.SWITCH";
     public static final String UPLOADITEMS          = "com.thunguip.lefit.backgroundservice.SWITCH.UPLOADITEMS";
 
+    private Preferences preferences;
 
     public BackgroundService() {
         super(CNAME);
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        preferences = new Preferences(this);
     }
 
     @Override
@@ -48,13 +56,18 @@ public class BackgroundService extends IntentService {
     }
 
     private void uploadItems() {
+        if (!canUpload()) {
+            Log.d(CNAME, "Upload items ABORTED due to postpone");
+            return;
+        }
+
         int MAX_ERRORS = 3;
 
         StorageDB        database   = new StorageDB(this);
         ArrayList<List>  items      = database.getAllUnsent();
         final HttpClient httpclient = new DefaultHttpClient();
-        String           deviceid   = Preferences.getAndroidId();
-        String           userid     = new Preferences(this).getUserID();
+        String           deviceid   = Preferences.getAndroidId(this);
+        String           userid     = preferences.getUserID();
 
         Log.d(CNAME, "Will send " + items.size() + " items.");
 
@@ -90,12 +103,29 @@ public class BackgroundService extends IntentService {
 
         if (errorcount > 0){
             MainService.sendIntent(this, MainService.CHECKINTERNETSTATE);
+            postponeUpload();
             Log.d(CNAME, "Some erros occured: " + errorcount + " errors");
         }
         else {
             Log.d(CNAME, "All items were uploaded");
             MainService.sendIntent(this, MainService.CHECKINTERNETSTATE);
         }
+    }
+
+    public boolean canUpload() {
+        if (preferences.getUploadGap() <= Preferences.TimeHelper.getNow())
+            return true;
+        return false;
+    }
+
+    public static boolean canUploadContext(Context context) {
+        if (new Preferences(context).getUploadGap() <= Preferences.TimeHelper.getNow())
+            return true;
+        return false;
+    }
+
+    public void postponeUpload() {
+        preferences.setUploadGap(Preferences.TimeHelper.getNow() + preferences.getUploadDelay());
     }
 
 

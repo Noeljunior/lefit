@@ -149,8 +149,13 @@ public class Preferences {
         return notificationCleanGap;
     }
 
-    public static String getAndroidId() {
-        return Integer.toHexString(Settings.Secure.ANDROID_ID.hashCode());
+    public static String getAndroidId(Context context) {
+        String AndroidID = Settings.System.getString(context.getContentResolver(),
+                android.provider.Settings.Secure.ANDROID_ID);
+        if (AndroidID == null)
+            AndroidID = "somenoise";
+        String Android_ID = "anothernoise" + android.os.Build.PRODUCT + AndroidID;
+        return Integer.toHexString(Android_ID.hashCode());
     }
 
     public String getUserID() {

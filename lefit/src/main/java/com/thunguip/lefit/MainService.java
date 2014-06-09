@@ -359,7 +359,8 @@ public class MainService extends IntentService {
         }
 
 
-        Preferences.TimeHelper.getNextByTime(preferences.getNotificationTime());
+        /* Also check if there are thing to upload */
+        sendIntent(this, CHECKINTERNETSTATE);
     }
 
 
@@ -519,7 +520,8 @@ public class MainService extends IntentService {
             if (!intent.getAction().equals("android.net.conn.CONNECTIVITY_CHANGE"))
                 return;
 
-            MainService.sendIntent(context, MainService.CHECKINTERNETSTATE);
+            if (BackgroundService.canUploadContext(context))
+                MainService.sendIntent(context, MainService.CHECKINTERNETSTATE);
 
             Log.d("InternetChangeReceiver", "INTERNET STATE CHANGED");
         }
