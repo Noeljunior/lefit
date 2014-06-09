@@ -23,7 +23,7 @@ public class Preferences {
     public static final int PERSONSTYLE_MODERATE    =  2;
     public static final int PERSONSTYLE_INTENSE     =  3;
 
-    public static final int     VERSIONINGVERIFICATION  =  1;
+    public static final int     VERSIONINGVERIFICATION  =  2;
     public static final String  PREFS_VERVERIF          = "MAINPREFES.PREFS_VERVERIF";
 
     /* Prefrences File */

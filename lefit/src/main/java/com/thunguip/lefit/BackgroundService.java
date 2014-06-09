@@ -120,10 +120,10 @@ public class BackgroundService extends IntentService {
 
             MainService.setInternetChangeBroadcastReceiver(this, false);
 
-            Log.d(CNAME, "Some erros occured: " + errorcount + " errors");
+            Log.d(CNAME, "Some erros occured: " + errorcount + " errors. Will now postpone sending items");
         }
         else {
-            Log.d(CNAME, "All items were uploaded");
+            Log.d(CNAME, "All items were uploaded. Canceling internetchange broadcast receiver");
             MainService.setInternetChangeBroadcastReceiver(this, false);
         }
     }
