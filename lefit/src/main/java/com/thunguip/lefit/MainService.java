@@ -275,7 +275,7 @@ public class MainService extends IntentService {
 
         /* Check if there are items to send */
         if (thereAreItems && isConnected) { /* There are items to send and there is connection */
-            new UploaderDB(this).sendAllUnsent();
+            BackgroundService.sendIntent(this, BackgroundService.UPLOADITEMS);
         }
         else if (thereAreItems && !isConnected) { /* There are items to send but there is NO connection */
             setInternetChangeBroadcastReceiver(true);

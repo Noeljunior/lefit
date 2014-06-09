@@ -38,6 +38,7 @@ public class Preferences {
     public static final String  PREFS_SHOWDAILLYMESSAGE     = "MAINPREFES.PREFS_SHOWDAILLYMESSAGE";
     public static final String  PREFS_PERSONSTYLE           = "MAINPREFES.PREFS_PERSONSTYLE";
     public static final String  PREFS_USERID                = "MAINPREFES.PREFS_USERID";
+    public static final String  PREFS_UPLOADGAP             = "MAINPREFES.PREFS_UPLOADGAP";
 
     /* DEFAULTS */
     public static final boolean     DEF_fireNotifications       = true;
@@ -49,6 +50,7 @@ public class Preferences {
     public static final long    notificationInterval            = /*5 * 60 * 1000;*/ TimeHelper.getByTime(24, 0); /* TODO set to 24h */
     public static final long    postponeDelay                   =  /*1 * 60 * 1000;*/ TimeHelper.getByTime(1, 0); /* TODO set to 1h */
     public static final long    notificationCleanGap            = postponeDelay * 2;
+    public static final long    uploaddelay                     =  TimeHelper.getByTime(1, 0);
 
     public static final int     DEF_personStyle                 = PERSONSTYLE_NOTDEFINED;
 
@@ -160,6 +162,13 @@ public class Preferences {
         }
     }
 
+    public long getUploadGap() {
+        return settings.getLong(PREFS_UPLOADGAP, 0);
+    }
+
+    public long getUploadDelay() {
+        return uploaddelay;
+    }
 
 
     /* Setters */
@@ -199,7 +208,10 @@ public class Preferences {
         commitPrefString(PREFS_USERID, out);
         return out;
     }
-
+    public long setUploadGap(long l) {
+        commitPrefLong(PREFS_UPLOADGAP, l);
+        return l;
+    }
 
 
     public void reset() {

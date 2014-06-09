@@ -16,6 +16,10 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.LeFitBlue" >
+
+
+        <!-- Activities -->
+
         <activity
             android:name=".LauncherActivity"
             android:label="@string/app_name"
@@ -23,32 +27,42 @@
             android:theme="@style/Theme.LeFitBlue" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
->
         </activity>
+
         <activity
             android:name=".PopupActivity"
             android:label="Le Fit"
             android:theme="@style/Theme.LeFitBlue.Dialog" >
         </activity>
+
         <activity
             android:name=".DebugActivity"
             android:label="Debug Menu"
             android:theme="@style/Theme.LeFitBlue" >
         </activity>
 
+        <!-- Services -->
+
         <service
             android:name=".MainService"
             android:label="Le Fit Service"/>
+
+        <service
+            android:name=".BackgroundService"
+            android:label="Le Fit Service"/>
+
+
+
+        <!-- Broadcast Receivers -->
 
         <receiver
             android:name=".AlarmerManager"
             android:process=":AlarmerProccess"
             android:enabled="true" >
 
-            </receiver>
+        </receiver>
 
         <receiver android:name=".MainService$BootBroadcastReceiver"
             android:enabled="false">

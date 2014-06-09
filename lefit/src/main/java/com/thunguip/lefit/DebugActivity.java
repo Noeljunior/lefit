@@ -75,7 +75,7 @@ public class DebugActivity extends Activity {
     }
 
     public void sendItems(View view) {
-        new UploaderDB(this).sendAllUnsent();
+        BackgroundService.sendIntent(this, BackgroundService.UPLOADITEMS);
 
     }
 

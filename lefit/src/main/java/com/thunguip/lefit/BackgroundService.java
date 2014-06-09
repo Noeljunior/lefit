@@ -23,8 +23,9 @@ public class BackgroundService extends IntentService {
     public static final String SWITCH               = "com.thunguip.lefit.backgroundservice.SWITCH";
     public static final String UPLOADITEMS          = "com.thunguip.lefit.backgroundservice.SWITCH.UPLOADITEMS";
 
-    public BackgroundService(String name) {
-        super(name);
+
+    public BackgroundService() {
+        super(CNAME);
     }
 
     @Override
@@ -55,12 +56,12 @@ public class BackgroundService extends IntentService {
         String           deviceid   = Preferences.getAndroidId();
         String           userid     = new Preferences(this).getUserID();
 
-        Log.d("UploaderDB", "Will send " + items.size() + " items.");
+        Log.d(CNAME, "Will send " + items.size() + " items.");
 
         int errorcount = 0;
         for (List item : items) {
-            item.add(new BasicNameValuePair(UploaderDB.FORM_DEVICEID, deviceid));
-            item.add(new BasicNameValuePair(UploaderDB.FORM_USERID,   userid));
+            item.add(new BasicNameValuePair(Form.DEVICEID, deviceid));
+            item.add(new BasicNameValuePair(Form.USERID,   userid));
 
             try {
                 HttpPost httppost = new HttpPost(Form.URL);
@@ -70,16 +71,16 @@ public class BackgroundService extends IntentService {
                 if (response.getStatusLine().getStatusCode() == 200) {
                     database.markAsSent(getId(item));
 
-                    Log.d("UploaderDB", "Item sent and maked as sent: " + itemToString(item));
+                    Log.d(CNAME, "Item sent and maked as sent: " + itemToString(item));
                 }
                 else {
-                    Log.d("UploaderDB", "HTTP ERROR CODE: " + response.getStatusLine().getStatusCode());
+                    Log.d(CNAME, "HTTP ERROR CODE: " + response.getStatusLine().getStatusCode());
                     errorcount++;
                 }
 
             }
             catch (IOException e) {
-                Log.d("UploaderDB", "NO CONNECTION");
+                Log.d(CNAME, "NO CONNECTION");
                 errorcount++;
             }
 
@@ -89,10 +90,10 @@ public class BackgroundService extends IntentService {
 
         if (errorcount > 0){
             MainService.sendIntent(this, MainService.CHECKINTERNETSTATE);
-            Log.d("UploaderDB", "Some erros occured: " + errorcount + " errors");
+            Log.d(CNAME, "Some erros occured: " + errorcount + " errors");
         }
         else {
-            Log.d("UploaderDB", "All items were uploaded");
+            Log.d(CNAME, "All items were uploaded");
             MainService.sendIntent(this, MainService.CHECKINTERNETSTATE);
         }
     }
