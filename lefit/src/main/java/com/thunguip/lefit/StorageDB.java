@@ -1,6 +1,7 @@
 package com.thunguip.lefit;
 
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -50,7 +51,7 @@ public class StorageDB extends SQLiteOpenHelper {
 
         private static final String SQL_CREATE_ENTRIES =
                 "CREATE TABLE " + TABLE_NAME + " (" +
-                        _ID + INT_TYPE + " PRIMARY KEY " + COMMA_SEP +
+                        _ID + INT_TYPE + " PRIMARY KEY AUTOINCREMENT NOT NULL" + COMMA_SEP +
                         COLUMN_NAME_TYPE  + INT_TYPE + COMMA_SEP +
                         COLUMN_NAME_SENT  + INT_TYPE + COMMA_SEP +
 
@@ -201,16 +202,11 @@ public class StorageDB extends SQLiteOpenHelper {
     public ArrayList<List> getAllUnsent() {
         SQLiteDatabase db = getReadableDatabase();
 
-        String[] projection = {
-                UniqTable.COLUMN_NAME_VAL2,
-                UniqTable.COLUMN_NAME_VAL5,
-                UniqTable.COLUMN_NAME_VAL13
-        };
 
         String where = UniqTable.COLUMN_NAME_TYPE + " = " + TYPE_POPUP + " AND " +
                 UniqTable.COLUMN_NAME_SENT + " = " + SENT_FALSE;
 
-        String order = UniqTable.COLUMN_NAME_VAL15 + " ASC";
+        String order = UniqTable._ID + " ASC";
 
         Cursor cursor = db.query(
                 UniqTable.TABLE_NAME,       // The table to query
@@ -219,7 +215,7 @@ public class StorageDB extends SQLiteOpenHelper {
                 null,                       // The values for the WHERE clause
                 null,                       // don't group the rows
                 null,                       // don't filter by row groups
-                null                        // The sort order
+                order                       // The sort order
         );
 
         ArrayList<List> results = new ArrayList<>();
@@ -228,25 +224,25 @@ public class StorageDB extends SQLiteOpenHelper {
         while (cursor.isAfterLast() == false) {
             List item = new ArrayList();
 
-            item.add(new BasicNameValuePair(UploaderDB.FORM_DBVERSION, DATABASE_VERSION + ""));
-            item.add(new BasicNameValuePair(UploaderDB.FORM_TYPE,  cursor.getInt(cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_TYPE))  + ""));
-            item.add(new BasicNameValuePair(UploaderDB.FORM_ID,    cursor.getInt(cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_TYPE))  + ""));
+            item.add(new BasicNameValuePair(BackgroundService.Form.DBVERSION, DATABASE_VERSION + ""));
+            item.add(new BasicNameValuePair(BackgroundService.Form.ID,    cursor.getInt(cursor.getColumnIndexOrThrow(UniqTable._ID))                + ""));
+            item.add(new BasicNameValuePair(BackgroundService.Form.TYPE,  cursor.getInt(cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_TYPE))   + ""));
 
-            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL1,  cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL1))  + ""));
-            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL2,  cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL2))  + ""));
-            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL3,  cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL3))  + ""));
-            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL4,  cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL4))  + ""));
-            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL5,  cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL5))  + ""));
-            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL6,  cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL6))  + ""));
-            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL7,  cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL7))  + ""));
-            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL8,  cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL8))  + ""));
-            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL9,  cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL9))  + ""));
-            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL10, cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL10)) + ""));
-            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL11, cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL11)) + ""));
-            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL12, cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL12)) + ""));
-            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL13, cursor.getLong(cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL13)) + ""));
-            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL14, cursor.getLong(cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL14)) + ""));
-            item.add(new BasicNameValuePair(UploaderDB.FORM_VAL15, cursor.getLong(cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL15)) + ""));
+            item.add(new BasicNameValuePair(BackgroundService.Form.VAL1,  cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL1))  + ""));
+            item.add(new BasicNameValuePair(BackgroundService.Form.VAL2,  cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL2))  + ""));
+            item.add(new BasicNameValuePair(BackgroundService.Form.VAL3,  cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL3))  + ""));
+            item.add(new BasicNameValuePair(BackgroundService.Form.VAL4,  cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL4))  + ""));
+            item.add(new BasicNameValuePair(BackgroundService.Form.VAL5,  cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL5))  + ""));
+            item.add(new BasicNameValuePair(BackgroundService.Form.VAL6,  cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL6))  + ""));
+            item.add(new BasicNameValuePair(BackgroundService.Form.VAL7,  cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL7))  + ""));
+            item.add(new BasicNameValuePair(BackgroundService.Form.VAL8,  cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL8))  + ""));
+            item.add(new BasicNameValuePair(BackgroundService.Form.VAL9,  cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL9))  + ""));
+            item.add(new BasicNameValuePair(BackgroundService.Form.VAL10, cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL10)) + ""));
+            item.add(new BasicNameValuePair(BackgroundService.Form.VAL11, cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL11)) + ""));
+            item.add(new BasicNameValuePair(BackgroundService.Form.VAL12, cursor.getInt (cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL12)) + ""));
+            item.add(new BasicNameValuePair(BackgroundService.Form.VAL13, cursor.getLong(cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL13)) + ""));
+            item.add(new BasicNameValuePair(BackgroundService.Form.VAL14, cursor.getLong(cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL14)) + ""));
+            item.add(new BasicNameValuePair(BackgroundService.Form.VAL15, cursor.getLong(cursor.getColumnIndexOrThrow(UniqTable.COLUMN_NAME_VAL15)) + ""));
 
             results.add(item);
 
@@ -256,6 +252,29 @@ public class StorageDB extends SQLiteOpenHelper {
         db.close();
 
         return results;
+    }
+
+    public int countUnsetItems() {
+        // TODO optimize this calculation
+        return getAllUnsent().size();
+    }
+
+    public void markAsSent(long id) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        String where = UniqTable._ID + " = " + id;
+
+        ContentValues args = new ContentValues();
+        args.put(UniqTable.COLUMN_NAME_SENT, SENT_TRUE);
+
+        db.update(
+                UniqTable.TABLE_NAME,
+                args,
+                where,
+                null
+        );
+
+        db.close();
     }
 
 

@@ -1,16 +1,16 @@
 package com.thunguip.lefit;
 
 import android.app.IntentService;
-import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
-import android.net.Uri;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Messenger;
@@ -28,7 +28,6 @@ import java.util.Calendar;
 public class MainService extends IntentService {
     /* Intent receivers */
     public static final String SWITCH               = "com.thunguip.lefit.mainservice.SWITCH";
-    public static final String MESSENGER            = "com.thunguip.lefit.mainservice.MESSENGER";
     public static final String DEBUG                = "com.thunguip.lefit.mainservice.SWITCH.DEBUG";
 
     public static final String GETLVITEMS           = "com.thunguip.lefit.mainservice.SWITCH.GETLVITEMS";
@@ -43,6 +42,8 @@ public class MainService extends IntentService {
     public static final String INVOKEPOPUPBYLVITEM  = "com.thunguip.lefit.mainservice.SWITCH.INVOKEPOPUPBYLVITEM";
 
     public static final String CHECKALARMSETTINGS   = "com.thunguip.lefit.mainservice.SWITCH.CHECKALARMSETTINGS";
+
+    public static final String CHECKINTERNETSTATE   = "com.thunguip.lefit.mainservice.SWITCH.CHECKINTERNETSTATE";
 
 
     /* Broadcasts senders */
@@ -118,6 +119,11 @@ public class MainService extends IntentService {
             case CHECKALARMSETTINGS:
                 checkAlarmSettings();
                 return;
+
+            case CHECKINTERNETSTATE:
+                checkInternetState();
+                return;
+
 
             case DEBUG:
 
@@ -256,7 +262,30 @@ public class MainService extends IntentService {
         StorageDB db = new StorageDB(this);
         db.addEntry(pep);
 
+
+        sendIntent(this, CHECKINTERNETSTATE);
+
     }
+
+    private void checkInternetState() {
+        NetworkInfo activeNetwork = ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        boolean thereAreItems = new StorageDB(this).countUnsetItems() > 0;
+
+
+        /* Check if there are items to send */
+        if (thereAreItems && isConnected) { /* There are items to send and there is connection */
+            new UploaderDB(this).sendAllUnsent();
+        }
+        else if (thereAreItems && !isConnected) { /* There are items to send but there is NO connection */
+            setInternetChangeBroadcastReceiver(true);
+        }
+        else if (!thereAreItems) {
+            /* There are no items to send, unsetting internetchange broadcast receiver */
+            setInternetChangeBroadcastReceiver(false);
+        }
+    }
+
 
     private void openPopupByRefer(long refer) {
         Intent intent = new Intent(this, PopupActivity.class);
@@ -304,7 +333,7 @@ public class MainService extends IntentService {
             );
 
             /* Set alarm at boot */
-            ComponentName receiver = new ComponentName(this, BootReceiver.class);
+            ComponentName receiver = new ComponentName(this, BootBroadcastReceiver.class);
             PackageManager pm = getPackageManager();
             pm.setComponentEnabledSetting(receiver,
                     PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
@@ -320,7 +349,7 @@ public class MainService extends IntentService {
             removeNotificationByID(NOTIFID_MAIN);
 
             /* Do not set alarm at boot */
-            ComponentName receiver = new ComponentName(this, BootReceiver.class);
+            ComponentName receiver = new ComponentName(this, BootBroadcastReceiver.class);
             PackageManager pm = getPackageManager();
             pm.setComponentEnabledSetting(receiver,
                     PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
@@ -418,6 +447,28 @@ public class MainService extends IntentService {
 
 
     /* STATIC METHODS */
+    public void setInternetChangeBroadcastReceiver(boolean enable) {
+        if (enable) {
+            Log.d("MainService", "CheckInternetChangedBroadcast ENEABLED");
+            /* Set the broadcast to true */
+            ComponentName receiver = new ComponentName(this, InternetChangeReceiver.class);
+            PackageManager pm = getPackageManager();
+            pm.setComponentEnabledSetting(receiver,
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                    PackageManager.DONT_KILL_APP);
+
+        }
+        else {
+            Log.d("MainService", "CheckInternetChangedBroadcast DISABLE");
+            /* Disable the broadcast */
+            ComponentName receiver = new ComponentName(this, InternetChangeReceiver.class);
+            PackageManager pm = getPackageManager();
+            pm.setComponentEnabledSetting(receiver,
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP);
+        }
+    }
+
     public static void sendIntent(Context context, String switchitent) {
         Intent intent = new Intent(context, MainService.class);
         intent.putExtra(MainService.SWITCH, switchitent);
@@ -447,6 +498,31 @@ public class MainService extends IntentService {
 
     public static boolean isDebuggable(Context context) {
         return ( 0 != ( context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE ) );
+    }
+
+
+
+    /* InnerClasses */
+    public static class BootBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (!intent.getAction().equals("android.intent.action.BOOT_COMPLETED"))
+                return;
+
+            MainService.sendIntent(context, MainService.CHECKALARMSETTINGS);
+        }
+    }
+
+    public static class InternetChangeReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (!intent.getAction().equals("android.net.conn.CONNECTIVITY_CHANGE"))
+                return;
+
+            MainService.sendIntent(context, MainService.CHECKINTERNETSTATE);
+
+            Log.d("InternetChangeReceiver", "INTERNET STATE CHANGED");
+        }
     }
 
 }

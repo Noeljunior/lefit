@@ -44,6 +44,8 @@ public class UploaderDB {
     public static final String FORM_VAL14       = "entry.1746984713";
     public static final String FORM_VAL15       = "entry.1445171993";
 
+    private static final int MAX_ERRORS = 3;
+
 
     private Context context;
 
@@ -53,42 +55,69 @@ public class UploaderDB {
     }
 
     public void sendAllUnsent() {
-        ArrayList<List> items = new StorageDB(context).getAllUnsent();
-        final ArrayList<HttpPost> postclients = new ArrayList<>();
-
-        for (List item : items) {
-            // TODO get device ID and user ID
-            item.add(new BasicNameValuePair(UploaderDB.FORM_DEVICEID,  "TESTDEVICEENV"));
-            item.add(new BasicNameValuePair(UploaderDB.FORM_USERID,    "TESTUSERENV"));
-
-            try {
-                HttpPost httppost = new HttpPost(URL_FORM);
-                httppost.setEntity(new UrlEncodedFormEntity(item));
-                postclients.add(httppost);
-            }
-            catch (IOException e) {}
-        }
-
 
         /* Submit form POST */
-        new Thread(new Runnable() {
-            public void run() {
-                final HttpClient httpclient = new DefaultHttpClient();
-                for (HttpPost httpPost : postclients) {
+        new Thread(new Runnable() { public void run() {
 
-                    try {
-                        HttpResponse response = httpclient.execute(httpPost);
-                        Log.d("UploaderDB", "JUSTUPLOADEDoutise with code: " + response.getStatusLine().getStatusCode());
+            StorageDB database = new StorageDB(context);
+            ArrayList<List> items = database.getAllUnsent();
+            final HttpClient httpclient = new DefaultHttpClient();
 
-                        // TODO mark as sent on the local database
+
+            Log.d("UploaderDB", "Will send " + items.size() + " items.");
+
+            int errorcount = 0;
+            for (List item : items) {
+                // TODO get device ID and user ID
+                item.add(new BasicNameValuePair(UploaderDB.FORM_DEVICEID,  Preferences.getAndroidId()));
+                item.add(new BasicNameValuePair(UploaderDB.FORM_USERID,    new Preferences(context).getUserID()));
+
+                try {
+                    HttpPost httppost = new HttpPost(URL_FORM);
+                    httppost.setEntity(new UrlEncodedFormEntity(item));
+                    HttpResponse response = httpclient.execute(httppost);
+
+                    if (response.getStatusLine().getStatusCode() == 200) {
+                        database.markAsSent(getId(item));
+
+                        Log.d("UploaderDB", "Item sent and maked as sent: " + itemToString(item));
                     }
-                    catch (IOException e) { }
+                    else {
+                        Log.d("UploaderDB", "HTTP ERROR CODE: " + response.getStatusLine().getStatusCode());
+                        errorcount++;
+                    }
+
                 }
+                catch (IOException e) {
+                    Log.d("UploaderDB", "NO CONNECTION");
+                    errorcount++;
+                }
+
+                if (errorcount >= MAX_ERRORS)
+                    break;
             }
-        }).start();
+
+            if (errorcount > 0){
+                MainService.sendIntent(context, MainService.CHECKINTERNETSTATE);
+                Log.d("UploaderDB", "Some erros occured: " + errorcount + " errors");
+            }
+            else {
+                Log.d("UploaderDB", "All items were uploaded");
+                MainService.sendIntent(context, MainService.CHECKINTERNETSTATE);
+            }
+
+        } }).start();
     }
 
-    private String itemToString(List item, int how) {
+    private long getId(List<BasicNameValuePair> item) {
+        for (BasicNameValuePair subitem : item) {
+            if (subitem.getName().equals(FORM_ID))
+                return Long.parseLong(subitem.getValue());
+        }
+        return 0;
+    }
+
+    private String itemToString(List item) {
         String out = "";
 
         for (Object subitem : item) {
@@ -99,11 +128,6 @@ public class UploaderDB {
         }
 
         return out;
-    }
-
-    public void postItem() {
-
-
     }
 
 

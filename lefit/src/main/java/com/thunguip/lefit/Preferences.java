@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.UUID;
 
 public class Preferences {
     public static final long SECOND = 1000L;
@@ -36,6 +37,7 @@ public class Preferences {
     public static final String  PREFS_NOTIFICATIONVIBRATE   = "MAINPREFES.PREFS_NOTIFICATIONVIBRATE";
     public static final String  PREFS_SHOWDAILLYMESSAGE     = "MAINPREFES.PREFS_SHOWDAILLYMESSAGE";
     public static final String  PREFS_PERSONSTYLE           = "MAINPREFES.PREFS_PERSONSTYLE";
+    public static final String  PREFS_USERID                = "MAINPREFES.PREFS_USERID";
 
     /* DEFAULTS */
     public static final boolean     DEF_fireNotifications       = true;
@@ -145,8 +147,17 @@ public class Preferences {
         return notificationCleanGap;
     }
 
-    public int getAndroidId() {
-        return Settings.Secure.ANDROID_ID.hashCode();
+    public static String getAndroidId() {
+        return Integer.toHexString(Settings.Secure.ANDROID_ID.hashCode());
+    }
+
+    public String getUserID() {
+        if (settings.contains(PREFS_USERID)) {
+            return settings.getString(PREFS_USERID, "");
+        }
+        else { /* return the default */
+            return setUserID();
+        }
     }
 
 
@@ -180,6 +191,13 @@ public class Preferences {
     public int setPersonStyle(int i) {
         commitPrefInt(PREFS_PERSONSTYLE, i);
         return i;
+    }
+
+    public String setUserID() {
+        UUID uuid = UUID.randomUUID();
+        String out = Integer.toHexString(uuid.toString().hashCode());
+        commitPrefString(PREFS_USERID, out);
+        return out;
     }
 
 
