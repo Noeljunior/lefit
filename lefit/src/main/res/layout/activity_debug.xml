@@ -105,6 +105,11 @@
                     android:textColor="@color/view_fg_light"
                     android:layout_margin="5dp" />
 
+                <TimePicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/timePicker" />
+
             </LinearLayout>
         </ScrollView>
 </LinearLayout>

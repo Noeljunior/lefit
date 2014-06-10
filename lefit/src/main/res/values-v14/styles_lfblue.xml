@@ -71,6 +71,20 @@
         <item name="android:windowIsTranslucent">false</item>
     </style>
 
+
+
+
+    <!-- style name="LeFitTimePicker" parent="@android:style/Widget.Holo.TimePicker">
+        <item name="android:textColor">@color/view_fg_light</item>
+    </style -->
+
+
+
+
+
+
+
+
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
                                     D E F I N I T I O N S

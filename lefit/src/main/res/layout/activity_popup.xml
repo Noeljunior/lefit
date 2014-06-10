@@ -109,7 +109,7 @@
                         android:layout_height="40dp"
                         android:layout_margin="5dp"
                         android:id="@+id/ibless"
-                        android:background="?android:selectableItemBackground"
+                        android:background="@drawable/button_transparent"
                         android:src="@drawable/ic_navigation_previous_item"
                         android:onClick="decrementSeek" />
 
@@ -129,7 +129,7 @@
                         android:layout_height="40dp"
                         android:layout_margin="5dp"
                         android:id="@+id/ibmore"
-                        android:background="?android:selectableItemBackground"
+                        android:background="@drawable/button_transparent"
                         android:src="@drawable/ic_navigation_next_item"
                         android:onClick="incrementSeek" />
 
@@ -165,14 +165,14 @@
                             android:id="@+id/ibhidemsg"
                             android:src="@drawable/ic_content_remove"
                             android:layout_marginLeft="5dp"
-                            android:background="?android:selectableItemBackground"
+                            android:background="@drawable/button_transparent"
                             android:onClick="hideMessageClick" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:text="Message of the day\nwich will\nhave much\nmore line\nthan just\nthree or four"
+                            android:text="Message of the day"
                             android:id="@+id/message"
                             android:minHeight="48dp"
                             android:gravity="center_vertical|center_horizontal"
@@ -186,7 +186,7 @@
                             android:layout_height="match_parent"
                             android:id="@+id/iblikemsg"
                             android:src="@drawable/ic_navigation_next_item"
-                            android:background="?android:selectableItemBackground"
+                            android:background="@drawable/button_transparent"
                             android:layout_marginRight="5dp"
                             android:onClick="nextMessage" />
 
@@ -209,21 +209,20 @@
             android:id="@+id/separator4"
             android:layout_width="fill_parent"
             android:layout_height="1dp"
-            android:background="#3b7a91"
+            android:background="#66ffffff"
             android:layout_above="@+id/buttons" />
 
         <LinearLayout
             android:id="@+id/buttons"
             android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/lvitembg" >
+            android:layout_height="wrap_content" >
 
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="?android:selectableItemBackground"
+                android:background="@drawable/button_translucent"
                 android:id="@+id/ibclose"
                 android:src="@drawable/ic_navigation_cancel"
                 android:onClick="actionCancel" />
@@ -232,13 +231,13 @@
                 android:id="@+id/separator1"
                 android:layout_width="1dp"
                 android:layout_height="fill_parent"
-                android:background="#3b7a91" />
+                android:background="#66ffffff" />
 
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="?android:selectableItemBackground"
+                android:background="@drawable/button_translucent"
                 android:id="@+id/ibpostpone"
                 android:src="@drawable/ic_device_access_time"
                 android:onClick="actionPostpone" />
@@ -247,13 +246,13 @@
                 android:id="@+id/separator2"
                 android:layout_width="1dp"
                 android:layout_height="fill_parent"
-                android:background="#3b7a91" />
+                android:background="#66ffffff" />
 
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="?android:selectableItemBackground"
+                android:background="@drawable/button_translucent"
                 android:id="@+id/ibsubmit"
                 android:src="@drawable/ic_navigation_accept"
                 android:onClick="actionSubmit" />

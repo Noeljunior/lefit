@@ -23,6 +23,7 @@ import android.os.Messenger;
 import android.support.v7.app.ActionBarActivity;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -285,16 +286,21 @@ public class LauncherActivity extends ActionBarActivity {
 
 
     private void openTimePicker() {
+        // TODO change this theme to LeFitBlue
+
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(preferences.getNotificationTime());
 
         final TimePicker timePicker = new TimePicker(this);
+        //timePicker.setScrollBarStyle(R.style.LeFitTimePicker);
         timePicker.setIs24HourView(DateFormat.is24HourFormat(this));
         timePicker.setCurrentHour(c.get(Calendar.HOUR_OF_DAY));
         timePicker.setCurrentMinute(c.get(Calendar.MINUTE));
         final Context thiscontext = this;
 
-        new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK)
+        //ContextThemeWrapper ctw = new ContextThemeWrapper(this, R.style.AlertDialogStyle);
+
+        new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_LIGHT)
                 .setTitle("Hora da notificação")
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 
@@ -322,6 +328,9 @@ public class LauncherActivity extends ActionBarActivity {
                             }
                         })
                 .setView(timePicker)
+
+
+
                 .show();
     }
 
