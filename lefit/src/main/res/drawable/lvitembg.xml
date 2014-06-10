@@ -3,13 +3,31 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:state_selected="false"
-        android:state_pressed="false"
-        android:drawable="@drawable/roundedbg" />
+        android:state_pressed="false" >
 
-    <item android:state_pressed="true"
-        android:drawable="@drawable/roundedbg_selected" />
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <solid android:color="#33000000"/>
+            <corners android:radius="1dp"/>
+        </shape>
+
+        </item>
+
+    <item android:state_pressed="true" >
+
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <solid android:color="#33000000"/>
+            <corners android:radius="1dp"/>
+        </shape>
+
+    </item>
 
     <item android:state_selected="true"
-        android:state_pressed="false"
-        android:drawable="@drawable/roundedbg_selected" />
+        android:state_pressed="false" >
+
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <solid android:color="#33000000"/>
+            <corners android:radius="1dp"/>
+        </shape>
+
+        </item>
 </selector>
