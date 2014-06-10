@@ -127,7 +127,7 @@ public class Decision {
         }
 
         /* Select dailly message */
-        if (isFirstTime() || (preferences.isShowDaillyMessage() == false)) {
+        if (isFirstTime() || !preferences.isShowDaillyMessage()) {
             /* Do not show if it is the first time or if the user ask to hide those messages */
             mp.showmessage = 0;
         }

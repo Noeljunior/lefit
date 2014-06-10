@@ -21,8 +21,6 @@ public class StorageDB extends SQLiteOpenHelper {
     public static final int TYPE_POPUP = 1;
     public static final int SENT_TRUE = 1;
     public static final int SENT_FALSE = 0;
-    /* TODO add an ID to each day */
-    /* TODO add how was popup action fired [notification | mainactivity] */
 
     private Context context;
 

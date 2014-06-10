@@ -370,7 +370,9 @@ public class MainService extends IntentService {
             while (iterator.getTimeInMillis() >= startDate) {
                 if ((pep = PopupEntryParcel.findByDay(entries, iterator)) != null) { // Answered day
                     // Get logo drwable id
-                    TypedArray ids = getResources().obtainTypedArray(R.array.phraseicons);
+                    TypedArray ids;
+                    if (pep.title == 0) ids = getResources().obtainTypedArray(R.array.firstphraseicons);
+                    else                ids = getResources().obtainTypedArray(R.array.phraseicons);
                     int logoid = ids.getResourceId(pep.phraseanswer, -1);
                     ids.recycle();
                     // Get phrase string

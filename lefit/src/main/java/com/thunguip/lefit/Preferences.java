@@ -47,8 +47,8 @@ public class Preferences {
     public static final boolean     DEF_notificationVibrate     = true;
     public static final boolean     DEF_showDaillyMessage       = true;
 
-    public static final long    notificationInterval            = /*5 * 60 * 1000;*/ TimeHelper.getByTime(24, 0); /* TODO set to 24h */
-    public static final long    postponeDelay                   =  /*1 * 60 * 1000;*/ TimeHelper.getByTime(1, 0); /* TODO set to 1h */
+    public static final long    notificationInterval            = TimeHelper.getByTime(24, 0);
+    public static final long    postponeDelay                   = TimeHelper.getByTime(1, 0);
     public static final long    notificationCleanGap            = postponeDelay * 2;
     public static final long    uploaddelay                     =  TimeHelper.getByTime(1, 0);
 

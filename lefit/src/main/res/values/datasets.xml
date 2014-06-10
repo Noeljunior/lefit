@@ -20,9 +20,9 @@
 
     <!--  Phrases -->
     <array name="phrases">
-        <item>@array/phrases0</item>
-        <item>@array/phrases1</item>
-        <item>@array/phrases2</item>
+        <item>@array/phrases0</item> <!--  Lifestyle -->
+        <item>@array/phrases1</item> <!-- Non PE -->
+        <item>@array/phrases2</item> <!-- PE -->
     </array>
     <string-array name="phrases0">
         <!--  0 --> <item>Sou sedentário.</item>
@@ -177,5 +177,12 @@
         <!--  8 --> <item>@drawable/ic_phraseicon_8</item>
         <!--  9 --> <item>@drawable/ic_phraseicon_9</item>
         <!-- 10 --> <item>@drawable/ic_phraseicon_10</item>
+    </array>
+
+    <array name="firstphraseicons">
+        <!--  0 --> <item>@drawable/ic_phraseicon_1</item>
+        <!--  1 --> <item>@drawable/ic_phraseicon_3</item>
+        <!--  2 --> <item>@drawable/ic_phraseicon_5</item>
+        <!--  3 --> <item>@drawable/ic_phraseicon_7</item>
     </array>
 </resources>

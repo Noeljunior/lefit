@@ -52,8 +52,6 @@ public class PopupActivity extends Activity {
         /* Get the message */
         message = getIntent().getExtras().getParcelable(MESSAGE);
         if (message == null) {
-            Log.w("myApp", "NULL!!!!!");
-            // TODO abort the creation of this activity
             finish();
         }
 
@@ -182,7 +180,10 @@ public class PopupActivity extends Activity {
         if ((seekbar.getProgress() + sboffset) != id)
             seekbar.setProgress(id - sboffset);
 
-        TypedArray ids = getResources().obtainTypedArray(R.array.phraseicons);
+        TypedArray ids;
+        if (popupentry.title == 0) ids = getResources().obtainTypedArray(R.array.firstphraseicons);
+        else                       ids = getResources().obtainTypedArray(R.array.phraseicons);
+
         int phraseid = ids.getResourceId(id, -1);
         ids.recycle();
 
