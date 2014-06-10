@@ -1,45 +1,49 @@
 package com.thunguip.lefit;
 
 import android.app.Activity;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import java.util.Calendar;
-
 public class PopupActivity extends Activity {
     public static final String MESSAGE = "com.thunguip.lefit.PopupActivity.MESSAGE";
 
-    private int sboffset;
+    public static final String KEY_PEP          = "KEY_PEP";
+    public static final String KEY_OFFSET       = "KEY_OFFSET";
+    public static final String KEY_SEEKBARMIN   = "KEY_SEEKBARMIN";
+    public static final String KEY_SEEKBARMAX   = "KEY_SEEKBARMAX";
+    public static final String KEY_MSGSTATE     = "KEY_MSGSTATE";
+
+
 
     /* Values */
-    private String[] phrases;
-    private String[] messages;
-    private int selectedmessage;
+    private String[]    phrases;
+    private String[]    messages;
+
 
     /* Result message */
     private PopupEntryParcel popupentry;
 
     /* States */
-    private boolean showMessage;
+    private int         sboffset;
+    private int         seekbarmax;
+    private int         seekbarmin;
+    private int         selectedmessage;
+
 
     /* Widgets */
-    private SeekBar seekbar;
-    private TextView tvtitle;
-    private TextView tvphrase;
-    private TextView tvmessage;
-    private ImageView ivphraselogo;
+    private SeekBar     seekbar;
+    private TextView    tvtitle;
+    private TextView    tvphrase;
+    private TextView    tvmessage;
+    private ImageView   ivphraselogo;
     private ImageButton ibmore;
     private ImageButton ibless;
 
@@ -48,68 +52,27 @@ public class PopupActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        /* Get the message */
-        popupentry = getIntent().getExtras().getParcelable(MESSAGE);
-        if (popupentry == null) {
-            finish();
-        }
-
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_popup);
 
-
-        /* Set the time when this popup was started */
-        popupentry.dateinit = Preferences.TimeHelper.getTodayDateTime();
-
-
         /* Initialize this new popup */
-        seekbar = (SeekBar) findViewById(R.id.seekbar);
-        tvphrase = (TextView) findViewById(R.id.phrase);
-        tvmessage = (TextView) findViewById(R.id.message);
-        tvtitle = (TextView) findViewById(R.id.title);
-        ivphraselogo = (ImageView) findViewById(R.id.phraselogo);
-        ibmore = (ImageButton) findViewById(R.id.ibmore);
-        ibless = (ImageButton) findViewById(R.id.ibless);
+        seekbar         = (SeekBar)     findViewById(R.id.seekbar);
+        tvphrase        = (TextView)    findViewById(R.id.phrase);
+        tvmessage       = (TextView)    findViewById(R.id.message);
+        tvtitle         = (TextView)    findViewById(R.id.title);
+        ivphraselogo    = (ImageView)   findViewById(R.id.phraselogo);
+        ibmore          = (ImageButton) findViewById(R.id.ibmore);
+        ibless          = (ImageButton) findViewById(R.id.ibless);
 
 
-        // Get and set title
-        tvtitle.setText(getResources().getStringArray(R.array.titles)[popupentry.title]);
-
-        // Prepare seekbar
-        seekbar.setMax(popupentry.phrasemax - popupentry.phrasemin);
-        sboffset = popupentry.phrasemin;
-
-        // Get phrases
-        TypedArray ids = getResources().obtainTypedArray(R.array.phrases);
-        int phraseid = ids.getResourceId(popupentry.phraseset, -1);
-        ids.recycle();
-        phrases = getResources().getStringArray(phraseid);
-        // And set the default
-        setPhrase(popupentry.phraseanswer);
+        Log.d("PopupActivity", savedInstanceState == null ? "NULL_SAVED" : "NOTNULL_SAVED" + "; ");
 
 
-        /* END Initialize this new popup*/
-
-        if (popupentry.messagehide == PopupEntryParcel.POPUP_HIDE_HIDEN) {
-            hideMessage();
-        } else {
-            // Get messages
-            ids = getResources().obtainTypedArray(R.array.messages);
-            int messageids = ids.getResourceId(popupentry.messageset, -1);
-            ids.recycle();
-            ids = getResources().obtainTypedArray(messageids);
-            messageids = ids.getResourceId(popupentry.messagesubset, -1);
-            ids.recycle();
-            messages = getResources().getStringArray(messageids);
-            selectedmessage = popupentry.messagedef;
-            // And set the default
-            tvmessage.setText(messages[selectedmessage]);
+        /* Get the message */
+        if ((popupentry = initPopup(savedInstanceState)) == null) {
+            finish();
+            return;
         }
-
-        if (popupentry.showpostpone == PopupEntryParcel.POPUP_SHOWPOSTPONE_FALSE) {
-            hidePostpone();
-        }
-
 
         seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -132,9 +95,112 @@ public class PopupActivity extends Activity {
                     ibless.setImageResource(R.drawable.ic_previous);
             }
         });
+
+        setPhrase(popupentry.phraseanswer);
+        if (seekbar.getProgress() == seekbar.getMax() && (seekbar.getProgress() + sboffset) < (phrases.length - 1))
+            ibmore.setImageResource(R.drawable.ic_more);
+        else
+            ibmore.setImageResource(R.drawable.ic_next);
+
+        if (seekbar.getProgress() == 0 && sboffset > 0)
+            ibless.setImageResource(R.drawable.ic_less);
+        else
+            ibless.setImageResource(R.drawable.ic_previous);
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+
+        savedInstanceState.putParcelable(KEY_PEP,        popupentry);
+
+        savedInstanceState.putInt       (KEY_OFFSET,     sboffset);
+
+        savedInstanceState.putInt       (KEY_SEEKBARMAX, seekbarmax);
+        savedInstanceState.putInt       (KEY_SEEKBARMIN, seekbarmin);
+
+        savedInstanceState.putInt       (KEY_MSGSTATE,   selectedmessage);
     }
 
     /* -- ME -- */
+
+
+    private PopupEntryParcel initPopup(Bundle savedInstanceState) {
+
+        PopupEntryParcel pep;
+
+        if (savedInstanceState == null) {
+            /* New popup */
+            pep = getIntent().getExtras().getParcelable(MESSAGE);
+
+            /* Set the time when this popup was started */
+            pep.dateinit = Preferences.TimeHelper.getTodayDateTime();
+
+            /* Set initial offset */
+            sboffset = pep.phrasemin;
+
+            /* Set the initial ohrase max and min */
+            seekbarmin = pep.phrasemin;
+            seekbarmax = pep.phrasemax;
+
+            selectedmessage = pep.messagedef;
+
+        }
+        else {
+            /* Restoring popup */
+            pep         = savedInstanceState.getParcelable(KEY_PEP);
+
+            sboffset    = savedInstanceState.getInt       (KEY_OFFSET);
+
+            seekbarmin  = savedInstanceState.getInt       (KEY_SEEKBARMIN);
+            seekbarmax  = savedInstanceState.getInt       (KEY_SEEKBARMAX);
+
+            selectedmessage  = savedInstanceState.getInt  (KEY_MSGSTATE);
+        }
+
+
+        // Get and set title
+        tvtitle.setText(getResources().getStringArray(R.array.titles)[pep.title]);
+
+        // Prepare seekbar
+        seekbar.setMax(seekbarmax - seekbarmin);
+
+
+        // Get phrases
+        TypedArray ids = getResources().obtainTypedArray(R.array.phrases);
+        int phraseid = ids.getResourceId(pep.phraseset, -1);
+        ids.recycle();
+        phrases = getResources().getStringArray(phraseid);
+
+
+        /* END Initialize this new popup*/
+
+        if (pep.messagehide != PopupEntryParcel.POPUP_HIDE_FALSE) {
+            hideMessage();
+        } else {
+            // Get messages
+            ids = getResources().obtainTypedArray(R.array.messages);
+            int messageids = ids.getResourceId(pep.messageset, -1);
+            ids.recycle();
+            ids = getResources().obtainTypedArray(messageids);
+            messageids = ids.getResourceId(pep.messagesubset, -1);
+            ids.recycle();
+            messages = getResources().getStringArray(messageids);
+            // And set the default
+            tvmessage.setText(messages[selectedmessage]);
+        }
+
+        if (pep.showpostpone == PopupEntryParcel.POPUP_SHOWPOSTPONE_FALSE) {
+            hidePostpone();
+        }
+
+        return pep;
+    }
+
+
+
+
     public void incrementSeek(View view) {
         if (seekbar.getProgress() == seekbar.getMax() &&  (seekbar.getProgress() + sboffset) < (phrases.length - 1)) {
             seekbar.setMax(seekbar.getMax() + 1);

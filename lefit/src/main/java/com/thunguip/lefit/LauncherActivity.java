@@ -1,18 +1,13 @@
 package com.thunguip.lefit;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
-import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -23,7 +18,6 @@ import android.os.Messenger;
 import android.support.v7.app.ActionBarActivity;
 import android.text.format.DateFormat;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,18 +35,13 @@ import java.util.Calendar;
 public class LauncherActivity extends ActionBarActivity {
     private static final int ACTRES_SELECTSOUND = 1000;
 
+    private static final String KEY_LVPOSTION = "KEY_LVPOSTION";
+    private static final String KEY_LVOFFSET  = "KEY_LVOFFSET";
+
     private Preferences preferences;
 
     private LvCalendarAdaptor lvcalendaradaptor;
     private ListView listView;
-    //public static final
-
-    public static void setInsets(Activity context, View view) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return;
-        SystemBarTintManager tintManager = new SystemBarTintManager(context);
-        SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
-        view.setPadding(0, config.getPixelInsetTop(true), config.getPixelInsetRight(), config.getPixelInsetBottom());
-    }
 
 
     @Override
@@ -69,7 +58,6 @@ public class LauncherActivity extends ActionBarActivity {
         SystemBarTintManager tintManager = new SystemBarTintManager(this);
         tintManager.setStatusBarTintEnabled(true);
         tintManager.setTintResource(R.color.actionbar_bg);
-
 
         requestLvItems();
 
@@ -108,6 +96,25 @@ public class LauncherActivity extends ActionBarActivity {
             /* Already unregistred */
             Log.d("LauncherActivity","EXCEPTION: Already Unregistered");
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+
+        View v = listView.getChildAt(0);
+
+        savedInstanceState.putInt       (KEY_LVPOSTION, listView.getFirstVisiblePosition());
+        savedInstanceState.putInt       (KEY_LVOFFSET, (v == null) ? 0 : v.getTop());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        listView.setSelectionFromTop(savedInstanceState.getInt(KEY_LVPOSTION),
+                savedInstanceState.getInt(KEY_LVOFFSET));
+
     }
 
     public void requestLvItems() {
