@@ -28,8 +28,10 @@ public class PopupEntryParcel implements Parcelable {
     public int phrasehitless;
     public int messageset;
     public int messagesubset;
+    public int messagedef;
     public int messagehide;
     public int messagemore;
+    public int showpostpone;
     public int action;
     public long daterefer;
     public long dateinit;
@@ -86,9 +88,9 @@ public class PopupEntryParcel implements Parcelable {
     }
 
     public static PopupEntryParcel findByDay(PopupEntryParcel[] peps, Calendar cal) {
-        for (int i = 0; i < peps.length; i++) {
-            if (Preferences.TimeHelper.isSameDay(peps[i].getDateRefer(), cal))
-                return peps[i];
+        for (PopupEntryParcel pep : peps) {
+            if (Preferences.TimeHelper.isSameDay(pep.getDateRefer(), cal))
+                return pep;
         }
         return null;
     }
@@ -117,8 +119,10 @@ public class PopupEntryParcel implements Parcelable {
         dest.writeInt(phrasehitless);
         dest.writeInt(messageset);
         dest.writeInt(messagesubset);
+        dest.writeInt(messagedef);
         dest.writeInt(messagehide);
         dest.writeInt(messagemore);
+        dest.writeInt(showpostpone);
         dest.writeInt(action);
         dest.writeLong(daterefer);
         dest.writeLong(dateinit);
@@ -138,8 +142,10 @@ public class PopupEntryParcel implements Parcelable {
         phrasehitless = in.readInt();
         messageset = in.readInt();
         messagesubset = in.readInt();
+        messagedef = in.readInt();
         messagehide = in.readInt();
         messagemore = in.readInt();
+        showpostpone = in.readInt();
         action = in.readInt();
         daterefer = in.readLong();
         dateinit = in.readLong();
