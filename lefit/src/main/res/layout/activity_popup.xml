@@ -110,7 +110,7 @@
                         android:layout_margin="5dp"
                         android:id="@+id/ibless"
                         android:background="@drawable/button_transparent"
-                        android:src="@drawable/ic_navigation_previous_item"
+                        android:src="@drawable/ic_previous"
                         android:onClick="decrementSeek" />
 
                     <SeekBar
@@ -130,7 +130,7 @@
                         android:layout_margin="5dp"
                         android:id="@+id/ibmore"
                         android:background="@drawable/button_transparent"
-                        android:src="@drawable/ic_navigation_next_item"
+                        android:src="@drawable/ic_next"
                         android:onClick="incrementSeek" />
 
 
@@ -163,7 +163,7 @@
                             android:layout_width="40dp"
                             android:layout_height="match_parent"
                             android:id="@+id/ibhidemsg"
-                            android:src="@drawable/ic_content_remove"
+                            android:src="@drawable/ic_close"
                             android:layout_marginLeft="5dp"
                             android:background="@drawable/button_transparent"
                             android:onClick="hideMessageClick" />
@@ -185,7 +185,7 @@
                             android:layout_width="40dp"
                             android:layout_height="match_parent"
                             android:id="@+id/iblikemsg"
-                            android:src="@drawable/ic_navigation_next_item"
+                            android:src="@drawable/ic_next"
                             android:background="@drawable/button_transparent"
                             android:layout_marginRight="5dp"
                             android:onClick="nextMessage" />

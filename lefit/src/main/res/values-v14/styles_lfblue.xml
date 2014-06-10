@@ -111,7 +111,6 @@
     </style>
 
     <style name="LeFitBlue.PopupMenu" parent="@style/Widget.AppCompat.PopupMenu">
-        <!--<item name="android:popupBackground">@drawable/menu_dropdown_panel_lefitstyle2</item>-->
         <item name="android:popupBackground">@color/menu_bg</item>
         <item name="android:textColor">@color/view_fg_light</item>
     </style>

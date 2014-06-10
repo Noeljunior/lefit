@@ -134,14 +134,14 @@ public class PopupActivity extends Activity {
                 setPhrase(progress + sboffset);
 
                 if (progress == seekBar.getMax() && (progress + sboffset) < (phrases.length - 1))
-                    ibmore.setImageResource(R.drawable.ic_hitmore);
+                    ibmore.setImageResource(R.drawable.ic_more);
                 else
-                    ibmore.setImageResource(R.drawable.ic_navigation_next_item);
+                    ibmore.setImageResource(R.drawable.ic_next);
 
                 if (progress == 0 && sboffset > 0)
-                    ibless.setImageResource(R.drawable.ic_hitless);
+                    ibless.setImageResource(R.drawable.ic_less);
                 else
-                    ibless.setImageResource(R.drawable.ic_navigation_previous_item);
+                    ibless.setImageResource(R.drawable.ic_previous);
             }
         });
     }
