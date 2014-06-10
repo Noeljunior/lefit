@@ -15,6 +15,8 @@ public class PopupEntryParcel implements Parcelable {
     public static final int POPUP_ACTION_CANCEL = 1;
     public static final int POPUP_ACTION_POSTPONE = 2;
     public static final int POPUP_ACTION_SUBMIT = 3;
+    public static final int POPUP_SHOWPOSTPONE_FALSE = 0;
+    public static final int POPUP_SHOWPOSTPONE_TRUE = 1;
 
     public int _id;
     public int _type;

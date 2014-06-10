@@ -21,7 +21,6 @@ import java.util.Calendar;
 public class PopupActivity extends Activity {
     public static final String MESSAGE = "com.thunguip.lefit.PopupActivity.MESSAGE";
 
-    private MessageParcel message;
     private int sboffset;
 
     /* Values */
@@ -50,27 +49,16 @@ public class PopupActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         /* Get the message */
-        message = getIntent().getExtras().getParcelable(MESSAGE);
-        if (message == null) {
+        popupentry = getIntent().getExtras().getParcelable(MESSAGE);
+        if (popupentry == null) {
             finish();
         }
 
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_popup);
 
-        // Start new result message
-        popupentry = new PopupEntryParcel();
 
-        popupentry._type = StorageDB.TYPE_POPUP;
-        popupentry.title = message.title;
-        popupentry.phraseset = message.phraseset;
-        popupentry.phrasemax = message.maxphrase;
-        popupentry.phrasemin = message.minphrase;
-        popupentry.messageset = message.messageset;
-        popupentry.messagesubset = message.messagesubset;
-        popupentry.action = PopupEntryParcel.POPUP_ACTION_IGNORE;
-        popupentry.messagehide = message.showmessage == 1 ? PopupEntryParcel.POPUP_HIDE_FALSE : PopupEntryParcel.POPUP_HIDE_HIDEN;
-        popupentry.daterefer = message.referdate;
+        /* Set the time when this popup was started */
         popupentry.dateinit = Preferences.TimeHelper.getTodayDateTime();
 
 
@@ -85,40 +73,40 @@ public class PopupActivity extends Activity {
 
 
         // Get and set title
-        tvtitle.setText(getResources().getStringArray(R.array.titles)[message.title]);
+        tvtitle.setText(getResources().getStringArray(R.array.titles)[popupentry.title]);
 
         // Prepare seekbar
-        seekbar.setMax(message.maxphrase - message.minphrase);
-        sboffset = message.minphrase;
+        seekbar.setMax(popupentry.phrasemax - popupentry.phrasemin);
+        sboffset = popupentry.phrasemin;
 
         // Get phrases
         TypedArray ids = getResources().obtainTypedArray(R.array.phrases);
-        int phraseid = ids.getResourceId(message.phraseset, -1);
+        int phraseid = ids.getResourceId(popupentry.phraseset, -1);
         ids.recycle();
         phrases = getResources().getStringArray(phraseid);
         // And set the default
-        setPhrase(message.defphrase);
+        setPhrase(popupentry.phraseanswer);
 
 
         /* END Initialize this new popup*/
 
-        if (message.showmessage == 0) {
+        if (popupentry.messagehide == PopupEntryParcel.POPUP_HIDE_HIDEN) {
             hideMessage();
         } else {
             // Get messages
             ids = getResources().obtainTypedArray(R.array.messages);
-            int messageids = ids.getResourceId(message.messageset, -1);
+            int messageids = ids.getResourceId(popupentry.messageset, -1);
             ids.recycle();
             ids = getResources().obtainTypedArray(messageids);
-            messageids = ids.getResourceId(message.messagesubset, -1);
+            messageids = ids.getResourceId(popupentry.messagesubset, -1);
             ids.recycle();
             messages = getResources().getStringArray(messageids);
-            selectedmessage = message.defmessage;
+            selectedmessage = popupentry.messagedef;
             // And set the default
             tvmessage.setText(messages[selectedmessage]);
         }
 
-        if (message.showpostpone == 0) {
+        if (popupentry.showpostpone == PopupEntryParcel.POPUP_SHOWPOSTPONE_FALSE) {
             hidePostpone();
         }
 
@@ -225,8 +213,6 @@ public class PopupActivity extends Activity {
 
 
     public void actionCancel(View view) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(message.referdate);
 
         // STATS
         popupentry.action = PopupEntryParcel.POPUP_ACTION_CANCEL;

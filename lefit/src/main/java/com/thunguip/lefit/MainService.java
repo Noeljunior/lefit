@@ -270,7 +270,7 @@ public class MainService extends IntentService {
     private void openPopupByRefer(long refer) {
         Intent intent = new Intent(this, PopupActivity.class);
 
-        MessageParcel m = new Decision(this).getMessageParcelByContext(Decision.CONTEXT_LVITEM, refer);
+        PopupEntryParcel m = new Decision(this).getMessageParcelByContext(Decision.CONTEXT_LVITEM, refer);
 
         intent.putExtra(PopupActivity.MESSAGE, m);
 
@@ -282,7 +282,7 @@ public class MainService extends IntentService {
     private void openPopupByNotification() {
         Intent intent = new Intent(this, PopupActivity.class);
 
-        MessageParcel m = new Decision(this).getMessageParcelByContext(Decision.CONTEXT_NOTIFICATION, 0);
+        PopupEntryParcel m = new Decision(this).getMessageParcelByContext(Decision.CONTEXT_NOTIFICATION, 0);
 
         intent.putExtra(PopupActivity.MESSAGE, m);
 
