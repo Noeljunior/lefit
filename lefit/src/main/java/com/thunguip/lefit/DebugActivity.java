@@ -2,10 +2,12 @@ package com.thunguip.lefit;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -81,6 +83,35 @@ public class DebugActivity extends Activity {
 
 
 
+
+    public void openTimepicker(View view) {
+
+        final TimePicker timePicker = new TimePicker(this);
+        timePicker.setIs24HourView(true);
+        timePicker.setCurrentHour(20);
+        timePicker.setCurrentMinute(15);
+
+        new AlertDialog.Builder(this)
+                .setTitle("Hora da notificação")
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d("Picker", timePicker.getCurrentHour() + ":"
+                                + timePicker.getCurrentMinute());
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel,
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+                                Log.d("Picker", "Cancelled!");
+                            }
+                        }).setView(timePicker).show();
+
+    }
 
 
 

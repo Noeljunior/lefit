@@ -50,7 +50,7 @@ public class Preferences {
     public static final long    notificationInterval            = TimeHelper.getByTime(24, 0);
     public static final long    postponeDelay                   = TimeHelper.getByTime(1, 0);
     public static final long    notificationCleanGap            = postponeDelay * 2;
-    public static final long    uploaddelay                     =  TimeHelper.getByTime(1, 0);
+    public static final long    uploaddelay                     = TimeHelper.getByTime(1, 0);
 
     public static final int     DEF_personStyle                 = PERSONSTYLE_NOTDEFINED;
 

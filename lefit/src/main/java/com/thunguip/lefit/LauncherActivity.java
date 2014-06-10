@@ -2,11 +2,13 @@ package com.thunguip.lefit;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
@@ -262,9 +264,11 @@ public class LauncherActivity extends ActionBarActivity {
                 this.invalidateOptionsMenu();
                 return true;
             case R.id.menutime:
-                DialogFragment newFragment = new DialogTimePicker();
+                /*DialogFragment newFragment = new DialogTimePicker();
 
-                newFragment.show(getFragmentManager(), "timePicker");
+                newFragment.show(getFragmentManager(), "timePicker");*/
+
+                openTimePicker();
                 return true;
 
 
@@ -278,35 +282,47 @@ public class LauncherActivity extends ActionBarActivity {
         }
     }
 
-    /* TODO solve this pretty shit time picker dialog thing */
-    @SuppressLint("ValidFragment")
-    public class DialogTimePicker extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            Calendar c = Calendar.getInstance();
-            c.setTimeInMillis(preferences.getNotificationTime());
 
-            return new TimePickerDialog(getActivity(), TimePickerDialog.THEME_HOLO_DARK, this,
-                    c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE),
-                    DateFormat.is24HourFormat(getActivity()));
-        }
 
-        @Override
-        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            Log.d("InnerTimePicker", "TIME: " + hourOfDay + ":" + minute);
+    private void openTimePicker() {
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(preferences.getNotificationTime());
 
-            Calendar c = Calendar.getInstance();
-            c.setTimeInMillis(0);
-            c.set(Calendar.HOUR_OF_DAY, hourOfDay);
-            c.set(Calendar.MINUTE, minute);
+        final TimePicker timePicker = new TimePicker(this);
+        timePicker.setIs24HourView(DateFormat.is24HourFormat(this));
+        timePicker.setCurrentHour(c.get(Calendar.HOUR_OF_DAY));
+        timePicker.setCurrentMinute(c.get(Calendar.MINUTE));
+        final Context thiscontext = this;
 
-            preferences.setNotificationTime(c.getTimeInMillis());
-            //preferences.setNotificationTime(Preferences.TimeHelper.getByTime(hourOfDay, minute));
+        new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK)
+                .setTitle("Hora da notificação")
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 
-            MainService.sendIntent(getActivity(), MainService.CHECKALARMSETTINGS);
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d("LauncherActivity", "TimePicker OK: " + timePicker.getCurrentHour() + ":" + timePicker.getCurrentMinute());
 
-        }
+                        Calendar c = Calendar.getInstance();
+                        c.setTimeInMillis(0);
+                        c.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
+                        c.set(Calendar.MINUTE, timePicker.getCurrentMinute());
+
+                        preferences.setNotificationTime(c.getTimeInMillis());
+
+                        MainService.sendIntent(thiscontext, MainService.CHECKALARMSETTINGS);
+
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel,
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Log.d("LauncherActivity", "TimePicker CANCEL: " + timePicker.getCurrentHour() + ":" + timePicker.getCurrentMinute());
+                            }
+                        })
+                .setView(timePicker)
+                .show();
     }
-
 
 }
